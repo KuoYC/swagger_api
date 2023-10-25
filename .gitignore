@@ -1,0 +1,14 @@
+.DS_Store
+/swagger-ui-master
+/sw_api
+/assets
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
