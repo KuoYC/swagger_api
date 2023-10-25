@@ -429,7 +429,7 @@
                                     $contract_list = $ContractMgr->queryContractForAction8($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
                                     break;
                                 default:
-                                    $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
+                                    $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
                                     break;
                             }
                         }
