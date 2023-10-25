@@ -2,7 +2,7 @@
 swagger-ui-master
 sw_api
 assets
-
+upload
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -12,3 +12,5 @@ assets
 *.njsproj
 *.sln
 *.sw?
+.gitignore
+api_file/
