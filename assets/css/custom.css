@@ -1,0 +1,33 @@
+
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJjdXN0b20uY3NzIn0= */
+@font-face {
+    font-family: 'Noto Sans TC', sans-serif;
+    src: url("../Noto_Sans_TC\ 2/") format("truetype");
+  }
+body{
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+:root {
+  --theme-color: #04984F;
+}
+th, td,.view-mail, .myFont16{
+  font-size: 16px;
+  line-height: normal;
+}
+.myFont16{
+  font-weight: 400;
+}
+.myCardTitle {
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  line-height: 28px;
+  padding-right: 10px;
+  margin-bottom: 0;
+  color: #212529;
+}
+
+
+
+/*# sourceMappingURL=custom.css.map */

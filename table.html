@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    /* 媒體查詢，當視窗寬度小於 600px 時套用這些 CSS 規則 */
+    @media screen and (max-width: 600px) {
+        table {
+            display: block;
+            width: 100%;
+        }
+
+        th,
+        td {
+            display: block;
+            text-align: left;
+        }
+
+        th:before {
+            content: attr(data-title);
+            font-weight: bold;
+        }
+    }
+</style>
+
+<table>
+    <thead>
+    <tr>
+        <th data-title="姓名">姓名</th>
+        <th data-title="年齡">年齡</th>
+        <th data-title="性別">性別</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td data-title="姓名">John Doe</td>
+        <td data-title="年齡">30</td>
+        <td data-title="性別">男</td>
+    </tr>
+    <tr>
+        <td data-title="姓名">Jane Smith</td>
+        <td data-title="年齡">25</td>
+        <td data-title="性別">女</td>
+    </tr>
+    <tr>
+        <td data-title="姓名">Mike Johnson</td>
+        <td data-title="年齡">35</td>
+        <td data-title="性別">男</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

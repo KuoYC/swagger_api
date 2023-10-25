@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/../hotgo/include/smarty/templates/backend/cms_pro.up.tpl.htm" description="&lt;label&gt;{#Image#}3&lt;span class=&quot;label_sub&quot;&gt;{#Specifi..." line="136" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/swagger-ui-master/composer.json</pharConfigPath>
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="cathay@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="cathay@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="268">
+              <caret line="2705" column="19" selection-start-line="2705" selection-start-column="19" selection-end-line="2705" selection-end-column="19" />
+              <folding>
+                <element signature="e#92#260#0#PHP" />
+                <element signature="e#269#717#0#PHP" />
+                <element signature="e#5104#5618#0#PHP" />
+                <element signature="e#5794#6329#0#PHP" />
+                <element signature="e#6486#6869#0#PHP" />
+                <element signature="e#10428#10602#0#PHP" />
+                <element signature="e#10611#11067#0#PHP" />
+                <element signature="e#11077#11235#0#PHP" />
+                <element signature="e#11768#11911#0#PHP" />
+                <element signature="e#11920#12450#0#PHP" />
+                <element signature="e#12460#12625#0#PHP" />
+                <element signature="e#13195#13341#0#PHP" />
+                <element signature="e#13350#13749#0#PHP" />
+                <element signature="e#61182#63784#0#PHP" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="287">
+              <caret line="410" column="84" lean-forward="true" selection-start-line="410" selection-start-column="84" selection-end-line="410" selection-end-column="84" />
+              <folding>
+                <element signature="e#655#1345#0#PHP" />
+                <element signature="e#1346#2412#0#PHP" />
+                <element signature="e#2424#4975#0#PHP" />
+                <element signature="e#2073#2787#0#PHP" />
+                <element signature="e#2796#5051#0#PHP" />
+                <element signature="e#5060#7633#0#PHP" />
+                <element signature="e#7642#10088#0#PHP" />
+                <element signature="e#10097#12798#0#PHP" />
+                <element signature="e#14252#15045#0#PHP" />
+                <element signature="e#14288#15029#0#PHP" />
+                <element signature="e#15038#17221#0#PHP" />
+                <element signature="e#30035#41908#0#PHP" />
+                <element signature="e#41917#42806#0#PHP" />
+                <element signature="e#42815#43763#0#PHP" />
+                <element signature="e#41917#43333#0#PHP" />
+                <element signature="e#43342#43965#0#PHP" />
+                <element signature="e#47033#48511#0#PHP" />
+                <element signature="e#12809#13881#0#PHP" />
+                <element signature="e#13890#14963#0#PHP" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.htaccess">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/post.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>contract_status</find>
+      <find>contract_default</find>
+      <find>::</find>
+      <find>member_status</find>
+      <find>$memNow</find>
+      <find>queryContractByMember</find>
+      <find>queryContractForMember</find>
+      <find>memNowPosition</find>
+      <find>updateMemberByContractDefault</find>
+      <find>queryContractForAction0</find>
+      <find>contact</find>
+      <find>category</find>
+      <find>contract_create</find>
+      <find>template'</find>
+      <find>'POST'</find>
+      <find>source'</find>
+      <find>回傳成功temId</find>
+      <find>PUT[temId]</find>
+      <find>$return_data['data'] = 'success';</find>
+      <find>comId</find>
+      <find>$comId</find>
+      <find>contract'</find>
+      <find>`contact` CT ON CP.`comId` = CT.`comId`</find>
+      <find>personnel'</find>
+      <find>contact'</find>
+      <find>work'</find>
+      <find>作業種類</find>
+      <find>html</find>
+      <find>api.</find>
+      <find>待修正</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>'mb</replace>
+      <replace>queryItemExesByItem(</replace>
+      <replace>$mbr</replace>
+      <replace>MB_Now</replace>
+      <replace>:</replace>
+      <replace>`wor</replace>
+      <replace>wor</replace>
+      <replace>dis</replace>
+      <replace>選項</replace>
+      <replace>con</replace>
+      <replace>, $</replace>
+      <replace>Now</replace>
+      <replace>'</replace>
+      <replace>`rat</replace>
+      <replace>source</replace>
+      <replace>:'',</replace>
+      <replace>conCompany</replace>
+      <replace>mem</replace>
+      <replace>$ite[</replace>
+      <replace>&quot;,&quot;</replace>
+      <replace>'],</replace>
+      <replace>perKey</replace>
+      <replace>分攤比例方式</replace>
+      <replace>$_POST</replace>
+      <replace>NULL</replace>
+      <replace>$ite</replace>
+      <replace>''</replace>
+      <replace>回傳成功</replace>
+      <replace>`contact` CT ON CP.`comCode` = CT.`comCode`</replace>
+      <replace>公告</replace>
+    </replaceStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/table.html" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/exp_table.html" />
+        <option value="$PROJECT_DIR$/test.php" />
+        <option value="$PROJECT_DIR$/t.html" />
+        <option value="$PROJECT_DIR$/test_r.php" />
+        <option value="$PROJECT_DIR$/swagger-ui-master/index.php" />
+        <option value="$PROJECT_DIR$/swagger-ui-master/swagger.json" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/txt.txt" />
+        <option value="$PROJECT_DIR$/include/config/Config.php" />
+        <option value="$PROJECT_DIR$/spd.php" />
+        <option value="$PROJECT_DIR$/a" />
+        <option value="$PROJECT_DIR$/b" />
+        <option value="$PROJECT_DIR$/b.html" />
+        <option value="$PROJECT_DIR$/a.html" />
+        <option value="$PROJECT_DIR$/test_sp.php" />
+        <option value="$PROJECT_DIR$/.haccess" />
+        <option value="$PROJECT_DIR$/t.txt" />
+        <option value="$PROJECT_DIR$/post.html" />
+        <option value="$PROJECT_DIR$/include/config/Web_Config.php" />
+        <option value="$PROJECT_DIR$/include/class/ConnManager.class.php" />
+        <option value="$PROJECT_DIR$/.htaccess" />
+        <option value="$PROJECT_DIR$/api.php" />
+        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBowerSettings">
+    <exe-path />
+    <config-path />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="25" />
+    <option name="width" value="1672" />
+    <option name="height" value="948" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+              <item name="include" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+              <item name="include" type="462c0819:PsiDirectoryNode" />
+              <item name="class" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+              <item name="include" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="editor.config.ad.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/b.html" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="" />
+      <created>1685057690465</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1685057690465</updated>
+      <workItem from="1685057691688" duration="9811000" />
+      <workItem from="1685339833201" duration="18370000" />
+      <workItem from="1685782287065" duration="16185000" />
+      <workItem from="1686389737334" duration="42078000" />
+      <workItem from="1686718695343" duration="5000" />
+      <workItem from="1686718736891" duration="10394000" />
+      <workItem from="1690257011409" duration="1466000" />
+      <workItem from="1690261344319" duration="190000" />
+      <workItem from="1692352283032" duration="1162000" />
+      <workItem from="1692661469690" duration="595000" />
+      <workItem from="1692766279261" duration="51969000" />
+      <workItem from="1694940723608" duration="14308000" />
+      <workItem from="1695483549304" duration="75806000" />
+      <workItem from="1696850894236" duration="21964000" />
+      <workItem from="1697272108286" duration="8338000" />
+      <workItem from="1697777714545" duration="9514000" />
+      <workItem from="1697965176657" duration="15641000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="297796000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="25" width="1672" height="948" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18895705" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32961586" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.21933086" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="SmartIM" order="10" />
+      <window_info anchor="bottom" id="Regex Tester" order="11" />
+      <window_info anchor="bottom" id="Terminal" order="12" />
+      <window_info anchor="bottom" id="Event Log" order="13" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" weight="0.32944787" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/exp_table.html" />
+    <entry file="file://$PROJECT_DIR$/swagger-ui-master/swagger.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/e59db8fe-0a60-4119-a6ff-764f1167db19/console.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" column="10" selection-end-line="984" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/swagger-ui-master/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-38">
+          <caret line="4" column="47" selection-start-line="4" selection-start-column="47" selection-end-line="4" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/t.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="398" column="6" selection-start-line="398" selection-start-column="6" selection-end-line="398" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/table.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="234" selection-start-column="231" selection-end-column="234" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/b.html" />
+    <entry file="file://$PROJECT_DIR$/a.html" />
+    <entry file="file://$USER_HOME$/Dropbox/ju-house/include/config/Config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2226">
+          <caret line="106" selection-start-line="103" selection-end-line="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="546">
+          <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_r.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_sp.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spd.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="39" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.haccess" />
+    <entry file="file://$PROJECT_DIR$/api.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/config/Config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1911">
+          <caret line="91" selection-start-line="88" selection-end-line="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/class/BannerManager.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="5" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/t.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-column="206" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/PDO/PDO.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="931" column="20" selection-start-line="931" selection-start-column="20" selection-end-line="931" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/class/ConnManager.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="75" column="31" lean-forward="true" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
+          <folding>
+            <element signature="e#3492#3529#0#PHP" />
+            <element signature="e#3684#3942#0#PHP" />
+            <element signature="e#3951#4613#0#PHP" />
+            <element signature="e#4623#4882#0#PHP" />
+            <element signature="e#4891#5560#0#PHP" />
+            <element signature="e#5570#5804#0#PHP" />
+            <element signature="e#5813#6987#0#PHP" />
+            <element signature="e#6997#7187#0#PHP" />
+            <element signature="e#7196#8176#0#PHP" />
+            <element signature="e#8186#8258#0#PHP" />
+            <element signature="e#8267#9083#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/config/Web_Config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/post.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="410" column="84" lean-forward="true" selection-start-line="410" selection-start-column="84" selection-end-line="410" selection-end-column="84" />
+          <folding>
+            <element signature="e#655#1345#0#PHP" />
+            <element signature="e#1346#2412#0#PHP" />
+            <element signature="e#2424#4975#0#PHP" />
+            <element signature="e#2073#2787#0#PHP" />
+            <element signature="e#2796#5051#0#PHP" />
+            <element signature="e#5060#7633#0#PHP" />
+            <element signature="e#7642#10088#0#PHP" />
+            <element signature="e#10097#12798#0#PHP" />
+            <element signature="e#14252#15045#0#PHP" />
+            <element signature="e#14288#15029#0#PHP" />
+            <element signature="e#15038#17221#0#PHP" />
+            <element signature="e#30035#41908#0#PHP" />
+            <element signature="e#41917#42806#0#PHP" />
+            <element signature="e#42815#43763#0#PHP" />
+            <element signature="e#41917#43333#0#PHP" />
+            <element signature="e#43342#43965#0#PHP" />
+            <element signature="e#47033#48511#0#PHP" />
+            <element signature="e#12809#13881#0#PHP" />
+            <element signature="e#13890#14963#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="2705" column="19" selection-start-line="2705" selection-start-column="19" selection-end-line="2705" selection-end-column="19" />
+          <folding>
+            <element signature="e#92#260#0#PHP" />
+            <element signature="e#269#717#0#PHP" />
+            <element signature="e#5104#5618#0#PHP" />
+            <element signature="e#5794#6329#0#PHP" />
+            <element signature="e#6486#6869#0#PHP" />
+            <element signature="e#10428#10602#0#PHP" />
+            <element signature="e#10611#11067#0#PHP" />
+            <element signature="e#11077#11235#0#PHP" />
+            <element signature="e#11768#11911#0#PHP" />
+            <element signature="e#11920#12450#0#PHP" />
+            <element signature="e#12460#12625#0#PHP" />
+            <element signature="e#13195#13341#0#PHP" />
+            <element signature="e#13350#13749#0#PHP" />
+            <element signature="e#61182#63784#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

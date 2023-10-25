@@ -1,0 +1,1 @@
+{ "status": true, "count": "3", "0": "data", "1": [ { "CTP_ID": "1", "CTP_Title": "樣板1", "CTP_Style": "" }, { "CTP_ID": "2", "CTP_Title": "樣板2", "CTP_Style": "" }, { "CTP_ID": "3", "CTP_Title": "樣板3", "CTP_Style": "" } ] }

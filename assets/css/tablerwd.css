@@ -1,0 +1,133 @@
+.myTable{
+	width: 100%;
+	border-collapse: collapse;
+	border-radius: 10px ;
+	overflow: hidden;
+}
+/* Zebra striping */
+.myTable tr:nth-of-type(odd) {
+	background: #ececec;
+}
+.myTable th {
+	background: #f0f3ff;
+	color: #6777ef;
+	font-weight: bold;
+}
+.myTable td, .myTable th {
+	padding: 6px;
+	border: 1px solid #ccc;
+	text-align: left;
+}
+.myTable caption {
+	display: none;
+}
+
+
+@media only screen and (max-width: 760px),(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	.myTable , .myTable thead, .myTable tbody, .myTable th, .myTable td, .myTable tr {
+		display: block;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	.myTable thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	.myTable tr { border: 1px solid #ccc; }
+
+	.myTable td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50%;
+	}
+
+	.myTable td:before {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+	}
+
+
+	/*
+	Label the data
+	*/
+	.myTableItem td:nth-of-type(1):before { content: "序號"; }
+	.myTableItem td:nth-of-type(2):before { content: "作業項目"; }
+	.myTableItem td:nth-of-type(3):before { content: "作業種類"; }
+	.myTableItem td:nth-of-type(4):before { content: "服務時間"; }
+	.myTableItem td:nth-of-type(5):before { content: "本項目使用公司"; }
+	.myTableItem td:nth-of-type(6):before { content: "權限控管及資料管制"; }
+	.myTableItem td:nth-of-type(7):before { content: "分攤比例原則"; }
+
+	.myTableMemberI td:nth-of-type(1):before { content: "公司"; }
+	.myTableMemberI td:nth-of-type(2):before { content: "部門"; }
+	.myTableMemberI td:nth-of-type(3):before { content: "科別"; }
+	.myTableMemberI td:nth-of-type(4):before { content: "承辦人"; }
+	.myTableMemberI td:nth-of-type(5):before { content: "科別主管"; }
+	.myTableMemberI td:nth-of-type(6):before { content: "部門主管"; }
+	.myTableMemberI td:nth-of-type(7):before { content: "窗口"; }
+	.myTableMemberI td:nth-of-type(8):before { content: "承辦人聯絡電話"; }
+
+	.myTableMemberIv td:nth-of-type(1):before { content: "公司"; }
+	.myTableMemberIv td:nth-of-type(2):before { content: "部門"; }
+	.myTableMemberIv td:nth-of-type(3):before { content: "科別"; }
+	.myTableMemberIv td:nth-of-type(4):before { content: "部門主管"; }
+	.myTableMemberIv td:nth-of-type(5):before { content: "科別主管"; }
+	.myTableMemberIv td:nth-of-type(6):before { content: "窗口"; }
+	.myTableMemberIv td:nth-of-type(7):before { content: "承辦人"; }
+	.myTableMemberIv td:nth-of-type(8):before { content: "承辦人聯絡電話"; }
+
+	.myTableMemberM td:nth-of-type(1):before { content: "公司"; }
+	.myTableMemberM td:nth-of-type(2):before { content: "部門"; }
+	.myTableMemberM td:nth-of-type(3):before { content: "科別"; }
+	.myTableMemberM td:nth-of-type(4):before { content: "承辦人"; }
+	.myTableMemberM td:nth-of-type(5):before { content: "科別主管"; }
+	.myTableMemberM td:nth-of-type(6):before { content: "部門主管"; }
+	.myTableMemberM td:nth-of-type(7):before { content: "承辦人聯絡電話"; }
+
+	.myTableMemberMv td:nth-of-type(1):before { content: "公司"; }
+	.myTableMemberMv td:nth-of-type(2):before { content: "部門"; }
+	.myTableMemberMv td:nth-of-type(3):before { content: "科別"; }
+	.myTableMemberMv td:nth-of-type(4):before { content: "部門主管"; }
+	.myTableMemberMv td:nth-of-type(5):before { content: "科別主管"; }
+	.myTableMemberMv td:nth-of-type(6):before { content: "承辦人"; }
+	.myTableMemberMv td:nth-of-type(7):before { content: "承辦人聯絡電話"; }
+
+	.myTableMemberU td:nth-of-type(1):before { content: "公司"; }
+	.myTableMemberU td:nth-of-type(2):before { content: "部門"; }
+	.myTableMemberU td:nth-of-type(3):before { content: "科別"; }
+	.myTableMemberU td:nth-of-type(4):before { content: "承辦人"; }
+	.myTableMemberU td:nth-of-type(5):before { content: "科別主管"; }
+	.myTableMemberU td:nth-of-type(6):before { content: "部門主管"; }
+	.myTableMemberU td:nth-of-type(7):before { content: "承辦人聯絡電話"; }
+
+	.myTableMemberUv td:nth-of-type(1):before { content: "公司"; }
+	.myTableMemberUv td:nth-of-type(2):before { content: "部門"; }
+	.myTableMemberUv td:nth-of-type(3):before { content: "科別"; }
+	.myTableMemberUv td:nth-of-type(4):before { content: "部門主管"; }
+	.myTableMemberUv td:nth-of-type(5):before { content: "科別主管"; }
+	.myTableMemberUv td:nth-of-type(6):before { content: "承辦人"; }
+	.myTableMemberUv td:nth-of-type(7):before { content: "承辦人聯絡電話"; }
+
+	/*.myTableOne td:nth-of-type(1):before { content: "作業項目"; }*/
+	/*.myTableOne td:nth-of-type(2):before { content: "作業種類"; }*/
+	/*.myTableOne td:nth-of-type(3):before { content: "服務時間"; }*/
+	/*.myTableOne td:nth-of-type(4):before { content: "權限控管及資料管制"; }*/
+	/*.myTableOne td:nth-of-type(5):before { content: "共用計劃框架"; }*/
+	/*.myTableOne td:nth-of-type(6):before { content: "費用分攤原則"; }*/
+	/*.myTableOne td:nth-of-type(7):before { content: ""; }*/
+	/*.myTableOne td:nth-of-type(8):before { content: ""; }*/
+	/*.myTableOne td:nth-of-type(9):before { content: ""; }*/
+	/*.myTableOne td:nth-of-type(10):before { content: ""; }*/
+}

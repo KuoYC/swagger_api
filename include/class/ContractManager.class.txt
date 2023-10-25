@@ -1,0 +1,984 @@
+<?php
+
+    /**
+     * Class ContractManager
+     */
+    class ContractManager
+    {
+        /**
+         * todo:查看文件樣板資料
+         *
+         * @param $rows
+         *
+         * @return mixed
+         */
+        function queryContractTemplate($rows)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array();
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract_template`';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+
+        /**
+         * todo:查看單一文件樣板資料
+         *
+         * @param $rows
+         * @param $id
+         *
+         * @return mixed
+         */
+        function queryContractTemplateByID($rows, $id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('id' => $Conn->UtilCheckNotNullIsNumeric($id) ? $id : '');
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract_template`';
+            $sql .= ' WHERE `CTP_ID` = :id';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:新增
+         *
+         * @param $title
+         * @param $style
+         *
+         * @return array|int|Number
+         */
+        function insertContractTemplate($title, $style)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('title' => $Conn->UtilCheckNotNull($title) ? $title : '',
+                            'style' => $Conn->UtilCheckNotNull($style) ? $style : '');
+            //SQL
+            $sql = ' INSERT INTO `contract_template`(`CTP_Title`, `CTP_Style`)';
+            $sql .= ' VALUES(:title, :style)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:修改文件樣板資料
+         *
+         * @param $title
+         * @param $style
+         * @param $id
+         *
+         * @return array|int
+         */
+        function updateContractTemplateByID($id, $title, $style)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('id'    => $Conn->UtilCheckNotNullIsNumeric($id) ? $id : '',
+                            'title' => $Conn->UtilCheckNotNull($title) ? $title : '',
+                            'style' => $Conn->UtilCheckNotNull($style) ? $style : '');
+            //SQL
+            $sql = ' UPDATE `contract_template`';
+            $sql .= ' SET `CTP_Title` = :title, `CTP_Style` = :style';
+            $sql .= ' WHERE `CTP_ID` = :id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+
+        /**
+         * todo:刪除文件樣板資料
+         *
+         * @param int $id 編號
+         *
+         * @return int|boolean
+         */
+        function deleteContractTemplateByID($id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('id' => $Conn->UtilCheckNotNullIsNumeric($id) ? $id : '');
+            //SQL
+            $sql = ' DELETE FROM `contract_template`';
+            $sql .= ' WHERE `CTP_ID` = :id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:查看文件資料
+         *
+         * @param $rows
+         * @param $ctp_id
+         * @param $search_serial
+         *
+         * @return mixed
+         */
+        function queryContract($rows, $ctp_id, $search_serial)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('search_serial' => $Conn->UtilCheckNotNull($search_serial) ? $search_serial : NULL,
+                            'ctp_id'        => $Conn->UtilCheckNotNullIsNumeric($ctp_id) ? $ctp_id : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` CT';
+            $sql .= ' LEFT JOIN `contract_template` CTP ON CT.`CTP_ID` = CTP.`CTP_ID`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ctp_id) ? ' AND CTP.`CTP_ID` = :ctp_id' : '';
+            $sql .= $Conn->UtilCheckNotNull($search_serial) ? ' AND CT.`CT_Serial` REGEXP CONCAT(\'^\', :search_serial)' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+
+        /**
+         * todo:查看單一文件資料
+         *
+         * @param $rows
+         * @param $id
+         *
+         * @return mixed
+         */
+        function queryContractByID($rows, $id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('id' => $Conn->UtilCheckNotNullIsNumeric($id) ? $id : '');
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` CT';
+            $sql .= ' LEFT JOIN `contract_template` CTP ON CT.`CTP_ID` = CTP.`CTP_ID`';
+            $sql .= ' WHERE CT.`CT_ID` = :id';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:新增
+         *
+         * @param $ctp_id
+         * @param $account
+         * @param $serial
+         * @param $title
+         * @param $type
+         * @param $ss_id
+         * @param $subsidiary
+         * @param $word
+         * @param $purpose
+         * @param $work
+         * @param $value
+         * @param $status
+         *
+         * @return array|int|Number
+         */
+        function insertContract($ctp_id, $account, $serial, $title, $type, $ss_id, $subsidiary, $word, $purpose, $work, $value, $status)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ctp_id'     => $Conn->UtilCheckNotNullIsNumeric($ctp_id) ? $ctp_id : 0,
+                            'account'    => $Conn->UtilCheckNotNull($account) ? $account : '',
+                            'serial'     => $Conn->UtilCheckNotNull($serial) ? $serial : '',
+                            'title'      => $Conn->UtilCheckNotNull($title) ? $title : '',
+                            'type'       => $Conn->UtilCheckNotNull($type) ? $type : '',
+                            'ss_id'      => $Conn->UtilCheckNotNullIsNumeric($ss_id) ? $ss_id : '',
+                            'subsidiary' => $Conn->UtilCheckNotNull($subsidiary) ? $subsidiary : '',
+                            'word'       => $Conn->UtilCheckNotNull($word) ? $word : '',
+                            'purpose'    => $Conn->UtilCheckNotNull($purpose) ? $purpose : '',
+                            'work'       => $Conn->UtilCheckNotNull($work) ? $work : '',
+                            'value'      => $Conn->UtilCheckNotNull($value) ? $value : '',
+                            'status'     => $Conn->UtilCheckNotNullIsNumeric($status) ? $status : 0);
+            //SQL
+            $sql = ' INSERT INTO `contract`(`CTP_ID`, `PL_Account`, `CT_Serial`, `CT_Title`, `CT_Type`, `SS_ID`, `CT_Subsidiary`, `CT_Word`, `CT_Purpose`, `CT_Work`, `CT_Value`, `CT_Status`, `CT_UpdateTime`, `CT_CreateTime`)';
+            $sql .= ' VALUES(:ctp_id, :account, :serial, :title, :type, :ss_id, :subsidiary, :word, :purpose, :work, :value, :status, NOW(), NOW())';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:修改文件資料
+         *
+         * @param $title
+         * @param $ctp_id
+         * @param $account
+         * @param $type
+         * @param $ss_id
+         * @param $subsidiary
+         * @param $word
+         * @param $purpose
+         * @param $work
+         * @param $value
+         * @param $id
+         *
+         * @return array|int
+         */
+        function updateContractByID($id, $ctp_id, $account, $title, $type, $ss_id, $subsidiary, $word, $purpose, $work, $value)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('id'         => $Conn->UtilCheckNotNullIsNumeric($id) ? $id : '',
+                            'ctp_id'     => $Conn->UtilCheckNotNullIsNumeric($ctp_id) ? $ctp_id : NULL,
+                            'account'    => $Conn->UtilCheckNotNull($account) ? $account : NULL,
+                            'title'      => $Conn->UtilCheckNotNull($title) ? $title : '',
+                            'type'       => $Conn->UtilCheckNotNull($type) ? $type : '',
+                            'ss_id'      => $Conn->UtilCheckNotNullIsNumeric($ss_id) ? $ss_id : '',
+                            'subsidiary' => $Conn->UtilCheckNotNull($subsidiary) ? $subsidiary : '',
+                            'word'       => $Conn->UtilCheckNotNull($word) ? $word : '',
+                            'purpose'    => $Conn->UtilCheckNotNull($purpose) ? $purpose : '',
+                            'work'       => $Conn->UtilCheckNotNull($work) ? $work : '',
+                            'value'      => $Conn->UtilCheckNotNull($value) ? $value : '');
+            //SQL
+            $sql = ' UPDATE `contract`';
+            $sql .= ' SET `CT_Title` = :title, `CT_Type` = :type, `SS_ID` = :ss_id, `CT_Subsidiary` = :subsidiary, `CT_Word` = :word, `CT_Purpose` = :purpose, `CT_Work` = :work, `CT_Value` = :value, `CT_UpdateTime` = NOW()';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ctp_id) ? ' , `CTP_ID` = :ctp_id' : '';
+            $sql .= $Conn->UtilCheckNotNull($account) ? ' , `PL_Account` :account' : '';
+            $sql .= ' WHERE `CT_ID` = :id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:修改文件資料狀態
+         *
+         * @param $status
+         * @param $id
+         *
+         * @return array|int
+         */
+        function updateContractStatusByID($id, $status)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('id'     => $Conn->UtilCheckNotNullIsNumeric($id) ? $id : '',
+                            'status' => $Conn->UtilCheckNotNullIsNumeric($status) ? $status : 0);
+            //SQL
+            $sql = ' UPDATE `contract`';
+            $sql .= ' SET `CT_Status` = :status, `CT_UpdateTime` = NOW()';
+            $sql .= ' WHERE `CT_ID` = :id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:修改文件資料狀態
+         *
+         * @param $date
+         * @param $id
+         *
+         * @return array|int
+         */
+        function updateContractTimeByID($id, $date)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('id'   => $Conn->UtilCheckNotNullIsNumeric($id) ? $id : '',
+                            'date' => $Conn->UtilCheckNotNullIsDate($date) ? $date : '');
+            //SQL
+            $sql = ' UPDATE `contract`';
+            $sql .= ' SET `CT_Date` = :date, `CT_UpdateTime` = NOW()';
+            $sql .= ' WHERE `CT_ID` = :id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+
+        /**
+         * todo:刪除文件資料
+         *
+         * @param int $id 編號
+         *
+         * @return int|boolean
+         */
+        function deleteContractByID($id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('id' => $Conn->UtilCheckNotNullIsNumeric($id) ? $id : '');
+            //SQL
+            $sql = ' DELETE FROM `contract`';
+            $sql .= ' WHERE `CTP_ID` = :id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:查看文件樣板資料
+         *
+         * @param $rows
+         *
+         * @return mixed
+         */
+        function querySearchSource($rows)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array();
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `search_source`';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:查看文件樣板資料
+         *
+         * @param $rows
+         *
+         * @return mixed
+         */
+        function queryPersonnel($rows)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array();
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `personnel`';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:查看文件資料
+         *
+         * @param $rows
+         * @param $contract_template_id
+         * @param $contract_id
+         * @param $member_type
+         * @param $subsidiary_id
+         * @param $member_lv0
+         * @param $member_lv1
+         * @param $member_lv2
+         * @param $member_now
+         * @param $member_status
+         * @param $contract_type
+         * @param $contract_status
+         * @param $account
+         *
+         * @return mixed
+         */
+        function queryContractMember($rows, $contract_template_id, $contract_id, $member_type, $subsidiary_id, $member_lv0, $member_lv1, $member_lv2, $member_now, $member_status, $contract_type, $contract_status, $account)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('contract_template_id' => $Conn->UtilCheckNotNullIsNumeric($contract_template_id) ? $contract_template_id : NULL,
+                            'contract_id'          => $Conn->UtilCheckNotNullIsNumeric($contract_id) ? $contract_id : NULL,
+                            'member_type'          => $Conn->UtilCheckNotNullIsNumeric($member_type) ? $member_type : NULL,
+                            'subsidiary_id'        => $Conn->UtilCheckNotNullIsNumeric($subsidiary_id) ? $subsidiary_id : NULL,
+                            'member_lv0'           => $Conn->UtilCheckNotNull($member_lv0) ? $member_lv0 : NULL,
+                            'member_lv1'           => $Conn->UtilCheckNotNull($member_lv1) ? $member_lv1 : NULL,
+                            'member_lv2'           => $Conn->UtilCheckNotNull($member_lv2) ? $member_lv2 : NULL,
+                            'member_now'           => $Conn->UtilCheckNotNull($member_now) ? $member_now : NULL,
+                            'member_status'        => $Conn->UtilCheckNotNullIsNumeric($member_status) ? $member_status : NULL,
+                            'contract_type'        => $Conn->UtilCheckNotNullIsNumeric($contract_type) ? $contract_type : NULL,
+                            'contract_status'      => $Conn->UtilCheckNotNullIsNumeric($contract_status) ? $contract_status : NULL,
+                            'account'              => $Conn->UtilCheckNotNull($account) ? $account : NULL,
+            );
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `member` M';
+            $sql .= ' LEFT JOIN `contract` C ON M.`CT_ID` = C.`CT_ID`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($contract_template_id) ? ' AND C.`CTP_ID` = :contract_template_id' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($contract_id) ? ' AND M.`CT_ID` = :contract_id' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($member_type) ? ' AND M.`MB_Type` = :member_type' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($subsidiary_id) ? ' AND M.`SS_ID` = :subsidiary_id' : '';
+            if ($Conn->UtilCheckNotNull($member_lv0) || $Conn->UtilCheckNotNull($member_lv1) || $Conn->UtilCheckNotNull($member_lv2)) {
+                $sql .= ' AND (';
+                $sql_lv = '';
+                $sql_lv .= $Conn->UtilCheckNotNull($member_lv0) ? ' M.`MB_LV0` = :member_lv0' : '';
+                if ('' != $sql_lv) {
+                    $sql_lv .= $Conn->UtilCheckNotNull($member_lv1) ? ' OR M.`MB_LV1` = :member_lv1' : '';
+                }
+                else {
+                    $sql_lv .= $Conn->UtilCheckNotNull($member_lv1) ? ' M.`MB_LV1` = :member_lv1' : '';
+                }
+                if ('' != $sql_lv) {
+                    $sql_lv .= $Conn->UtilCheckNotNull($member_lv2) ? ' OR M.`MB_LV2` = :member_lv2' : '';
+                }
+                else {
+                    $sql_lv .= $Conn->UtilCheckNotNull($member_lv2) ? ' M.`MB_LV2` = :member_lv2' : '';
+                }
+                $sql .= $sql_lv;
+                $sql .= ' )';
+            }
+            $sql .= $Conn->UtilCheckNotNull($member_now) ? ' AND M.`MB_Now` = :member_now' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($member_status) ? ' AND M.`MB_Status` = :member_status' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($contract_type) ? ' AND C.`CT_Type` = :contract_type' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($contract_status) ? ' AND C.`CT_Status` = :contract_status' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($account) ? ' AND C.`PL_Account` = :account' : '';
+            $sql .= ' AND C.`CT_ID` IS NOT NULL';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:新增簽核流程
+         *
+         * @param $ct_id
+         * @param $type
+         * @param $ss_id
+         * @param $department
+         * @param $branch
+         * @param $lv0
+         * @param $lv1
+         * @param $lv2
+         * @param $phone
+         * @param $lv0_time
+         * @param $lv1_time
+         * @param $lv2_time
+         * @param $lv0_status
+         * @param $lv1_status
+         * @param $lv2_status
+         * @param $status
+         * @param $now
+         *
+         * @return array|int|Number
+         */
+        function insertMember($ct_id, $type, $ss_id, $department, $branch, $lv0, $lv1, $lv2, $phone, $lv0_time, $lv1_time, $lv2_time, $lv0_status, $lv1_status, $lv2_status, $status, $now)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id'      => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : 0,
+                            'type'       => $Conn->UtilCheckNotNullIsNumeric($type) ? $type : 0,
+                            'ss_id'      => $Conn->UtilCheckNotNullIsNumeric($ss_id) ? $ss_id : 0,
+                            'department' => $Conn->UtilCheckNotNull($department) ? $department : '',
+                            'branch'     => $Conn->UtilCheckNotNull($branch) ? $branch : '',
+                            'lv0'        => $Conn->UtilCheckNotNull($lv0) ? $lv0 : '',
+                            'lv1'        => $Conn->UtilCheckNotNull($lv1) ? $lv1 : '',
+                            'lv2'        => $Conn->UtilCheckNotNull($lv2) ? $lv2 : '',
+                            'phone'      => $Conn->UtilCheckNotNull($phone) ? $phone : '',
+                            'lv0_time'   => $Conn->UtilCheckNotNullIsDateTime($lv0_time) ? $lv0_time : NULL,
+                            'lv1_time'   => $Conn->UtilCheckNotNullIsDateTime($lv1_time) ? $lv1_time : NULL,
+                            'lv2_time'   => $Conn->UtilCheckNotNullIsDateTime($lv2_time) ? $lv2_time : NULL,
+                            'lv0_status' => $Conn->UtilCheckNotNullIsNumeric($lv0_status) ? $lv0_status : NULL,
+                            'lv1_status' => $Conn->UtilCheckNotNullIsNumeric($lv1_status) ? $lv1_status : NULL,
+                            'lv2_status' => $Conn->UtilCheckNotNullIsNumeric($lv2_status) ? $lv2_status : NULL,
+                            'status'     => $Conn->UtilCheckNotNullIsNumeric($status) ? $status : NULL,
+                            'now'        => $Conn->UtilCheckNotNull($now) ? $now : NULL);
+            //SQL
+            $sql = ' INSERT INTO `member`(`CT_ID`, `MB_Type`, `SS_ID`, `MB_Department`, `MB_Branch`, `MB_LV0`, `MB_LV1`, `MB_LV2`, `MB_Phone`';
+            $sql .= $Conn->UtilCheckNotNullIsDateTime($lv0_time) ? ' ,  `MB_LV0Time`' : '';
+            $sql .= $Conn->UtilCheckNotNullIsDateTime($lv1_time) ? ' ,  `MB_LV1Time`' : '';
+            $sql .= $Conn->UtilCheckNotNullIsDateTime($lv2_time) ? ' ,  `MB_LV2Time`' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($lv0_status) ? ' ,  `MB_LV0Status`' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($lv1_status) ? ' ,  `MB_LV1Status`' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($lv2_status) ? ' ,  `MB_LV2Status`' : '';
+            $sql .= $Conn->UtilCheckNotNull($status) ? ' ,  `MB_Status`' : '';
+            $sql .= $Conn->UtilCheckNotNull($now) ? ' ,  `MB_Now`' : '';
+            $sql .= ')';
+            $sql .= ' VALUES(:ct_id, :type, :ss_id, :department, :branch, :lv0, :lv1, :lv2, :phone';
+            $sql .= $Conn->UtilCheckNotNullIsDateTime($lv0_time) ? ' ,  :lv0_time' : '';
+            $sql .= $Conn->UtilCheckNotNullIsDateTime($lv1_time) ? ' ,  :lv1_time' : '';
+            $sql .= $Conn->UtilCheckNotNullIsDateTime($lv2_time) ? ' ,  :lv2_time' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($lv0_status) ? ' ,  :lv0_status' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($lv1_status) ? ' ,  :lv1_status' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($lv2_status) ? ' ,  :lv2_status' : '';
+            $sql .= $Conn->UtilCheckNotNull($status) ? ' ,  :status' : '';
+            $sql .= $Conn->UtilCheckNotNull($now) ? ' ,  :now' : '';
+            $sql .= ')';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:刪除文件相關簽核流程
+         *
+         * @param $ct_id
+         *
+         * @return array|int|Number
+         */
+        function deleteMember($ct_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id' => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : '');
+            //SQL
+            $sql = ' DELETE FROM `member`';
+            $sql .= ' WHERE `CT_ID` = :ct_id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:新增簽核流程
+         *
+         * @param $lv0_status
+         * @param $lv1_status
+         * @param $lv2_status
+         * @param $status
+         * @param $now_account
+         * @param $mbId
+         *
+         * @return array|int|Number
+         */
+        function updateMemberStatus($lv0_status, $lv1_status, $lv2_status, $status, $now_account, $mbId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('lv0_status'  => $Conn->UtilCheckNotNullIsNumeric($lv0_status) ? $lv0_status : NULL,
+                            'lv1_status'  => $Conn->UtilCheckNotNullIsNumeric($lv1_status) ? $lv1_status : NULL,
+                            'lv2_status'  => $Conn->UtilCheckNotNullIsNumeric($lv2_status) ? $lv2_status : NULL,
+                            'status'      => $Conn->UtilCheckNotNullIsNumeric($status) ? $status : NULL,
+                            'now_account' => $Conn->UtilCheckNotNull($now_account) ? $now_account : NULL,
+                            'mbId'        => $Conn->UtilCheckNotNullIsNumeric($mbId) ? $mbId : 0);
+            //SQL
+            if ('' != $lv0_status || '' != $lv1_status || '' != $lv2_status || '' != $status || '' != $now_account) {
+                $sql = ' UPDATE `member`';
+                $sql .= ' SET ';
+                $up_sql = '';
+                if ($Conn->UtilCheckNotNullIsNumeric($lv0_status)) {
+                    if ($up_sql != '') {
+                        $up_sql .= ' , ';
+                    }
+                    $up_sql .= ' `MB_LV0Status` = :lv0_status';
+                    $up_sql .= '4' == $lv0_status ? ' , `MB_LV0Time` = NOW()' : '';
+                }
+                if ($Conn->UtilCheckNotNullIsNumeric($lv1_status)) {
+                    if ($up_sql != '') {
+                        $up_sql .= ' , ';
+                    }
+                    $up_sql .= ' `MB_LV1Status` = :lv1_status';
+                    $up_sql .= '4' == $lv1_status ? ' , `MB_LV1Time` = NOW()' : '';
+                }
+                if ($Conn->UtilCheckNotNullIsNumeric($lv2_status)) {
+                    if ($up_sql != '') {
+                        $up_sql .= ' , ';
+                    }
+                    $up_sql .= ' `MB_LV2Status` = :lv2_status';
+                    $up_sql .= '4' == $lv2_status ? ' , `MB_LV2Time` = NOW()' : '';
+                }
+                if ($Conn->UtilCheckNotNullIsNumeric($status)) {
+                    if ($up_sql != '') {
+                        $up_sql .= ' , ';
+                    }
+                    $up_sql .= ' `MB_Status` = :status';
+                }
+                if ($Conn->UtilCheckNotNull($now_account)) {
+                    if ($up_sql != '') {
+                        $up_sql .= ' , ';
+                    }
+                    $up_sql .= ' `MB_Now` = :now_account';
+                }
+                $sql .= $up_sql;
+                $sql .= ' WHERE `MB_ID` = :mbId';
+                $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            }
+            else {
+                $aryExecute = FALSE;
+            }
+            return $aryExecute;
+        }
+
+
+        /**
+         * todo:查看項目
+         *
+         * @param $rows
+         * @param $ct_id
+         *
+         * @return mixed
+         */
+        function queryItem($rows, $ct_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id' => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract_item`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ct_id) ? ' AND `CT_ID` = :ct_id' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:刪除文件相關項目
+         *
+         * @param $ct_id
+         *
+         * @return mixed
+         */
+        function deleteItem($ct_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id' => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : '');
+            //SQL
+            $sql = ' DELETE FROM `contract_item`';
+            $sql .= ' WHERE `CT_ID` = :ct_id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:新增
+         *
+         * @param $ct_id
+         * @param $title
+         * @param $work
+         * @param $time
+         * @param $subsidiaries
+         * @param $control
+         * @param $appo
+         * @param $type
+         * @param $type_note
+         * @param $cost
+         * @param $description
+         * @param $file_meeting
+         * @param $file_plan
+         * @param $file
+         * @param $word
+         * @param $note
+         *
+         * @return array|int|Number
+         */
+        function insertItem($ct_id, $title, $work, $time, $subsidiaries, $control, $appo, $type, $type_note, $cost, $description, $file_meeting, $file_plan, $file, $word, $note)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id'        => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : 0,
+                            'title'        => $Conn->UtilCheckNotNull($title) ? $title : '',
+                            'work'         => $Conn->UtilCheckNotNull($work) ? $work : '',
+                            'time'         => $Conn->UtilCheckNotNull($time) ? $time : '',
+                            'subsidiaries' => $Conn->UtilCheckNotNull($subsidiaries) ? $subsidiaries : '',
+                            'control'      => $Conn->UtilCheckNotNull($control) ? $control : '',
+                            'appo'         => $Conn->UtilCheckNotNull($appo) ? $appo : '',
+                            'type'         => $Conn->UtilCheckNotNull($type) ? $type : '',
+                            'type_note'    => $Conn->UtilCheckNotNull($type_note) ? $type_note : '',
+                            'cost'         => $Conn->UtilCheckNotNullIsNumeric($cost) ? $cost : 0,
+                            'description'  => $Conn->UtilCheckNotNull($description) ? $description : '',
+                            'file_meeting' => $Conn->UtilCheckNotNull($file_meeting) ? $file_meeting : '',
+                            'file_plan'    => $Conn->UtilCheckNotNull($file_plan) ? $file_plan : '',
+                            'file'         => $Conn->UtilCheckNotNull($file) ? $file : '',
+                            'word'         => $Conn->UtilCheckNotNull($word) ? $word : '',
+                            'note'         => $Conn->UtilCheckNotNull($note) ? $note : '');
+            //SQL
+            $sql = ' INSERT INTO `contract_item`(`CT_ID`, `CTI_Title`, `CTI_Work`, `CTI_Time`, `CTI_Subsidiaries`, `CTI_Control`, `CTI_Appo`, `CTI_Type`, `CTI_TypeNote`, `CTI_Cost`, `CTI_Description`, `CTI_FileMeeting`, `CTI_FilePlan`, `CTI_File`, `CTI_Word`, `CTI_Note`)';
+            $sql .= ' VALUES(:ct_id, :title, :work, :time, :subsidiaries, :control, :appo, :type, :type_note, :cost, :description, :file_meeting, :file_plan, :file, :word, :note)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:查看項目預計分攤
+         *
+         * @param $rows
+         * @param $ct_id
+         * @param $cti_id
+         *
+         * @return mixed
+         */
+        function queryItemSubsidiary($rows, $ct_id, $cti_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id'  => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : NULL,
+                            'cti_id' => $Conn->UtilCheckNotNullIsNumeric($cti_id) ? $cti_id : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract_item_subsidiary` CTS';
+            $sql .= ' LEFT JOIN `search_source` SS ON CTS.`SS_ID` = SS.`SS_ID`';
+            $sql .= ' LEFT JOIN `contract_item` CI ON CTS.`CTI_ID` = CI.`CTI_ID`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ct_id) ? ' AND CI.`CT_ID` = :ct_id' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($cti_id) ? ' AND CI.`CTI_ID` = :cti_id' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:刪除文件相關項目預計分攤
+         *
+         * @param $ct_id
+         *
+         * @return mixed
+         */
+        function deleteItemSubsidiary($ct_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id' => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : '');
+            //SQL
+            $sql = ' DELETE CTIS.* FROM `contract_item_subsidiary` CTIS';
+            $sql .= ' LEFT JOIN `contract_item` CTI ON CTI.`CTI_ID` = CTIS.`CTI_ID`';
+            $sql .= ' WHERE CTI.`CT_ID` = :ct_id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:查看計畫實際金額
+         *
+         * @param $ct_status
+         *
+         * @return mixed
+         */
+        function queryItemReport($ct_status)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_status' => $Conn->UtilCheckNotNullIsNumeric($ct_status) ? $ct_status : NULL);
+            //SQL
+            $sql = ' SELECT CT.*, MIN(CIES.`CIES_Year`) AS `Min_Year`, MAX(CIES.`CIES_Year`) AS `Max_Year`, SUM(CIE.`CIE_Cost`) AS `SUM_Cost` FROM `contract` CT';
+            $sql .= ' LEFT JOIN `contract_item` CI ON CI.`CT_ID` = CT.`CT_ID`';
+            $sql .= ' LEFT JOIN `contract_item_exes` CIE ON CI.`CTI_ID` = CIE.`CTI_ID`';
+            $sql .= ' LEFT JOIN `contract_item_exes_subsidiary` CIES ON CIES.`CIE_ID` = CIE.`CIE_ID`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ct_status) ? ' AND CT.`CT_Status` = :ct_status' : '';
+            $sql .= ' GROUP BY CT.CT_ID';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:查看分攤使用年份
+         *
+         *
+         * @return mixed
+         */
+        function queryExesYear()
+        {
+            $Conn = new ConnManager();
+            $arrPar = array();
+            //SQL
+            $sql = ' SELECT `CIES_YEAR` FROM `contract_item_exes_subsidiary` GROUP BY `CIES_Year` ORDER BY `CIES_Year`';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:查看項目實際金額
+         *
+         * @param $ct_status
+         *
+         * @return mixed
+         */
+        function queryItemExesByItem($ct_status)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_status' => $Conn->UtilCheckNotNullIsNumeric($ct_status) ? $ct_status : NULL);
+            //SQL
+            $sql = ' SELECT CT.`CTP_ID`, CT.`SS_ID`, CT.`CT_ID`, CI.`CTI_ID`, CT.`CT_Title`, CI.`CTI_Work`, CI.`CTI_Title`, CI.`CTI_Appo`, SUM(CIE.`CIE_Cost`) AS `Sum_Cost`  FROM `contract` CT';
+            $sql .= ' LEFT JOIN `contract_item` CI ON CI.`CT_ID` = CT.`CT_ID`';
+            $sql .= ' LEFT JOIN `contract_item_exes` CIE ON CIE.`CTI_ID` = CI.`CTI_ID`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ct_status) ? ' AND CT.`CT_Status` = :ct_status' : '';
+            $sql .= ' GROUP BY CI.`CTI_ID`';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:查看項目實際金額
+         *
+         * @param $rows
+         * @param $ct_id
+         *
+         * @return mixed
+         */
+        function queryItemExes($rows, $ct_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id' => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract_item_exes` CIE';
+            $sql .= ' LEFT JOIN `contract_item` CTI ON CTI.`CTI_ID` = CIE.`CTI_ID`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ct_id) ? ' AND CTI.`CTI_ID` = :ct_id' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:刪除文件相關項目實際金額
+         *
+         * @param $ct_id
+         *
+         * @return mixed
+         */
+        function deleteItemExes($ct_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id' => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : '');
+            //SQL
+            $sql = ' DELETE CIR.* FROM `contract_item_exes` CIE';
+            $sql .= ' LEFT JOIN `contract_item` CTI ON CTI.`CTI_ID` = CIE.`CTI_ID`';
+            $sql .= ' WHERE CTI.`CT_ID` = :ct_id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:查看項目實際金額-一公司與年份區分
+         *
+         * @param $ct_status
+         *
+         * @return mixed
+         */
+        function queryExes($ct_status)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_status' => $Conn->UtilCheckNotNullIsNumeric($ct_status) ? $ct_status : NULL);
+            //SQL
+            $sql = ' SELECT CT.`CT_ID`, CI.`CTI_ID`, CIES.`SS_ID`, CIES.`CIES_Year`, SUM(CIES.`CIES_Cost`) AS `Exes_Cost`  FROM `contract_item` CI';
+            $sql .= ' LEFT JOIN `contract_item_exes` CIE ON CIE.`CTI_ID` = CI.`CTI_ID`';
+            $sql .= ' LEFT JOIN `contract_item_exes_subsidiary` CIES ON CIES.`CIE_ID` = CIE.`CIE_ID`';
+            $sql .= ' LEFT JOIN `contract` CT ON CT.`CT_ID` = CI.`CT_ID`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ct_status) ? ' AND CT.`CT_Status` = :ct_status' : '';
+            $sql .= ' GROUP BY CIES.`CIES_Year`, CIES.`SS_ID`, CIE.`CTI_ID`';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+
+        /**
+         * todo:新增
+         *
+         * @param $cti_id
+         * @param $ss_id
+         * @param $ratio
+         * @param $cost
+         *
+         * @return array|int|Number
+         */
+        function insertItemSubsidiary($cti_id, $ss_id, $ratio, $cost)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('cti_id' => $Conn->UtilCheckNotNullIsNumeric($cti_id) ? $cti_id : 0,
+                            'ss_id'  => $Conn->UtilCheckNotNullIsNumeric($ss_id) ? $ss_id : 0,
+                            'ratio'  => $Conn->UtilCheckNotNullIsNumeric($ratio) ? $ratio : 0,
+                            'cost'   => $Conn->UtilCheckNotNullIsNumeric($cost) ? $cost : 0);
+            //SQL
+            $sql = ' INSERT INTO `contract_item_subsidiary`(`CTI_ID`, `SS_ID`, `CTIS_Ratio`, `CTIS_Cost`)';
+            $sql .= ' VALUES(:cti_id, :ss_id, :ratio, :cost)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:新增
+         *
+         * @param $cti_id
+         * @param $title
+         * @param $cost
+         *
+         * @return array|int|Number
+         */
+        function insertItemExes($cti_id, $title, $cost)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('cti_id' => $Conn->UtilCheckNotNullIsNumeric($cti_id) ? $cti_id : 0,
+                            'title'  => $Conn->UtilCheckNotNullIsNumeric($title) ? $title : '',
+                            'cost'   => $Conn->UtilCheckNotNullIsNumeric($cost) ? $cost : 0);
+            //SQL
+            $sql = ' INSERT INTO `contract_item_exes`(`CTI_ID`, `CIE_Title`, `CIE_Cost`)';
+            $sql .= ' VALUES(:cti_id, :title, :cost)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:查看項目費用分攤
+         *
+         * @param $rows
+         * @param $ct_id
+         * @param $cti_id
+         * @param $cie_id
+         *
+         * @return mixed
+         */
+        function queryItemExesSubsidiary($rows, $ct_id, $cti_id, $cie_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id'  => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : NULL,
+                            'cti_id' => $Conn->UtilCheckNotNullIsNumeric($cti_id) ? $cti_id : NULL,
+                            'cie_id' => $Conn->UtilCheckNotNullIsNumeric($cie_id) ? $cie_id : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract_item_exes_subsidiary` CIES';
+            $sql .= ' LEFT JOIN `contract_item_exes` CIE ON CIE.`CIE_ID` = CIES.`CIE_ID`';
+            $sql .= ' LEFT JOIN `contract_item` CI ON CIE.`CTI_ID` = CI.`CTI_ID`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($ct_id) ? ' AND CI.`CT_ID` = :ct_id' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($cti_id) ? ' AND CI.`CTI_ID` = :cti_id' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($cie_id) ? ' AND CIE.`CIE_ID` = :cie_id' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:新增
+         *
+         * @param $cie_id
+         * @param $ss_id
+         * @param $ratio
+         * @param $cost
+         * @param $year
+         *
+         * @return array|int|Number
+         */
+        function insertItemExesSubsidiary($cie_id, $ss_id, $ratio, $cost, $year)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('cie_id' => $Conn->UtilCheckNotNullIsNumeric($cie_id) ? $cie_id : 0,
+                            'ss_id'  => $Conn->UtilCheckNotNullIsNumeric($ss_id) ? $ss_id : 0,
+                            'ratio'  => $Conn->UtilCheckNotNullIsNumeric($ratio) ? $ratio : 0,
+                            'cost'   => $Conn->UtilCheckNotNullIsNumeric($cost) ? $cost : 0,
+                            'year'   => $Conn->UtilCheckNotNullIsNumeric($year) ? $year : 0);
+            //SQL
+            $sql = ' INSERT INTO `contract_item_exes_subsidiary`(`CIE_ID`, `SS_ID`, `CIES_Ratio`, `CIES_Cost`, `CIES_Year`)';
+            $sql .= ' VALUES(:cie_id, :ss_id, :ratio, :cost, :year)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:刪除文件相關
+         *
+         * @param $ct_id
+         *
+         * @return array|int|Number
+         */
+        function deleteItemExesSubsidiary($ct_id)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('ct_id' => $Conn->UtilCheckNotNullIsNumeric($ct_id) ? $ct_id : '');
+            //SQL
+            $sql = ' DELETE CIES.* FROM `contract_item_exes_subsidiary` CIES';
+            $sql .= ' LEFT JOIN `contract_item_exes` CIE ON CIE.`CIE_ID` = CIES.`CIE_ID`';
+            $sql .= ' LEFT JOIN `contract_item` CTI ON CTI.`CTI_ID` = CIE.`CTI_ID`';
+            $sql .= ' WHERE CTI.`CT_ID` = :ct_id';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+
+    }
+
+?>

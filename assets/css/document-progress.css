@@ -1,0 +1,12 @@
+span {
+  font-size: 16px;
+}
+
+.table:not(.table-sm) thead th {
+  background-color: #f0f3ff;
+  color: #6777ef;
+}
+
+tr{
+  border-bottom: 1px solid var(--bs-border-color);
+}

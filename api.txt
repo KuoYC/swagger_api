@@ -1,0 +1,431 @@
+<?php
+    include 'include/config/Web_Config.php';
+    include INCLUDE_PATH.'class/ContractManager.class.php';
+    // 允许跨域请求的源
+    header('Access-Control-Allow-Origin: *');
+    // 允许的请求方法
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    // 允许的请求头
+    header('Access-Control-Allow-Headers: Content-Type');
+    // 允许发送身份验证凭据（如 Cookie）
+    header('Access-Control-Allow-Credentials: true');
+
+    header('Content-Type: application/json');
+    $ContractMgr = new ContractManager();
+    $return_data['code'] = 0;
+    $return_data['message'] = '請求成功';
+    switch ($_GET['type']) {
+        case 'contract_template':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    if (isset($_GET['ctpId'])) {
+                        $contract_template_sl = $ContractMgr->queryContractTemplateByID('', $_GET['ctpId']);
+                        if (0 < $contract_template_sl['count']) {
+                            $contract_template_sl['data']['CTP_Style'] = htmlspecialchars_decode($contract_template_sl['data']['CTP_Style']);
+                        }
+                        $return_data['data'] = replaceArr($contract_template_sl['data']);
+                    }
+                    else {
+                        $contract_template_list = $ContractMgr->queryContractTemplate('');
+                        for ($i = 0; $i < $contract_template_list['count']; $i++) {
+                            $contract_template_list['data'][$i]['CTP_Style'] = htmlspecialchars_decode($contract_template_list['data'][$i]['CTP_Style']);
+                        }
+                        $return_data['data'] = replaceArr($contract_template_list['data']);
+                    }
+                    break;
+                case 'POST'://ad
+                    $data = json_decode(file_get_contents('php://input'), TRUE);
+                    $contract_template_ad = $ContractMgr->insertContractTemplate($data['ctpTitle'], $data['ctpStyle']);
+                    if ($contract_template_ad) {
+//                        $return_data['data']['CTP_ID'] = $contract_template_ad;
+                    }
+                    $return_data['data'] = 'success';
+                    break;
+                case 'PUT'://up
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+
+                    if (isset($data['ctpId'])) {
+                        $contract_template_up = $ContractMgr->updateContractTemplateByID($data['ctpId'], $data['ctpTitle'], $data['ctpStyle']);
+                        if ($contract_template_up) {
+
+                        }
+                        $return_data['data'] = 'success';
+                    }
+                    break;
+                case 'DELETE'://dl
+                    if (isset($_GET['ctpId'])) {
+                        $contract_template_dl = $ContractMgr->deleteContractTemplateByID($_GET['ctpId']);
+                        if ($contract_template_dl) {
+//                            $return_data['data'] = 'success';
+                        }
+                        $return_data['data'] = 'success';
+                    }
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'contract':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    if (isset($_GET['ctId'])) {
+                        $contract_sl = $ContractMgr->queryContractByID('', $_GET['ctId']);
+                        $return_data['count'] = $contract_sl['count'];
+                        if (0 < $contract_sl['count']) {
+                            $contract_sl['data']['CT_Value'] = htmlspecialchars_decode($contract_sl['data']['CT_Value']);
+                            $return_data['data'] = replaceArr($contract_sl['data']);
+                        }
+                    }
+                    else {
+                        $contract_list = $ContractMgr->queryContract('', $_GET['ctpId'], '');
+                        $return_data['data'] = replaceArr($contract_list['data']);
+                    }
+                    break;
+                case 'POST'://ad
+                    $date = date('Ymd', time());
+                    $contract_list = $ContractMgr->queryContract('', '', $date);
+                    $data = json_decode(file_get_contents('php://input'), TRUE);
+//                    echo '<pre>';
+//                    var_dump($data);
+//                    echo '</pre>';
+                    $contract_ad = $ContractMgr->insertContract($data['ctpId'], $data['plAccount'], $date.'-'.str_pad($contract_list['count'] + 1, 3, '0', STR_PAD_LEFT),
+                                                                $data['ctTitle'], $data['ctType'], $data['ssId'], $data['ctSubsidiary'], '', $data['ctPurpose'], $data['ctWork'], $data['ctValue'], 0);
+                    if ($contract_ad) {
+                        if (isset($data['itemList']) && is_array($data['itemList'])) {
+                            //項目
+                            foreach ($data['itemList'] as $item) {
+                                $item_ad = $ContractMgr->insertItem($contract_ad,
+                                                                    $item['ctiTitle'], $item['ctiWork'], $item['ctiTime'], $item['ctiSubsidiaries'], $item['ctiControl'], $item['ctiAppo'], $item['ctiType'], '', $item['ctiCost'],
+                                                                    '', '', '', '', '', '');
+                                if ($item_ad) {
+                                    //預計費用比例
+                                    if (isset($item['ratio']) && is_array($item['ratio'])) {
+                                        foreach ($item['ratio'] as $ratio) {
+                                            $ratio_ad = $ContractMgr->insertItemSubsidiary($item_ad, $ratio['ssId'], $ratio['ctisRatio'], round($item['ctiCost'] * $ratio['ctisRatio'] / $item['ratioCount']));
+                                        }
+                                    }
+                                    //費用資料
+                                    if (isset($item['exes']) && is_array($item['exes'])) {
+                                        foreach ($item['exes'] as $exes) {
+                                            $exes_ad = $ContractMgr->insertItemExes($item_ad, $exes['cieTitle'], $exes['cieCost']);
+                                            //費用計算 分三期 0.3 0.3 0.4
+                                            if (isset($item['ratio']) && is_array($item['ratio'])) {
+                                                foreach ($item['ratio'] as $exes_ss) {
+                                                    $exes_ss_ad = $ContractMgr->insertItemExesSubsidiary($exes_ad, $exes_ss['ssId'], $exes_ss['ctisRatio'], round($exes['cieCost'] * $exes_ss['ctisRatio'] / $item['ratioCount'] * 0.3), 2023);
+                                                    $exes_ss_ad = $ContractMgr->insertItemExesSubsidiary($exes_ad, $exes_ss['ssId'], $exes_ss['ctisRatio'], round($exes['cieCost'] * $exes_ss['ctisRatio'] / $item['ratioCount'] * 0.3), 2024);
+                                                    $exes_ss_ad = $ContractMgr->insertItemExesSubsidiary($exes_ad, $exes_ss['ssId'], $exes_ss['ctisRatio'], round($exes['cieCost'] * $exes_ss['ctisRatio'] / $item['ratioCount'] * 0.4), 2025);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (isset($data['iniMember']) && is_array($data['iniMember'])) {
+                            $i_member_ad = $ContractMgr->insertMember($contract_ad, 0, $data['iniMember']['ssId'], $data['iniMember']['mbDepartment'], $data['iniMember']['mbBranch'], $data['iniMember']['mbLv0'], $data['iniMember']['mbLv1'], $data['iniMember']['mbLv2'], $data['iniMember']['mbPhone'], '', '', '', '', '', '', '', '');
+                        }
+                        if (isset($data['maiMember']) && is_array($data['maiMember'])) {
+                            foreach ($data['maiMember'] as $mbr) {
+                                $m_member_ad = $ContractMgr->insertMember($contract_ad, 1, $mbr['ssId'], $mbr['mbDepartment'], $mbr['mbBranch'], $mbr['mbLv0'], $mbr['mbLv1'], $mbr['mbLv2'], $mbr['mbPhone'], '', '', '', '', '', '', '', '');
+                            }
+                        }
+                        if (isset($data['useMember']) && is_array($data['useMember'])) {
+                            foreach ($data['useMember'] as $mbr) {
+                                $u_member_ad = $ContractMgr->insertMember($contract_ad, 2, $mbr['ssId'], $mbr['mbDepartment'], $mbr['mbBranch'], $mbr['mbLv0'], $mbr['mbLv1'], $mbr['mbLv2'], $mbr['mbPhone'], '', '', '', '', '', '', '', '');
+                            }
+                        }
+                        $return_data['ctId'] = $contract_ad;
+//                        $return_data['ctId'] = $contract_ad;
+                    }
+//                    $return_data['data'] = 'success';
+                    break;
+                case 'PUT'://up
+//                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+//
+//                    if (isset($data['ctId'])) {
+//                        $contract_up = $ContractMgr->updateContractByID($data['ctId'], $data['ctTitle'], $data['ctType'], $data['ssId'], $data['ctSubsidiary'], '', $data['ctPurpose'], $data['ctWork'], $data['ctValue']);
+//                        if ($contract_up) {
+//
+//                        }
+//                        $return_data['data'] = 'success';
+//                    }
+                    $data = json_decode(file_get_contents('php://input'), TRUE);
+                    $contract_up = $ContractMgr->updateContractByID($data['ctId'], $data['ctpId'], $data['plAccount'],
+                                                                    $data['ctTitle'], $data['ctType'], $data['ssId'], $data['ctSubsidiary'], $data['ctValue'], $data['ctPurpose'], $data['ctWork'], $data['ctValue']);
+                    $ContractMgr->deleteItemSubsidiary($data);
+                    $ContractMgr->deleteItemExesSubsidiary($data['ctId']);
+                    $ContractMgr->deleteItemExes($data['ctId']);
+                    $ContractMgr->deleteItem($data['ctId']);
+                    $ContractMgr->deleteMember($data['ctId']);
+                    if (isset($data['itemList']) && is_array($data['itemList'])) {
+                        //項目
+                        foreach ($data['itemList'] as $item) {
+                            $item_ad = $ContractMgr->insertItem($data['ctId'],
+                                                                $item['ctiTitle'], $item['ctiWork'], $item['ctiTime'], $item['ctiSubsidiaries'], $item['ctiControl'], $item['ctiAppo'], $item['ctiType'], '', $item['ctiCost'],
+                                                                '', '', '', '', '', '');
+                            if ($item_ad) {
+                                //預計費用比例
+                                if (isset($item['ratio']) && is_array($item['ratio'])) {
+                                    foreach ($item['ratio'] as $ratio) {
+                                        $ratio_ad = $ContractMgr->insertItemSubsidiary($item_ad, $ratio['ssId'], $ratio['ctisRatio'], round($item['ctiCost'] * $ratio['ctisRatio'] / $item['ratioCount']));
+                                    }
+                                }
+                                //費用資料
+                                if (isset($item['exes']) && is_array($item['exes'])) {
+                                    foreach ($item['exes'] as $exes) {
+                                        $exes_ad = $ContractMgr->insertItemExes($item_ad, $exes['cieTitle'], $exes['cieCost']);
+                                        //費用計算 分三期 0.3 0.3 0.4
+                                        if (isset($item['ratio']) && is_array($item['ratio'])) {
+                                            foreach ($item['ratio'] as $exes_ss) {
+                                                $exes_ss_ad = $ContractMgr->insertItemExesSubsidiary($exes_ad, $exes_ss['ssId'], $exes_ss['ctisRatio'], round($exes['cieCost'] * $exes_ss['ctisRatio'] / $item['ratioCount'] * 0.3), 2023);
+                                                $exes_ss_ad = $ContractMgr->insertItemExesSubsidiary($exes_ad, $exes_ss['ssId'], $exes_ss['ctisRatio'], round($exes['cieCost'] * $exes_ss['ctisRatio'] / $item['ratioCount'] * 0.3), 2024);
+                                                $exes_ss_ad = $ContractMgr->insertItemExesSubsidiary($exes_ad, $exes_ss['ssId'], $exes_ss['ctisRatio'], round($exes['cieCost'] * $exes_ss['ctisRatio'] / $item['ratioCount'] * 0.4), 2025);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (isset($data['iniMember']) && is_array($data['iniMember'])) {
+                        $i_member_ad = $ContractMgr->insertMember($data['ctId'], 0, $data['iniMember']['ssId'], $data['iniMember']['mbDepartment'], $data['iniMember']['mbBranch'], $data['iniMember']['mbLv0'], $data['iniMember']['mbLv1'], $data['iniMember']['mbLv2'], $data['iniMember']['mbPhone'], $data['iniMember']['mbLv0Time'], $data['iniMember']['mbLv1Time'], $data['iniMember']['mbLv2Time'], $data['iniMember']['mbLv0Status'], $data['iniMember']['mbLv1Status'], $data['iniMember']['mbLv2Status'], $data['iniMember']['mbStatus'], $data['iniMember']['mbNow']);
+                    }
+                    if (isset($data['maiMember']) && is_array($data['maiMember'])) {
+                        foreach ($data['maiMember'] as $mbr) {
+                            $m_member_ad = $ContractMgr->insertMember($data['ctId'], 1, $mbr['ssId'], $mbr['mbDepartment'], $mbr['mbBranch'], $mbr['mbLv0'], $mbr['mbLv1'], $mbr['mbLv2'], $mbr['mbPhone'], $mbr['mbLv0Time'], $mbr['mbLv1Time'], $mbr['mbLv2Time'], $mbr['mbLv0Status'], $mbr['mbLv1Status'], $mbr['mbLv2Status'], $mbr['mbStatus'], $mbr['mbNow']);
+                        }
+                    }
+                    if (isset($data['useMember']) && is_array($data['useMember'])) {
+                        foreach ($data['useMember'] as $mbr) {
+                            $u_member_ad = $ContractMgr->insertMember($data['ctId'], 2, $mbr['ssId'], $mbr['mbDepartment'], $mbr['mbBranch'], $mbr['mbLv0'], $mbr['mbLv1'], $mbr['mbLv2'], $mbr['mbPhone'], $mbr['mbLv0Time'], $mbr['mbLv1Time'], $mbr['mbLv2Time'], $mbr['mbLv0Status'], $mbr['mbLv1Status'], $mbr['mbLv2Status'], $mbr['mbStatus'], $mbr['mbNow']);
+                        }
+                    }
+//                        $return_data['ctId'] = $contract_ad;
+                    $return_data['data'] = 'success';
+                    break;
+                case 'DELETE'://dl
+                    if (isset($_GET['ctpId'])) {
+                        $contract_dl = $ContractMgr->deleteContractByID($_GET['ctpId']);
+                        if ($contract_dl) {
+
+                        }
+                        $return_data['data'] = 'success';
+                    }
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'contract_status':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'PUT'://up
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+
+                    if (isset($data['ctId'])) {
+                        $contract_up = $ContractMgr->updateContractStatusByID($data['ctId'], $data['ctStatus']);
+                        if ($contract_up) {
+
+                        }
+                        $return_data['data'] = 'success';
+                    }
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'contract_time':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'PUT'://up
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+
+                    if (isset($data['ctId'])) {
+                        $contract_up = $ContractMgr->updateContractTimeByID($data['ctId'], $data['ctDate']);
+                        if ($contract_up) {
+
+                        }
+                        $return_data['data'] = 'success';
+                    }
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'search_source':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $contract_template_list = $ContractMgr->querySearchSource('');
+                    $return_data['data'] = replaceArr($contract_template_list['data']);
+                    break;
+            }
+            break;
+        case 'personnel':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $personnel_list = $ContractMgr->queryPersonnel('');
+                    $return_data['data'] = replaceArr($personnel_list['data']);
+                    break;
+            }
+            break;
+        case 'contract_member':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $rows = array('M.*', 'C.`CTP_ID`', 'C.`PL_Account`', 'C.`CT_Serial`', 'C.`CT_Title`', 'C.`CT_Type`', 'C.`CT_Date`', 'C.`SS_ID` AS `ctSsId`', 'C.`CT_Subsidiary`', 'C.`CT_Word`', 'C.`CT_Purpose`', 'C.`CT_Work`', 'C.`CT_Value`', 'C.`CT_Log`', 'C.`CT_Status`', 'C.`CT_UpdateTime`', 'C.`CT_CreateTime`');
+                    $contract_member_list = $ContractMgr->queryContractMember($rows,
+                                                                              $_GET['ctpId'],
+                                                                              $_GET['ctId'],
+                                                                              $_GET['mbType'],
+                                                                              $_GET['ssId'],
+                                                                              $_GET['mbLv0'],
+                                                                              $_GET['mbLv1'],
+                                                                              $_GET['mbLv2'],
+                                                                              $_GET['mbNow'],
+                                                                              $_GET['mbStatus'],
+                                                                              $_GET['ctType'],
+                                                                              $_GET['ctStatus'],
+                                                                              $_GET['plAccount']);
+                    $return_data['data'] = replaceArr($contract_member_list['data']);
+                    break;
+                case 'PUT'://up
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+
+                    $contract_member_up = $ContractMgr->updateMemberStatus($data['mbLv0Status'], $data['mbLv1Status'], $data['mbLv2Status'], $data['mbStatus'], $data['mbNow'], $data['mbId']);
+                    if ($contract_member_up) {
+
+                    }
+                    $return_data['data'] = 'success';
+                    break;
+            }
+            break;
+        case 'contract_item':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $item_list = $ContractMgr->queryItem('', $_GET['ctId']);
+                    $return_data['data'] = replaceArr($item_list['data']);
+                    break;
+                case 'POST'://ad
+                    $date = date('Ymd', time());
+                    $data = json_decode(file_get_contents('php://input'), TRUE);
+                    $item_ad = $ContractMgr->insertItem($data['cpId'],
+                                                        $data['ctiTitle'], $data['ctiWork'], $data['ctiTime'], $data['ctiControl'], $data['ctiAppo'], $data['ctiType'], $data['ctiTypenote'], $data['ctiCost'], $data['ctiDescription'],
+                                                        $data['ctiFilemeetiong'], $data['ctiFileplan'], $data['ctiFile'], $data['ctiWord'], $data['ctiNote']);
+                    if ($item_ad) {
+                        $return_data['data'] = 'success';
+                        $return_data['ctiId'] = $item_ad;
+                    }
+                    $return_data['data'] = 'success';
+                    break;
+            }
+            break;
+        case 'contract_item_subsidiary':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $item_subsidiary_list = $ContractMgr->queryItemSubsidiary('', $_GET['ctId'], $_GET['ctiId']);
+                    $return_data['data'] = replaceArr($item_subsidiary_list['data']);
+                    break;
+            }
+            break;
+        case 'contract_item_report':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+
+                    $item_report_list = $ContractMgr->queryItemReport($_GET['ctStatus']);
+                    $return_data['data'] = replaceArr($item_report_list['data']);
+                    break;
+            }
+            break;
+        case 'contract_exes_year':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $exes_year = NULL;
+                    $exes_year_list = $ContractMgr->queryExesYear();
+                    for ($i = 0; $i < $exes_year_list['count']; $i++) {
+                        $exes_year[] = $exes_year_list['data'][$i]['CIES_YEAR'];
+                    }
+                    $return_data['data'] = replaceArr($exes_year);
+                    break;
+            }
+            break;
+        case 'contract_item_exes':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $item_exes_list = $ContractMgr->queryItemExesByItem($_GET['ctStatus']);
+                    $return_data['data'] = replaceArr($item_exes_list['data']);
+                    break;
+            }
+            break;
+        case 'contract_exes':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $exes_list = $ContractMgr->queryExes($_GET['ctStatus']);
+                    $return_data['data'] = replaceArr($exes_list['data']);
+                    break;
+            }
+            break;
+
+        case 'item_exes':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $rows = array('CIE.*');
+                    $exes_list = $ContractMgr->queryItemExes($rows, $_GET['ctId']);
+                    $return_data['data'] = replaceArr($exes_list['data']);
+                    break;
+            }
+            break;
+
+    }
+    die(json_encode($return_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK));
+
+
+    function replaceString($str)
+    {
+        $parts = explode('_', $str); // 將字串以 '_' 分割為陣列
+        if (count($parts) != 1) {
+            $beforeString = strtolower($parts[0]); // 取得 '_' 前的部分
+            $afterString = '';
+            for ($i = 1; $i < count($parts); $i++) {
+                $afterString .= $parts[$i];
+            }
+            $afterString = ucfirst(strtolower($afterString));
+            $newString = $beforeString.$afterString;
+            if (preg_match('/\d[a-zA-Z]/', $newString)) {
+                $newString = preg_replace_callback('/(\d)([a-zA-Z])/', function ($matches) {
+                    return $matches[1].ucfirst($matches[2]);
+                }, $newString);
+            }
+
+            return $newString; // 返回結果
+        }
+        else {
+            return $str;
+        }
+    }
+
+
+    function replaceArr($arr)
+    {
+// 檢查陣列是否為一維
+        if (is_array(reset($arr))) {
+            // 二維陣列的處理
+            foreach ($arr as &$subArr) {
+                $subArr = replaceArr($subArr); // 遞迴處理子陣列
+            }
+        }
+        else {
+            // 一維陣列的處理
+            $keys = array_keys($arr); // 取得陣列的鍵名
+            foreach ($keys as $key) {
+                $newKey = replaceString($key); // 使用前面定義的 replaceString 函數進行鍵名置換
+                if ($newKey !== $key) {
+                    $arr[$newKey] = $arr[$key]; // 新鍵名對應到舊值
+                    unset($arr[$key]); // 刪除舊鍵名
+                }
+            }
+        }
+
+        return $arr;
+    }
+
+?>

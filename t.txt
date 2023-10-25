@@ -1,0 +1,1 @@
+"perAccount","perNo","perName","perPar","perNick","perPosition","perPositionName","perEmail","perPhone1","perPhone2","perPhone3","perBu1Code","perBu1","perBu2Code","perBu2","perBu3Code","perBu3","perMobile"

@@ -1,0 +1,41 @@
+.myNotification {
+    /* height: 200px; */
+    /* overflow: scroll; */
+    padding-top: 0 !important;
+  }
+
+  .myNew>tr {
+    border-color: white;
+  }
+
+  .text-job {
+    cursor: auto;
+  }
+
+  .card .card-header .btn {
+    padding: 5px 15px;
+  }
+
+  .contact-list {
+    border-bottom: 0px solid #dcdbdb;
+  }
+
+  .myNew>tr>th,
+  .myNew>tr>td {
+    height: 40px !important;
+  }
+
+  .myFont16Title{
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .m-tb {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .r-c-col {
+    display: inline-block;
+    padding-right: 10px;
+  }
