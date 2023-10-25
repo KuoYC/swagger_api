@@ -1,4 +1,5 @@
 .DS_Store
+.idea
 swagger-ui-master
 sw_api
 assets
@@ -6,7 +7,6 @@ upload
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
 *.suo
 *.ntvs*
 *.njsproj
