@@ -456,7 +456,7 @@
                     break;
             }
             break;
-        case 'contract_create'://todo: contract_create新增文件資料
+        case 'contractCreate'://todo: contract_create新增文件資料
             if ('POST' == $_SERVER['REQUEST_METHOD']) {
                 $date = date('Ymd', time());
                 $contract_list = $ContractMgr->queryContract(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -557,7 +557,7 @@
                 }
             }
             break;
-        case 'contract_update'://todo: contract_update修改文件資料
+        case 'contractUpdate'://todo: contract_update修改文件資料
             if ('POST' == $_SERVER['REQUEST_METHOD']) {
                 $contract_sl = $ContractMgr->queryContractByID(NULL, $_POST['conId']);
                 if (0 < $contract_sl['count']) {
@@ -733,7 +733,7 @@
                 }
             }
             break;
-        case 'contract_status': // todo: contract_status 修改文件狀態
+        case 'contractStatus': // todo: contract_status 修改文件狀態
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT':// todo: contract_status PUT[conId, conStatus, {conDate|null}] 修改文件狀態
                     $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
@@ -754,7 +754,7 @@
                     break;
             }
             break;
-        case 'contract_default':// todo: contract_default 重置文件狀態
+        case 'contractDefault':// todo: contract_default 重置文件狀態
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT':// todo: contract_default PUT[conId] 重置文件狀態 ps.將文件conStatus=0, conDate不予理會, member.conId相關全部資料重置(xxStatus=-1, xxMsg=null, xxTime=null, memNow=null, memNowPosition=null)
                     $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
@@ -772,7 +772,7 @@
                     break;
             }
             break;
-        case 'contract_member':// todo: contract_member 取得文件相關的所有簽核名單
+        case 'contractMember':// todo: contract_member 取得文件相關的所有簽核名單
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract_member GET[conId, {memType|null}]
                     $member_list = $ContractMgr->queryMember(NULL, $_GET['conId'], $_GET['memType']);
@@ -780,7 +780,7 @@
                     break;
             }
             break;
-        case 'member_status'://todo:member_status簽核人員資料修改
+        case 'memberStatus'://todo:member_status簽核人員資料修改
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT'://up
                     $data = json_decode(file_get_contents('php://input'), TRUE);
@@ -803,7 +803,7 @@
                     break;
             }
             break;
-        case 'member_status_all'://todo:member_status_all所有簽核人員資料修改
+        case 'memberStatusAll'://todo:member_status_all所有簽核人員資料修改
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT'://up
                     $data = json_decode(file_get_contents('php://input'), TRUE);
@@ -817,7 +817,7 @@
                     break;
             }
             break;
-        case 'contract_item':// todo: contract_item 取得文件相關的所有作業項目
+        case 'contractItem':// todo: contract_item 取得文件相關的所有作業項目
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract_item GET[conId]
                     $item_list = $ContractMgr->queryItem(NULL, $_GET['conId']);
@@ -830,7 +830,7 @@
             break;
 
 
-        case 'personnel_purview':
+        case 'personnelPurview':
             break;
         case 'admin':// todo: admin 管理員
             switch ($_SERVER['REQUEST_METHOD']) {
@@ -854,7 +854,7 @@
                     break;
             }
             break;
-        case 'admin_login':// todo: admin 管理員登入
+        case 'adminLogin':// todo: admin 管理員登入
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: admin GET[admAccount, md5(admPassword)] 管理員登入
                     if (isset($_GET['souId'])) {
