@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/api.php" afterDir="false" />
     </list>
@@ -55,8 +56,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="666">
-              <caret line="431" column="135" selection-start-line="431" selection-start-column="135" selection-end-line="431" selection-end-column="135" />
+            <state relative-caret-position="207">
+              <caret line="441" column="60" selection-start-line="441" selection-start-column="60" selection-end-line="441" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -66,6 +67,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
               <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -190,6 +200,7 @@
         <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
         <option value="$PROJECT_DIR$/.htaccess" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/Cathay-main/app/payment-share.html" />
         <option value="$PROJECT_DIR$/api.php" />
       </list>
     </option>
@@ -215,6 +226,17 @@
             <path>
               <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
               <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+              <item name="Cathay-main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+              <item name="Cathay-main" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
@@ -289,12 +311,12 @@
       <workItem from="1697272108286" duration="8338000" />
       <workItem from="1697777714545" duration="9514000" />
       <workItem from="1697965176657" duration="17801000" />
-      <workItem from="1698216437347" duration="1308000" />
+      <workItem from="1698216437347" duration="3310000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="301264000" />
+    <option name="totallyTimeSpent" value="303266000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -313,7 +335,7 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32961586" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.5365552" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -484,13 +506,6 @@
     <entry file="file://$PROJECT_DIR$/.git/info/exclude">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitattributes">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
@@ -498,10 +513,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Cathay-main/app/payment-share.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="706">
+          <caret line="1669" column="59" selection-start-line="1669" selection-start-column="59" selection-end-line="1669" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="431" column="135" selection-start-line="431" selection-start-column="135" selection-end-line="431" selection-end-column="135" />
+        <state relative-caret-position="207">
+          <caret line="441" column="60" selection-start-line="441" selection-start-column="60" selection-end-line="441" selection-end-column="60" />
         </state>
       </provider>
     </entry>

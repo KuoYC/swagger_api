@@ -392,8 +392,8 @@
                         $return_data['count'] = $contract_sl['count'];
                         if (0 < $contract_sl['count']) {
                             $contract_sl['data']['conValue'] = htmlspecialchars_decode($contract_sl['data']['conValue']);
-                            $contract_sl['data']['filePath'] = 'https://ju-house.com/upload/';
-//                            $contract_sl['data']['filePath'] = 'http://www.api.ks/upload/';
+//                            $contract_sl['data']['filePath'] = 'https://ju-house.com/upload/';
+                            $contract_sl['data']['filePath'] = 'http://www.api.ks/upload/';
                             $return_data['data'] = replaceArr($contract_sl['data']);
                         }
                     }
