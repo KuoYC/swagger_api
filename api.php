@@ -439,7 +439,6 @@
                         if ($contract_list['count'] > 0) {
                             for ($i = 0; $i < $contract_list['count']; $i++) {
                                 $contract_list['data'][$i]['conValue'] = htmlspecialchars_decode($contract_list['data'][$i]['conValue']);
-                                $contract_list['data'][$i]['conLog'] = htmlspecialchars_decode($contract_list['data'][$i]['conLog']);
                             }
                         }
                         $return_data['data'] = replaceArr($contract_list['data']);
@@ -742,7 +741,10 @@
                     if (isset($data['conId'])) {
                         $contract_up = $ContractMgr->updateContractStatusByID($data['conId'], $data['conStatus'], $data['conDate']);
                         if ($contract_up) {
-                            $ContractMgr->updateContractLogByID($data['conId'], $data['conLogMsg']);
+                            if (isset($data['conLog'])) {
+                                $log = json_decode($data['conLog'], TRUE);
+                                $ContractMgr->insertContractLog($log['conId'], $log['memId'], $log['perKey'], $log['colMemberStatus'], $log['colMsg'], $log);
+                            }
                             $return_data['data'] = 'success';
                         }
                     }
@@ -785,11 +787,13 @@
                     $member_up = $ContractMgr->updateMemberStatus($data['memId'], $data['memLV0Status'], $data['memLV0Time'], $data['memLV0Msg'], $data['memLVCKey'], $data['memLVCName'], $data['memLVCPositionName'], $data['memLVCStatus'], $data['memLVCTime'], $data['memLV1Status'], $data['memLV1Time'], $data['memLV1Msg'], $data['memLV2Status'], $data['memLV2Time'], $data['memLV2Msg'], $data['memNowKey'], $data['memNowStatus'], $data['memStatus']);
                     $contract_update_time = $ContractMgr->updateContractUpdateTimeByID($data['conId']);
                     if ($member_up) {
-                        if (isset($data['conLogMsg'])) {
-                            $ContractMgr->updateContractLogByID($data['conId'], $data['conLogMsg']);
+                        if (isset($data['conLog'])) {
+                            $log = json_decode($data['conLog'], TRUE);
+                            $ContractMgr->insertContractLog($log['conId'], $log['memId'], $log['perKey'], $log['colMemberStatus'], $log['colMsg'], $log);
                         }
-                        if (isset($data['conLogMsgNext'])) {
-                            $ContractMgr->updateContractLogByID($data['conId'], $data['conLogMsgNext']);
+                        if (isset($data['conLogNext'])) {
+                            $log = json_decode($data['conLogNext'], TRUE);
+                            $ContractMgr->insertContractLog($log['conId'], $log['memId'], $log['perKey'], $log['colMemberStatus'], $log['colMsg'], $log);
                         }
                         $return_data['data'] = 'success';
                     }

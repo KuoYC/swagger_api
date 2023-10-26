@@ -21,7 +21,7 @@
             //SQL
             $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `news`';
             $sql .= $Conn->getLimit($anum, $num);
-            $sql.= ' ORDER BY `nwsTop` DESC, `nwsRelease` DESC';
+            $sql .= ' ORDER BY `nwsTop` DESC, `nwsRelease` DESC';
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
             return $aryData;
@@ -61,11 +61,11 @@
         function insertNews($nwsTitle, $nwsRelease, $nwsContent, $nwsTop, $nwsType)
         {
             $Conn = new ConnManager();
-            $arrPar = array('nwsTitle' => $Conn->UtilCheckNotNull($nwsTitle) ? $nwsTitle : '',
+            $arrPar = array('nwsTitle'   => $Conn->UtilCheckNotNull($nwsTitle) ? $nwsTitle : '',
                             'nwsRelease' => $Conn->UtilCheckNotNullIsDate($nwsRelease) ? $nwsRelease : date('Y-m-d'),
                             'nwsContent' => $Conn->UtilCheckNotNull($nwsContent) ? $nwsContent : '',
-                            'nwsTop' => $Conn->UtilCheckNotNullIsNumeric($nwsTop) ? $nwsTop : 0,
-                            'nwsType' => $Conn->UtilCheckNotNullIsNumeric($nwsType) ? $nwsType : 0);
+                            'nwsTop'     => $Conn->UtilCheckNotNullIsNumeric($nwsTop) ? $nwsTop : 0,
+                            'nwsType'    => $Conn->UtilCheckNotNullIsNumeric($nwsType) ? $nwsType : 0);
             //SQL
             $sql = ' INSERT INTO `news`(`nwsTitle`, `nwsRelease`, `nwsContent`, `nwsTop`, `nwsType`)
                      VALUES(:nwsTitle, :nwsRelease, :nwsContent, :nwsTop, :nwsType)';
@@ -93,16 +93,16 @@
         function updateNewsByID($nwsId, $nwsTitle, $nwsRelease, $nwsContent, $nwsTop, $nwsType)
         {
             $Conn = new ConnManager();
-            $arrPar = array('nwsId'    => $Conn->UtilCheckNotNullIsNumeric($nwsId) ? $nwsId : '',
-                            'nwsTitle' => $Conn->UtilCheckNotNull($nwsTitle) ? $nwsTitle : '',
+            $arrPar = array('nwsId'      => $Conn->UtilCheckNotNullIsNumeric($nwsId) ? $nwsId : '',
+                            'nwsTitle'   => $Conn->UtilCheckNotNull($nwsTitle) ? $nwsTitle : '',
                             'nwsRelease' => $Conn->UtilCheckNotNullIsDate($nwsRelease) ? $nwsRelease : NULL,
                             'nwsContent' => $Conn->UtilCheckNotNull($nwsContent) ? $nwsContent : '',
-                            'nwsTop' => $Conn->UtilCheckNotNullIsNumeric($nwsTop) ? $nwsTop : 0,
-                            'nwsType' => $Conn->UtilCheckNotNullIsNumeric($nwsType) ? $nwsType : 0);
+                            'nwsTop'     => $Conn->UtilCheckNotNullIsNumeric($nwsTop) ? $nwsTop : 0,
+                            'nwsType'    => $Conn->UtilCheckNotNullIsNumeric($nwsType) ? $nwsType : 0);
             //SQL
             $sql = ' UPDATE `news`
                      SET `nwsTitle` = :nwsTitle, `nwsContent` = :nwsContent, `nwsTop` = :nwsTop, `nwsType` = :nwsType'.
-                     ($Conn->UtilCheckNotNullIsDate($nwsRelease) ? ', `nwsRelease` = :nwsRelease' : '').'
+                ($Conn->UtilCheckNotNullIsDate($nwsRelease) ? ', `nwsRelease` = :nwsRelease' : '').'
                      WHERE `nwsId` = :nwsId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
@@ -125,9 +125,6 @@
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
         }
-
-
-
 
         /**
          * todo:queryTemplate 查看樣板
@@ -1480,7 +1477,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'conStatus'  => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
@@ -1536,7 +1533,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
@@ -1589,7 +1586,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
@@ -1642,7 +1639,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
@@ -1695,7 +1692,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
@@ -1749,7 +1746,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'conStatus'  => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
@@ -1803,7 +1800,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
@@ -1856,7 +1853,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
@@ -1909,7 +1906,7 @@
             $Conn = new ConnManager();
             $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
@@ -1967,7 +1964,6 @@
         }
 
         /**
-         * todo:待調整
          * todo:insertContract 新增文件
          *
          * @param $temId
@@ -1993,7 +1989,7 @@
             $Conn = new ConnManager();
             $arrPar = array('temId'          => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : 0,
                             'perKey'         => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'comCode'          => $Conn->UtilCheckNotNull($comCode) ? $comCode : 0,
+                            'comCode'        => $Conn->UtilCheckNotNull($comCode) ? $comCode : 0,
                             'conSerial'      => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : '',
                             'conTitle'       => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
                             'conType'        => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
@@ -2216,6 +2212,85 @@
             return $aryExecute;
         }
 
+        /**
+         * todo:queryContractLog 查看文件Log
+         *
+         * @param $rows
+         * @param $conId
+         * @param $anum
+         * @param $num
+         *
+         * @return mixed
+         */
+        function queryContractLog($rows, $conId, $anum, $num)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId' => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contractLog` CL';
+            $sql .= ' LEFT JOIN `contract` C ON C.`conId` = CL.`conId`';
+            $sql .= ' LEFT JOIN `member` M ON M.`memId` = CL.`memId`';
+            $sql .= ' LEFT JOIN `personnel` P ON P.`perKey` = CL.`perKey`';
+            $sql .= ' WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conId) ? ' AND CL.`conId` = :conId' : '';
+            $sql .= $Conn->getLimit($anum, $num);
+            $sql .= ' ORDER BY `colCreateTime` DESC';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:insertContractLog 新增文件Log
+         *
+         * @param $conId
+         * @param $memId
+         * @param $perKey
+         * @param $colMemberStatus
+         * @param $colMsg
+         * @param $colStatus
+         *
+         * @return array|int|Number
+         */
+        function insertContractLog($conId, $memId, $perKey, $colMemberStatus, $colMsg, $colStatus)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
+                            'memId'     => $Conn->UtilCheckNotNullIsNumeric($memId) ? $memId : '',
+                            'perKey'    => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
+                            'colMemberStatus' => $Conn->UtilCheckNotNullIsNumeric($colMemberStatus) ? $colMemberStatus : -1,
+                            'colMsg'    => $Conn->UtilCheckNotNull($colMsg) ? $colMsg : '',
+                            'colStatus' => $Conn->UtilCheckNotNullIsNumeric($colStatus) ? $colStatus : -1);
+            //SQL
+            $sql = ' INSERT INTO `contractLog`(`conId`, `memId`, `perKey`, `colMemberStatus`, `colMsg`, `colStatus`, `colCreateTime`)
+                     VALUES(:conId, :memId, :perKey, :colMemberStatus, :colMsg, :colStatus, NOW())';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:deleteContractLogByContract 刪除文件相關文件Log
+         *
+         * @param int $conId 編號
+         *
+         * @return int|boolean
+         */
+        function deleteContractLogByContract($conId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId' => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '');
+            //SQL
+            $sql = ' DELETE FROM `contractLog`
+                     WHERE `conId` = :conId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
 
         /**
          * todo:queryContractByMember 查看文件簽核-參與者
@@ -2251,7 +2326,7 @@
                             'conId'        => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL,
                             'conType'      => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : NULL,
                             'conSerial'    => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comCode'        => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'conStatus'    => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
                             'memType'      => $Conn->UtilCheckNotNullIsNumeric($memType) ? $memType : NULL,
                             'memLV0Key'    => $Conn->UtilCheckNotNull($memLV0Key) ? $memLV0Key : NULL,
@@ -2351,7 +2426,7 @@
                             'conId'        => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL,
                             'conType'      => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : NULL,
                             'conSerial'    => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comCode'        => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
                             'conStatus'    => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
                             'memType'      => $Conn->UtilCheckNotNullIsNumeric($memType) ? $memType : NULL,
                             'memLV0Key'    => $Conn->UtilCheckNotNull($memLV0Key) ? $memLV0Key : NULL,
