@@ -1979,12 +1979,11 @@
          * @param $conFilePlan
          * @param $conFile
          * @param $conValue
-         * @param $conLog
          * @param $conStatus
          *
          * @return array|int|Number
          */
-        function insertContract($temId, $perKey, $comCode, $conSerial, $conTitle, $conType, $conDate, $conWork, $conCompany, $conFileMeeting, $conFilePlan, $conFile, $conValue, $conLog, $conStatus)
+        function insertContract($temId, $perKey, $comCode, $conSerial, $conTitle, $conType, $conDate, $conWork, $conCompany, $conFileMeeting, $conFilePlan, $conFile, $conValue, $conStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('temId'          => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : 0,
@@ -2000,59 +1999,16 @@
                             'conFilePlan'    => $Conn->UtilCheckNotNull($conFilePlan) ? $conFilePlan : '',
                             'conFile'        => $Conn->UtilCheckNotNull($conFile) ? $conFile : '',
                             'conValue'       => $Conn->UtilCheckNotNull($conValue) ? $conValue : '',
-                            'conLog'         => $Conn->UtilCheckNotNull($conLog) ? $conLog : '',
                             'conStatus'      => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : 0);
             //SQL
-            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `conSerial`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conFileMeeting`, `conFilePlan`, `conFile`, `conValue`, `conLog`, `conStatus`, `conUpdateTime`, `conCreateTime`)
-                     VALUES(:temId, :perKey, :comCode, :conSerial, :conTitle, :conType, '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', :conWork, :conCompany, :conFileMeeting, :conFilePlan, :conFile, :conValue, :conLog, :conStatus, NOW(), NOW())';
+            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `conSerial`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conFileMeeting`, `conFilePlan`, `conFile`, `conValue`, `conStatus`, `conUpdateTime`, `conCreateTime`)
+                     VALUES(:temId, :perKey, :comCode, :conSerial, :conTitle, :conType, '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', :conWork, :conCompany, :conFileMeeting, :conFilePlan, :conFile, :conValue, :conStatus, NOW(), NOW())';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
             }
             else {
                 return $aryExecute;
-            }
-        }
-
-        /**
-         * todo:updateContractByID 修改文件
-         *
-         * @param $conLogMsg
-         * @param $conId
-         *
-         * @return array|int
-         */
-        function updateContractLogByID($conId, $conLogMsg)
-        {
-            if (is_numeric($conId) && !empty($conLogMsg)) {
-                $contract_sl = $this->queryContractByID(array('C.`conLog`'), $conId);
-                if (0 < $contract_sl['count']) {
-                    $conLogArr[] = array('msg'  => $conLogMsg,
-                                         'time' => date('Y-m-d H:i:s')
-                    );
-                    if ('' != $contract_sl['data']['conLog']) {
-                        $conLog = json_decode(htmlspecialchars_decode($contract_sl['data']['conLog']), TRUE);
-                        $conLogNew = array_merge($conLogArr, $conLog);
-                    }
-                    else {
-                        $conLogNew = $conLogArr;
-                    }
-                    $Conn = new ConnManager();
-                    $arrPar = array('conId'  => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
-                                    'conLog' => htmlspecialchars(json_encode($conLogNew, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK)));
-                    //SQL
-                    $sql = ' UPDATE `contract`
-                             SET `conLog` = :conLog
-                             WHERE `conId` = :conId';
-                    $aryExecute = $Conn->pramExecute($sql, $arrPar);
-                    return $aryExecute;
-                }
-                else {
-                    return FALSE;
-                }
-            }
-            else {
-                return FALSE;
             }
         }
 
@@ -2133,42 +2089,6 @@
             $sql .= $Conn->UtilCheckNotNullIsDate($conDate) ? ' , `conDate` = :conDate' : '';
             $sql .= ' WHERE `conId` = :conId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
-            return $aryExecute;
-        }
-
-        /**
-         * todo:addContractLogByID 修改文件Log
-         *
-         * @param $msg
-         * @param $conId
-         *
-         * @return boolean|int
-         */
-        function addContractLogByID($conId, $msg)
-        {
-            $Conn = new ConnManager();
-            $contract_sl = $this->queryContractByID('', $conId);
-            $conLog = NULL;
-            $msg_log = array('time' => date('Y-m-d H:i:s'), 'msg' => $msg);
-            if (0 < $contract_sl['count'] && '' != $contract_sl['data']['conLog']) {
-                $conLog = json_decode($contract_sl['data']['conLog'], TRUE);
-                array_unshift($conLog, $msg_log);
-            }
-            else {
-                $conLog[] = $msg_log;
-            }
-            $arrPar = array('conId'  => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
-                            'conLog' => json_encode($conLog, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK));
-            //SQL
-            if ($Conn->UtilCheckNotNull($conLog)) {
-                $sql = ' UPDATE `contract`
-                         SET `conLog` = :conLog, `conUpdateTime` = NOW()
-                         WHERE `conId` = :conId';
-                $aryExecute = $Conn->pramExecute($sql, $arrPar);
-            }
-            else {
-                return FALSE;
-            }
             return $aryExecute;
         }
 

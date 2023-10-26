@@ -529,7 +529,7 @@
                 }
 
                 $contract_ad = $ContractMgr->insertContract($_POST['temId'], $_POST['perKey'], $_POST['comCode'], $date.'-'.str_pad($contract_list['count'] + 1, 3, '0', STR_PAD_LEFT),
-                                                            $_POST['conTitle'], $_POST['conType'], $_POST['conDate'], $_POST['conWork'], $_POST['conCompany'], $conFileMeeting, $conFilePlan, $conFile, $_POST['conValue'], NULL, 0);
+                                                            $_POST['conTitle'], $_POST['conType'], $_POST['conDate'], $_POST['conWork'], $_POST['conCompany'], $conFileMeeting, $conFilePlan, $conFile, $_POST['conValue'], 0);
                 if ($contract_ad) {
                     if (isset($_POST['itemList']) && NULL != $_POST['itemList']) {
                         $_POST['itemList'] = json_decode(htmlspecialchars_decode($_POST['itemList']), TRUE);
