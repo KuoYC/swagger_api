@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/class/ConnManager.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/class/ConnManager.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/config/Config.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/config/Config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,19 +48,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="2103" column="9" lean-forward="true" selection-start-line="2103" selection-start-column="9" selection-end-line="2103" selection-end-column="9" />
+            <state relative-caret-position="105">
+              <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
               <folding>
                 <element signature="e#92#256#0#PHP" />
-                <element signature="e#265#770#0#PHP" />
-                <element signature="e#780#928#0#PHP" />
-                <element signature="e#937#1435#0#PHP" />
-                <element signature="e#1445#1691#0#PHP" />
-                <element signature="e#1700#2769#0#PHP" />
-                <element signature="e#2779#3047#0#PHP" />
-                <element signature="e#3056#4221#0#PHP" />
-                <element signature="e#4231#4367#0#PHP" />
-                <element signature="e#4376#4759#0#PHP" />
               </folding>
             </state>
           </provider>
@@ -66,8 +60,90 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="890" column="22" selection-start-line="890" selection-start-column="22" selection-end-line="890" selection-end-column="22" />
+            <state relative-caret-position="154">
+              <caret line="531" column="221" selection-start-line="531" selection-start-column="221" selection-end-line="531" selection-end-column="221" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/config/Web_Config.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/class/ConnManager.class.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-268">
+              <caret line="17" column="37" lean-forward="true" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
+              <folding>
+                <element signature="e#2386#3482#0#PHP" />
+                <element signature="e#3492#3529#0#PHP" />
+                <element signature="e#3684#3942#0#PHP" />
+                <element signature="e#3951#4613#0#PHP" />
+                <element signature="e#4623#4882#0#PHP" />
+                <element signature="e#4891#5560#0#PHP" />
+                <element signature="e#5570#5804#0#PHP" />
+                <element signature="e#5813#6987#0#PHP" />
+                <element signature="e#6997#7187#0#PHP" />
+                <element signature="e#7196#8176#0#PHP" />
+                <element signature="e#8186#8258#0#PHP" />
+                <element signature="e#8267#9083#0#PHP" />
+                <element signature="e#9317#9990#0#PHP" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/config/Config.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1764">
+              <caret line="84" column="57" selection-start-line="84" selection-start-column="57" selection-end-line="84" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Cathay-main/app/payment-share-2.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="600" column="18" lean-forward="true" selection-start-line="600" selection-start-column="18" selection-end-line="600" selection-end-column="18" />
+              <folding>
+                <element signature="n#style#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#li#0;n#ul#0;n#div#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#li#2;n#ul#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#li#3;n#ul#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#2;n#div#0;n#li#4;n#ul#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#3;n#div#0;n#li#4;n#ul#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#a#0;n#div#0;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#1;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#style#0;n#div#0;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#1;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#0;n#span#0;n#div#1;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#b#0;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#1;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#0;n#span#0;n#div#1;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#2;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#0;n#span#0;n#div#2;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#0;n#div#0;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#button#0;n#div#0;n#div#2;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -75,8 +151,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.htaccess">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+            <state relative-caret-position="357">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
             </state>
           </provider>
         </entry>
@@ -115,8 +191,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>memNowPosition</find>
-      <find>updateMemberByContractDefault</find>
       <find>queryContractForAction0</find>
       <find>contact</find>
       <find>category</find>
@@ -143,8 +217,10 @@
       <find>'member_status'</find>
       <find>contract_status</find>
       <find>insertContractLog</find>
-      <find>conLog</find>
       <find>case '.+?_.+?'</find>
+      <find>todo:.+?_.+?'</find>
+      <find>費用分攤明細表</find>
+      <find>conLog</find>
     </findStrings>
     <replaceStrings>
       <replace>queryItemExesByItem(</replace>
@@ -195,7 +271,6 @@
         <option value="$PROJECT_DIR$/swagger-ui-master/swagger.json" />
         <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/txt.txt" />
-        <option value="$PROJECT_DIR$/include/config/Config.php" />
         <option value="$PROJECT_DIR$/spd.php" />
         <option value="$PROJECT_DIR$/a" />
         <option value="$PROJECT_DIR$/b" />
@@ -206,11 +281,13 @@
         <option value="$PROJECT_DIR$/t.txt" />
         <option value="$PROJECT_DIR$/post.html" />
         <option value="$PROJECT_DIR$/include/config/Web_Config.php" />
-        <option value="$PROJECT_DIR$/include/class/ConnManager.class.php" />
-        <option value="$PROJECT_DIR$/.htaccess" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/Cathay-main/app/payment-share.html" />
         <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
+        <option value="$PROJECT_DIR$/Cathay-main/app/payment-share-2.html" />
+        <option value="$PROJECT_DIR$/include/config/Config.php" />
+        <option value="$PROJECT_DIR$/include/class/ConnManager.class.php" />
+        <option value="$PROJECT_DIR$/.htaccess" />
         <option value="$PROJECT_DIR$/api.php" />
       </list>
     </option>
@@ -259,6 +336,12 @@
               <item name="include" type="462c0819:PsiDirectoryNode" />
               <item name="class" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+              <item name="include" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -271,7 +354,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="add_unversioned_files" value="$PROJECT_DIR$/.gitignore" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/.gitignore&#10;/Users/kh164362/Desktop/www/swagger_api/Cathay-main/app/payment-share-2.html" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -321,12 +404,12 @@
       <workItem from="1697272108286" duration="8338000" />
       <workItem from="1697777714545" duration="9514000" />
       <workItem from="1697965176657" duration="17801000" />
-      <workItem from="1698216437347" duration="10061000" />
+      <workItem from="1698216437347" duration="15048000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="310017000" />
+    <option name="totallyTimeSpent" value="315004000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -341,11 +424,11 @@
     <frame x="0" y="25" width="1672" height="948" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19079755" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19079755" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.35315984" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.35315984" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -428,13 +511,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/config/Config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1911">
-          <caret line="91" selection-start-line="88" selection-end-line="91" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/t.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -449,33 +525,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/class/ConnManager.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="75" column="31" lean-forward="true" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
-          <folding>
-            <element signature="e#3492#3529#0#PHP" />
-            <element signature="e#3684#3942#0#PHP" />
-            <element signature="e#3951#4613#0#PHP" />
-            <element signature="e#4623#4882#0#PHP" />
-            <element signature="e#4891#5560#0#PHP" />
-            <element signature="e#5570#5804#0#PHP" />
-            <element signature="e#5813#6987#0#PHP" />
-            <element signature="e#6997#7187#0#PHP" />
-            <element signature="e#7196#8176#0#PHP" />
-            <element signature="e#8186#8258#0#PHP" />
-            <element signature="e#8267#9083#0#PHP" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/config/Web_Config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/table.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1134">
@@ -486,13 +535,6 @@
     <entry file="file://$PROJECT_DIR$/spd.php" />
     <entry file="file://$PROJECT_DIR$/api_contract_template.json" />
     <entry file="file://$PROJECT_DIR$/include/class/BannerManager.class.php" />
-    <entry file="file://$PROJECT_DIR$/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -530,29 +572,101 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Cathay-main/app/payment-share-2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="600" column="18" lean-forward="true" selection-start-line="600" selection-start-column="18" selection-end-line="600" selection-end-column="18" />
+          <folding>
+            <element signature="n#style#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#0;n#ul#0;n#div#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#2;n#ul#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#3;n#ul#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#2;n#div#0;n#li#4;n#ul#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#3;n#div#0;n#li#4;n#ul#0;n#nav#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#a#0;n#div#0;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#1;n#aside#0;n#div#1;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#style#0;n#div#0;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#1;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#span#0;n#div#1;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#b#0;n#h4#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#1;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#span#0;n#div#1;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#2;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#span#0;n#div#2;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#div#0;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#div#0;n#div#2;n#div#3;n#section#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/config/Config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1764">
+          <caret line="84" column="57" selection-start-line="84" selection-start-column="57" selection-end-line="84" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/config/Web_Config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="2103" column="9" lean-forward="true" selection-start-line="2103" selection-start-column="9" selection-end-line="2103" selection-end-column="9" />
+        <state relative-caret-position="105">
+          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
           <folding>
             <element signature="e#92#256#0#PHP" />
-            <element signature="e#265#770#0#PHP" />
-            <element signature="e#780#928#0#PHP" />
-            <element signature="e#937#1435#0#PHP" />
-            <element signature="e#1445#1691#0#PHP" />
-            <element signature="e#1700#2769#0#PHP" />
-            <element signature="e#2779#3047#0#PHP" />
-            <element signature="e#3056#4221#0#PHP" />
-            <element signature="e#4231#4367#0#PHP" />
-            <element signature="e#4376#4759#0#PHP" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/class/ConnManager.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-268">
+          <caret line="17" column="37" lean-forward="true" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
+          <folding>
+            <element signature="e#2386#3482#0#PHP" />
+            <element signature="e#3492#3529#0#PHP" />
+            <element signature="e#3684#3942#0#PHP" />
+            <element signature="e#3951#4613#0#PHP" />
+            <element signature="e#4623#4882#0#PHP" />
+            <element signature="e#4891#5560#0#PHP" />
+            <element signature="e#5570#5804#0#PHP" />
+            <element signature="e#5813#6987#0#PHP" />
+            <element signature="e#6997#7187#0#PHP" />
+            <element signature="e#7196#8176#0#PHP" />
+            <element signature="e#8186#8258#0#PHP" />
+            <element signature="e#8267#9083#0#PHP" />
+            <element signature="e#9317#9990#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="890" column="22" selection-start-line="890" selection-start-column="22" selection-end-line="890" selection-end-column="22" />
+        <state relative-caret-position="154">
+          <caret line="531" column="221" selection-start-line="531" selection-start-column="221" selection-end-line="531" selection-end-column="221" />
         </state>
       </provider>
     </entry>
