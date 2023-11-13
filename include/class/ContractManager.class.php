@@ -337,6 +337,109 @@
         }
 
         /**
+         * todo:queryFrame 查看框架種類
+         *
+         * @param $rows
+         * @param $anum
+         * @param $num
+         *
+         * @return mixed
+         */
+        function queryFrame($rows, $anum, $num)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array();
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `frame`';
+            $sql .= $Conn->getLimit($anum, $num);
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:queryFrameByID 查看單一框架種類
+         *
+         * @param $rows
+         * @param $frmId
+         *
+         * @return mixed
+         */
+        function queryFrameByID($rows, $frmId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('frmId' => $Conn->UtilCheckNotNullIsNumeric($frmId) ? $frmId : '');
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `frame`
+                     WHERE `frmId` = :frmId';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:insertFrame 新增框架種類
+         *
+         * @param $frmTitle
+         *
+         * @return array|int|Number
+         */
+        function insertFrame($frmTitle)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('frmTitle' => $Conn->UtilCheckNotNull($frmTitle) ? $frmTitle : '');
+            //SQL
+            $sql = ' INSERT INTO `frame`(`frmTitle`)
+                     VALUES(:frmTitle)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:updateFrameByID 修改框架種類
+         *
+         * @param $frmTitle
+         * @param $frmId
+         *
+         * @return array|int
+         */
+        function updateFrameByID($frmId, $frmTitle)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('frmId'    => $Conn->UtilCheckNotNullIsNumeric($frmId) ? $frmId : '',
+                            'frmTitle' => $Conn->UtilCheckNotNull($frmTitle) ? $frmTitle : '');
+            //SQL
+            $sql = ' UPDATE `frame`
+                     SET `frmTitle` = :frmTitle
+                     WHERE `frmId` = :frmId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:deleteFrameByID 刪除框架種類
+         *
+         * @param int $frmId 編號
+         *
+         * @return int|boolean
+         */
+        function deleteFrameByID($frmId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('frmId' => $Conn->UtilCheckNotNullIsNumeric($frmId) ? $frmId : '');
+            //SQL
+            $sql = ' DELETE FROM `frame`
+                     WHERE `frmId` = :frmId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
          * todo:queryCompany 查看公司
          *
          * @param $rows
@@ -1444,6 +1547,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      WHERE 1 = 1';
             $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
@@ -1487,6 +1591,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT `conId`, COUNT(*) AS `CT` FROM `member` M
                                 LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
@@ -1542,6 +1647,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT M.`conId`, COUNT(*) AS `CT` FROM `member` M 
                                 LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
@@ -1595,6 +1701,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT M.`conId`, COUNT(*) AS `CT` FROM `member` M 
                                 LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
@@ -1648,6 +1755,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT M.`conId`, COUNT(*) AS `CT` FROM `member` M 
                                 LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
@@ -1701,6 +1809,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
                                 WHERE `memBu1Code` = :perBu1Code 
@@ -1756,6 +1865,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
                                 WHERE `memBu1Code` = :perBu1Code 
@@ -1809,6 +1919,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
                                 WHERE `memBu1Code` = :perBu1Code 
@@ -1862,6 +1973,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
                                 WHERE `memBu1Code` = :perBu1Code 
@@ -1915,6 +2027,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
                                 SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
                                 WHERE `memBu1Code` = :perBu1Code 
@@ -1957,6 +2070,7 @@
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      WHERE C.`conId` = :conId';
             $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
@@ -1969,6 +2083,7 @@
          * @param $temId
          * @param $perKey
          * @param $comCode
+         * @param $frmId
          * @param $conSerial
          * @param $conTitle
          * @param $conType
@@ -1983,12 +2098,13 @@
          *
          * @return array|int|Number
          */
-        function insertContract($temId, $perKey, $comCode, $conSerial, $conTitle, $conType, $conDate, $conWork, $conCompany, $conFileMeeting, $conFilePlan, $conFile, $conValue, $conStatus)
+        function insertContract($temId, $perKey, $comCode, $frmId, $conSerial, $conTitle, $conType, $conDate, $conWork, $conCompany, $conFileMeeting, $conFilePlan, $conFile, $conValue, $conStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('temId'          => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : 0,
                             'perKey'         => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'comCode'        => $Conn->UtilCheckNotNull($comCode) ? $comCode : 0,
+                            'frmId'        => $Conn->UtilCheckNotNull($frmId) ? $frmId : 0,
                             'conSerial'      => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : '',
                             'conTitle'       => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
                             'conType'        => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
@@ -1999,10 +2115,10 @@
                             'conFilePlan'    => $Conn->UtilCheckNotNull($conFilePlan) ? $conFilePlan : '',
                             'conFile'        => $Conn->UtilCheckNotNull($conFile) ? $conFile : '',
                             'conValue'       => $Conn->UtilCheckNotNull($conValue) ? $conValue : '',
-                            'conStatus'      => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : 0);
+                            'conStatus'      => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : -1);
             //SQL
-            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `conSerial`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conFileMeeting`, `conFilePlan`, `conFile`, `conValue`, `conStatus`, `conUpdateTime`, `conCreateTime`)
-                     VALUES(:temId, :perKey, :comCode, :conSerial, :conTitle, :conType, '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', :conWork, :conCompany, :conFileMeeting, :conFilePlan, :conFile, :conValue, :conStatus, NOW(), NOW())';
+            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `frmId`, `conSerial`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conFileMeeting`, `conFilePlan`, `conFile`, `conValue`, `conStatus`, `conUpdateTime`, `conCreateTime`)
+                     VALUES(:temId, :perKey, :comCode, :frmId, :conSerial, :conTitle, :conType, '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', :conWork, :conCompany, :conFileMeeting, :conFilePlan, :conFile, :conValue, :conStatus, NOW(), NOW())';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -2017,33 +2133,29 @@
          *
          * @param $conTitle
          * @param $conType
+         * @param $frmId
          * @param $conDate
          * @param $conWork
          * @param $conCompany
-         * @param $conFileMeeting
-         * @param $conFilePlan
-         * @param $conFile
          * @param $conValue
          * @param $conId
          *
          * @return array|int
          */
-        function updateContractByID($conId, $conTitle, $conType, $conDate, $conWork, $conCompany, $conFileMeeting, $conFilePlan, $conFile, $conValue)
+        function updateContractByID($conId, $conTitle, $conType, $frmId, $conDate, $conWork, $conCompany, $conValue)
         {
             $Conn = new ConnManager();
             $arrPar = array('conId'          => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
                             'conTitle'       => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
                             'conType'        => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
+                            'frmId'        => $Conn->UtilCheckNotNullIsNumeric($frmId) ? $frmId : 0,
                             'conDate'        => $Conn->UtilCheckNotNullIsDate($conDate) ? $conDate : NULL,
                             'conWork'        => $Conn->UtilCheckNotNull($conWork) ? $conWork : '',
                             'conCompany'     => $Conn->UtilCheckNotNull($conCompany) ? $conCompany : '',
-                            'conFileMeeting' => $Conn->UtilCheckNotNull($conFileMeeting) ? $conFileMeeting : '',
-                            'conFilePlan'    => $Conn->UtilCheckNotNull($conFilePlan) ? $conFilePlan : '',
-                            'conFile'        => $Conn->UtilCheckNotNull($conFile) ? $conFile : '',
                             'conValue'       => $Conn->UtilCheckNotNull($conValue) ? $conValue : '');
             //SQL
             $sql = ' UPDATE `contract`
-                     SET `conTitle` = :conTitle, `conType` = :conType, `conDate` = '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', `conWork` = :conWork, `conCompany` = :conCompany, `conFileMeeting` = :conFileMeeting, `conFilePlan` = :conFilePlan, `conFile` = :conFile, `conValue` = :conValue, `conUpdateTime` = NOW()
+                     SET `conTitle` = :conTitle, `conType` = :conType, `frmId` = :frmId, `conDate` = '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', `conWork` = :conWork, `conCompany` = :conCompany, `conValue` = :conValue, `conUpdateTime` = NOW()
                      WHERE `conId` = :conId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;

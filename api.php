@@ -130,6 +130,47 @@
                     break;
             }
             break;
+        case 'frame':// todo: frame 框架種類操作
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':// todo: frame GET[frmId|null] 取得[單一|全部]框架種類
+                    if (isset($_GET['frmId'])) {
+                        $frame_sl = $ContractMgr->queryFrameByID(NULL, $_GET['frmId']);
+                        if (0 < $frame_sl['count']) {
+                            $return_data['data'] = $frame_sl['data'];
+                        }
+                    }
+                    else {
+                        $frame_list = $ContractMgr->queryFrame(NULL, NULL, NULL);
+                        $return_data['data'] = $frame_list['data'];
+                    }
+                    break;
+                case 'POST':// todo: frame POST[frmTitle]新增框架種類 return:frmId
+                    $data = json_decode(file_get_contents('php://input'), TRUE);
+                    $frame_ad = $ContractMgr->insertFrame($data['frmTitle']);
+                    if ($frame_ad) {
+                        $return_data['frmId'] = $frame_ad;//回傳成功
+                        $return_data['data'] = 'success';
+                    }
+                    break;
+                case 'PUT':// todo: frame PUT[frmId, frmTitle]修改框架種類
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+                    if (isset($data['frmId'])) {
+                        $frame_up = $ContractMgr->updateFrameByID($data['frmId'], $data['frmTitle']);
+                        if ($frame_up) {
+                            $return_data['data'] = 'success';
+                        }
+                    }
+                    break;
+                case 'DELETE':// todo: frame PUT[frmId]刪除框架種類
+                    if (isset($_GET['frmId'])) {
+                        $frame_dl = $ContractMgr->deleteFrameByID($_GET['frmId']);
+                        if ($frame_dl) {
+                            $return_data['data'] = 'success';
+                        }
+                    }
+                    break;
+            }
+            break;
         case 'company':// todo: company 公司資料操作
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: company GET[comId|null] 取得[單一|全部]公司資料
@@ -444,6 +485,80 @@
                         $return_data['data'] = replaceArr($contract_list['data']);
                     }
                     break;
+                case 'PUT'://todo contract PUT 修改文件資料
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+                    $contract_up = $ContractMgr->updateContractByID($data['conId'], $data['conTitle'], $data['conType'], $data['conDate'], $data['conWork'], $data['conCompany'], $data['conValue']);
+                    if ($contract_up) {
+                        if (isset($data['itemList']) && NULL != $data['itemList']) {
+                            //刪除不再資料列中的資料
+                            $iteId_list = NULL;
+                            foreach ($data['itemList'] as $ite) {
+                                $iteId_list[] = $ite['iteId'];
+                            }
+                            $item_list = $ContractMgr->queryItem(array('I.`iteId`'), $data['conId']);
+                            $o_iteId_list = NULL;
+                            foreach ($item_list['data'] as $ite) {
+                                $o_iteId_list[] = $ite['iteId'];
+                            }
+                            $dl_iteId_list = array_diff($o_iteId_list, $iteId_list);
+
+                            if (0 < count($dl_iteId_list)) {
+                                $item_dl = $ContractMgr->deleteItemByContract($data['conId'], $dl_iteId_list);
+                            }
+                            //============
+                            foreach ($data['itemList'] as $ite) {
+                                if ($ite['iteId']) {
+                                    $item_up = $ContractMgr->updateItem($ite['iteId'], $data['conId'], $ite['iteTitle'], $ite['worId'], $ite['iteTime'], $ite['iteSubsidiaries'], $ite['iteControl'],
+                                                                        $ite['disId'], $ite['manId'], $ite['iteProportion'], $ite['iteTypeNote'], $ite['iteDescription'],
+                                                                        NULL, NULL, NULL, $ite['iteWord'], $ite['iteNote']);
+                                }
+                                else {
+                                    $item_ad = $ContractMgr->insertItem($data['conId'],
+                                                                        $ite['iteTitle'], $ite['worId'], $ite['iteTime'], $ite['iteSubsidiaries'], $ite['iteControl'],
+                                                                        $ite['disId'], $ite['manId'], $ite['iteProportion'], $ite['iteTypeNote'], $ite['iteDescription'],
+                                                                        NULL, NULL, NULL, $ite['iteWord'], $ite['iteNote']);
+                                }
+                            }
+                        }
+                        if (isset($data['memberList']) && is_array($data['memberList'])) {
+                            //刪除不再資料列中的資料
+                            $memId_list = NULL;
+                            foreach ($data['memberList'] as $mbr) {
+                                $memId_list[] = $mbr['memId'];
+                            }
+                            $member_list = $ContractMgr->queryMember(array('M.`memId`'), $data['conId'], NULL);
+                            $o_memId_list = NULL;
+                            foreach ($member_list['data'] as $mbr) {
+                                $o_memId_list[] = $mbr['memId'];
+                            }
+                            $dl_memId_list = array_diff($o_memId_list, $memId_list);
+
+                            if (0 < count($dl_memId_list)) {
+                                $member_dl = $ContractMgr->deleteMemberByContract($data['conId'], $dl_memId_list);
+                            }
+                            //==============
+                            foreach ($data['memberList'] as $mbr) {
+                                if ($mbr['memId'] && '0' != $mbr['memId']) {
+                                    $member_up = $ContractMgr->updateMemberByID($mbr['memId'], $mbr['memType'], $mbr['memBu1Code'], $mbr['memBu2Code'], $mbr['memBu2'], $mbr['memBu3Code'], $mbr['memBu3'],
+                                                                                $mbr['memLV0Key'], $mbr['memLV0Name'], $mbr['memLV0PositionName'],
+                                                                                $mbr['memLVCKey'], $mbr['memLVCName'], $mbr['memLVCPositionName'],
+                                                                                $mbr['memLV1Key'], $mbr['memLV1Name'], $mbr['memLV1PositionName'],
+                                                                                $mbr['memLV2Key'], $mbr['memLV2Name'], $mbr['memLV2PositionName'],
+                                                                                $mbr['memPhone'], NULL);
+                                }
+                                else {
+                                    $member_ad = $ContractMgr->insertMember($data['conId'], $mbr['memType'], $mbr['memBu1Code'], $mbr['memBu2Code'], $mbr['memBu2'], $mbr['memBu3Code'], $mbr['memBu3'],
+                                                                            $mbr['memLV0Key'], $mbr['memLV0Name'], $mbr['memLV0PositionName'],
+                                                                            $mbr['memLVCKey'], $mbr['memLVCName'], $mbr['memLVCPositionName'],
+                                                                            $mbr['memLV1Key'], $mbr['memLV1Name'], $mbr['memLV1PositionName'],
+                                                                            $mbr['memLV2Key'], $mbr['memLV2Name'], $mbr['memLV2PositionName'],
+                                                                            $mbr['memPhone'], NULL);
+                                }
+                            }
+                        }
+                        $return_data['data'] = 'success';
+                    }
+                    break;
                 case 'DELETE'://dl
                     if (isset($_GET['conId'])) {
                         $contract_dl = $ContractMgr->deleteContractByID($_GET['conId']);
@@ -451,6 +566,19 @@
                             $return_data['data'] = 'success';
                         }
                     }
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'contractId'://todo: contractId 取得新增的conId
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':// todo: contract GET[perKey, temId] 取得[單一|全部]文件
+                    $date_key = date('YmdHis', time());
+                    $contract_ad = $ContractMgr->insertContract($_GET['temId'], $_GET['perKey'], '', $date_key, '', '', '', '', '', '', '', '', '', '');
+                    $return_data['conId'] = $contract_ad;
+                    $return_data['data'] = 'success';
+                    break;
                 default:
                     $return_data = FALSE;
                     break;
@@ -639,7 +767,7 @@
                     if ($conFile && is_array($conFile)) {
                         $conFile = implode('|', $conFile);
                     }
-                    $contract_up = $ContractMgr->updateContractByID($_POST['conId'], $_POST['conTitle'], $_POST['conType'], $_POST['conDate'], $_POST['conWork'], $_POST['conCompany'], $conFileMeeting, $conFilePlan, $conFile, $_POST['conValue']);
+                    //$contract_up = $ContractMgr->updateContractByID($_POST['conId'], $_POST['conTitle'], $_POST['conType'], $_POST['conDate'], $_POST['conWork'], $_POST['conCompany'], $conFileMeeting, $conFilePlan, $conFile, $_POST['conValue']);
                     if ($contract_up) {
                         if ($delFileMeeting) {
                             foreach ($delFileMeeting as $v) {

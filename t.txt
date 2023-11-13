@@ -1,1 +1,1 @@
-"perAccount","perNo","perName","perPar","perNick","perPosition","perPositionName","perEmail","perPhone1","perPhone2","perPhone3","perBu1Code","perBu1","perBu2Code","perBu2","perBu3Code","perBu3","perMobile"
+[{"comCode":"01","p":"0"},{"comCode":"A0","p":"3"},{"comCode":"C0","p":"4"},{"comCode":"E0","p":"5"},{"comCode":"F0","p":"0"},{"comCode":"G0","p":"0"},{"comCode":"G1","p":"0"},{"comCode":"K0","p":"0"},{"comCode":"L0","p":"0"},{"comCode":"N0","p":"0"}]
