@@ -470,12 +470,12 @@
                                     $contract_list = $ContractMgr->queryContractForAction8($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
                                     break;
                                 default:
-                                    $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
+                                    $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
                                     break;
                             }
                         }
                         else {
-                            $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
+                            $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
                         }
                         if ($contract_list['count'] > 0) {
                             for ($i = 0; $i < $contract_list['count']; $i++) {
@@ -587,7 +587,7 @@
         case 'contractCreate'://todo: contract_create新增文件資料
             if ('POST' == $_SERVER['REQUEST_METHOD']) {
                 $date = date('Ymd', time());
-                $contract_list = $ContractMgr->queryContract(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+                $contract_list = $ContractMgr->queryContract(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 //                    $data = json_decode(file_get_contents('php://input'), TRUE);
                 $conFileMeeting = NULL;
                 if (isset($_FILES['conFileMeeting']) && is_array($_FILES['conFileMeeting']['name'])) {

@@ -1527,6 +1527,7 @@
          * @param $temId
          * @param $comId
          * @param $comCode
+         * @param $perKey
          * @param $conSerial
          * @param $conStatus
          * @param $anum
@@ -1534,12 +1535,13 @@
          *
          * @return mixed
          */
-        function queryContract($rows, $temId, $comId, $comCode, $conSerial, $conStatus, $anum, $num)
+        function queryContract($rows, $temId, $comId, $comCode, $perKey, $conSerial, $conStatus, $anum, $num)
         {
             $Conn = new ConnManager();
             $arrPar = array('conSerial' => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'     => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
                             'comCode'   => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'perKey'    => $Conn->UtilCheckNotNull($perKey) ? $perKey : NULL,
                             'conStatus' => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
                             'temId'     => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
             //SQL
@@ -1552,6 +1554,7 @@
             $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
             $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
+            $sql .= $Conn->UtilCheckNotNull($perKey) ? ' AND C.`perKey` = :$perKey' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
             $sql .= $Conn->getLimit($anum, $num);
@@ -2104,7 +2107,7 @@
             $arrPar = array('temId'          => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : 0,
                             'perKey'         => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'comCode'        => $Conn->UtilCheckNotNull($comCode) ? $comCode : 0,
-                            'frmId'        => $Conn->UtilCheckNotNull($frmId) ? $frmId : 0,
+                            'frmId'          => $Conn->UtilCheckNotNull($frmId) ? $frmId : 0,
                             'conSerial'      => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : '',
                             'conTitle'       => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
                             'conType'        => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
@@ -2145,14 +2148,14 @@
         function updateContractByID($conId, $conTitle, $conType, $frmId, $conDate, $conWork, $conCompany, $conValue)
         {
             $Conn = new ConnManager();
-            $arrPar = array('conId'          => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
-                            'conTitle'       => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
-                            'conType'        => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
-                            'frmId'        => $Conn->UtilCheckNotNullIsNumeric($frmId) ? $frmId : 0,
-                            'conDate'        => $Conn->UtilCheckNotNullIsDate($conDate) ? $conDate : NULL,
-                            'conWork'        => $Conn->UtilCheckNotNull($conWork) ? $conWork : '',
-                            'conCompany'     => $Conn->UtilCheckNotNull($conCompany) ? $conCompany : '',
-                            'conValue'       => $Conn->UtilCheckNotNull($conValue) ? $conValue : '');
+            $arrPar = array('conId'      => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
+                            'conTitle'   => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
+                            'conType'    => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
+                            'frmId'      => $Conn->UtilCheckNotNullIsNumeric($frmId) ? $frmId : 0,
+                            'conDate'    => $Conn->UtilCheckNotNullIsDate($conDate) ? $conDate : NULL,
+                            'conWork'    => $Conn->UtilCheckNotNull($conWork) ? $conWork : '',
+                            'conCompany' => $Conn->UtilCheckNotNull($conCompany) ? $conCompany : '',
+                            'conValue'   => $Conn->UtilCheckNotNull($conValue) ? $conValue : '');
             //SQL
             $sql = ' UPDATE `contract`
                      SET `conTitle` = :conTitle, `conType` = :conType, `frmId` = :frmId, `conDate` = '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', `conWork` = :conWork, `conCompany` = :conCompany, `conValue` = :conValue, `conUpdateTime` = NOW()
@@ -2287,12 +2290,12 @@
         function insertContractLog($conId, $memId, $perKey, $colMemberStatus, $colMsg, $colStatus)
         {
             $Conn = new ConnManager();
-            $arrPar = array('conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
-                            'memId'     => $Conn->UtilCheckNotNullIsNumeric($memId) ? $memId : '',
-                            'perKey'    => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
+            $arrPar = array('conId'           => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
+                            'memId'           => $Conn->UtilCheckNotNullIsNumeric($memId) ? $memId : '',
+                            'perKey'          => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'colMemberStatus' => $Conn->UtilCheckNotNullIsNumeric($colMemberStatus) ? $colMemberStatus : -1,
-                            'colMsg'    => $Conn->UtilCheckNotNull($colMsg) ? $colMsg : '',
-                            'colStatus' => $Conn->UtilCheckNotNullIsNumeric($colStatus) ? $colStatus : -1);
+                            'colMsg'          => $Conn->UtilCheckNotNull($colMsg) ? $colMsg : '',
+                            'colStatus'       => $Conn->UtilCheckNotNullIsNumeric($colStatus) ? $colStatus : -1);
             //SQL
             $sql = ' INSERT INTO `contractLog`(`conId`, `memId`, `perKey`, `colMemberStatus`, `colMsg`, `colStatus`, `colCreateTime`)
                      VALUES(:conId, :memId, :perKey, :colMemberStatus, :colMsg, :colStatus, NOW())';
