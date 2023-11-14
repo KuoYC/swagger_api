@@ -1554,7 +1554,7 @@
             $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
             $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNull($perKey) ? ' AND C.`perKey` = :$perKey' : '';
+            $sql .= $Conn->UtilCheckNotNull($perKey) ? ' AND C.`perKey` = :perKey' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
             $sql .= $Conn->getLimit($anum, $num);
