@@ -575,7 +575,7 @@
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract GET[perKey, temId] 取得[單一|全部]文件
                     $date_key = date('YmdHis', time());
-                    $contract_ad = $ContractMgr->insertContract($_GET['temId'], $_GET['perKey'], '', '', $date_key, '', '', '', '', '', '', '', '', '', '');
+                    $contract_ad = $ContractMgr->insertContract($_GET['temId'], $_GET['perKey'], '', '', $date_key, '', $_GET['conType'], '', '', '', '', '', '', '', '-1');
                     $return_data['conId'] = $contract_ad;
                     $return_data['data'] = 'success';
                     break;

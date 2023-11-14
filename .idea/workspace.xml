@@ -70,8 +70,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="501">
-                  <caret line="577" column="103" selection-start-line="577" selection-start-column="103" selection-end-line="577" selection-end-column="103" />
+                <state relative-caret-position="443">
+                  <caret line="577" column="169" selection-start-line="577" selection-start-column="169" selection-end-line="577" selection-end-column="169" />
                   <folding>
                     <element signature="e#4989#7000#0#PHP" />
                     <element signature="e#7009#9038#0#PHP" />
@@ -424,12 +424,12 @@
       <workItem from="1697272108286" duration="8338000" />
       <workItem from="1697777714545" duration="9514000" />
       <workItem from="1697965176657" duration="17801000" />
-      <workItem from="1698216437347" duration="32025000" />
+      <workItem from="1698216437347" duration="32948000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="331981000" />
+    <option name="totallyTimeSpent" value="332904000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -444,7 +444,7 @@
     <frame x="0" y="25" width="1672" height="948" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19079755" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15214723" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -681,8 +681,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="577" column="103" selection-start-line="577" selection-start-column="103" selection-end-line="577" selection-end-column="103" />
+        <state relative-caret-position="443">
+          <caret line="577" column="169" selection-start-line="577" selection-start-column="169" selection-end-line="577" selection-end-column="169" />
           <folding>
             <element signature="e#4989#7000#0#PHP" />
             <element signature="e#7009#9038#0#PHP" />
