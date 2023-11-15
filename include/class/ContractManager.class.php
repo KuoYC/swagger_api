@@ -1590,7 +1590,7 @@
                             'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
             //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).', CASE WHEN MS.`CTS` > 0 THEN 1 ELSE 0 END AS `memSign` FROM `contract` C
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
@@ -1608,13 +1608,24 @@
                                     )
                                 GROUP BY M.`conId`
                                 ) M ON M.`conId` = C.`conId`
+                     LEFT JOIN (
+                                SELECT `conId`, COUNT(*) AS `CTS` FROM `member` M
+                                LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
+                                LEFT JOIN `contact` CT ON CP.`comCode` = CT.`comCode` AND CT.`perKey` = :perKey
+                                WHERE M.`memBu1Code` = :perBu1Code 
+                                AND (
+                                        (M.`memNowKey` = :perKey AND M.`memNowStatus` != -1) OR
+                                        (M.`memLVCStatus` IN  (1, 2) AND M.`memType` = 0)
+                                    )
+                                GROUP BY M.`conId`
+                                ) MS ON MS.`conId` = C.`conId`
                      WHERE 1 = 1';
             $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
             $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND ((M.`CT` > 0 AND C.`conStatus` IN (0, 1)) OR (CM.`comCode` = :perBu1Code AND C.`perKey` = :perKey AND C.`conStatus` IN (0, 2)))';
+            $sql .= ' AND ((M.`CT` > 0 AND C.`conStatus` IN (0, 1, 3)) OR (CM.`comCode` = :perBu1Code AND C.`perKey` = :perKey AND C.`conStatus` IN (0, 2)))';
             $sql .= $Conn->getLimit($anum, $num);
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
@@ -2135,7 +2146,6 @@
          * todo:updateContractByID 修改文件
          *
          * @param $conTitle
-         * @param $conType
          * @param $frmId
          * @param $conDate
          * @param $conWork
@@ -2145,12 +2155,11 @@
          *
          * @return array|int
          */
-        function updateContractByID($conId, $conTitle, $conType, $frmId, $conDate, $conWork, $conCompany, $conValue)
+        function updateContractByID($conId, $conTitle, $frmId, $conDate, $conWork, $conCompany, $conValue)
         {
             $Conn = new ConnManager();
             $arrPar = array('conId'      => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
                             'conTitle'   => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
-                            'conType'    => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
                             'frmId'      => $Conn->UtilCheckNotNullIsNumeric($frmId) ? $frmId : 0,
                             'conDate'    => $Conn->UtilCheckNotNullIsDate($conDate) ? $conDate : NULL,
                             'conWork'    => $Conn->UtilCheckNotNull($conWork) ? $conWork : '',
@@ -2158,7 +2167,7 @@
                             'conValue'   => $Conn->UtilCheckNotNull($conValue) ? $conValue : '');
             //SQL
             $sql = ' UPDATE `contract`
-                     SET `conTitle` = :conTitle, `conType` = :conType, `frmId` = :frmId, `conDate` = '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', `conWork` = :conWork, `conCompany` = :conCompany, `conValue` = :conValue, `conUpdateTime` = NOW()
+                     SET `conTitle` = :conTitle, `frmId` = :frmId, `conDate` = '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', `conWork` = :conWork, `conCompany` = :conCompany, `conValue` = :conValue, `conUpdateTime` = NOW()
                      WHERE `conId` = :conId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;

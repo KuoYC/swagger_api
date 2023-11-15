@@ -487,7 +487,7 @@
                     break;
                 case 'PUT'://todo contract PUT 修改文件資料
                     $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
-                    $contract_up = $ContractMgr->updateContractByID($data['conId'], $data['conTitle'], $data['conType'], $data['conDate'], $data['conWork'], $data['conCompany'], $data['conValue']);
+                    $contract_up = $ContractMgr->updateContractByID($data['conId'], $data['conTitle'], $data['frmId'], $data['conDate'], $data['conWork'], $data['conCompany'], $data['conValue']);
                     if ($contract_up) {
                         if (isset($data['itemList']) && NULL != $data['itemList']) {
                             //刪除不再資料列中的資料
