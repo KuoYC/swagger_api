@@ -439,8 +439,10 @@
                         }
                     }
                     else {
-                        if (isset($_GET['action'])) {
-                            $rows = array('C.*', 'CM.*', 'P.*', 'T.*');
+                        if (isset($_GET['action']) && '1' == $_GET['action']) {
+                            $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'],NULL, NULL);
+                            /**
+                            $rows = array('T.`temId`', 'T.`temTitle`', 'C.`conId`', 'C.`conTitle`', 'C.`conStatus`', 'C.`conSerial`', 'C.`conCreateTime`', 'C.`comCode`', 'C.`perKey`', 'C.`conType`', 'F.`frmTitle`', 'P.`perBu1`', 'P.`perBu2`', 'P.`perBu3`', 'CM.`comTitle`');
                             switch ($_GET['action']) {
                                 case '0':// todo: contract GET[{action=0}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-相關(發起, 退回, 待簽, 已簽)
                                     $contract_list = $ContractMgr->queryContractForAction0($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
@@ -470,9 +472,10 @@
                                     $contract_list = $ContractMgr->queryContractForAction8($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
                                     break;
                                 default:
-                                    $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
+                                    $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'],NULL, NULL);
                                     break;
                             }
+                            **/
                         }
                         else {
                             $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
@@ -575,7 +578,7 @@
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract GET[perKey, temId] 取得[單一|全部]文件
                     $date_key = date('YmdHis', time());
-                    $contract_ad = $ContractMgr->insertContract($_GET['temId'], $_GET['perKey'], '', '', $date_key, '', $_GET['conType'], '', '', '', '', '', '', '', '-1');
+                    $contract_ad = $ContractMgr->insertContract($_GET['temId'], $_GET['perKey'], $_GET['comCode'], '', $date_key, '', $_GET['conType'], '', '', '', '', '', '', '', '-1');
                     $return_data['conId'] = $contract_ad;
                     $return_data['data'] = 'success';
                     break;
