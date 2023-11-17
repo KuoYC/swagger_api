@@ -440,7 +440,7 @@
                     }
                     else {
                         if (isset($_GET['action']) && '1' == $_GET['action']) {
-                            $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'],NULL, NULL);
+                            $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'], $_GET['conStatusNot'],NULL, NULL);
                             /**
                             $rows = array('T.`temId`', 'T.`temTitle`', 'C.`conId`', 'C.`conTitle`', 'C.`conStatus`', 'C.`conSerial`', 'C.`conCreateTime`', 'C.`comCode`', 'C.`perKey`', 'C.`conType`', 'F.`frmTitle`', 'P.`perBu1`', 'P.`perBu2`', 'P.`perBu3`', 'CM.`comTitle`');
                             switch ($_GET['action']) {

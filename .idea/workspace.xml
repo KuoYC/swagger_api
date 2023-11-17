@@ -42,14 +42,14 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.27858177">
+    <splitter split-orientation="horizontal" split-proportion="0.58248913">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="309">
-                  <caret line="440" column="26" lean-forward="true" selection-start-line="440" selection-start-column="26" selection-end-line="440" selection-end-column="26" />
+                <state relative-caret-position="351">
+                  <caret line="442" column="321" selection-start-line="442" selection-start-column="309" selection-end-line="442" selection-end-column="321" />
                   <folding>
                     <element signature="e#4989#7000#0#PHP" />
                     <element signature="e#7009#9038#0#PHP" />
@@ -171,8 +171,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="571">
-                  <caret line="1655" column="22" selection-start-line="1655" selection-start-column="22" selection-end-line="1655" selection-end-column="22" />
+                <state relative-caret-position="315">
+                  <caret line="1647" column="113" selection-start-line="1647" selection-start-column="113" selection-end-line="1647" selection-end-column="113" />
                   <folding>
                     <element signature="e#92#256#0#PHP" />
                     <element signature="e#8361#8527#0#PHP" />
@@ -418,12 +418,12 @@
       <workItem from="1697272108286" duration="8338000" />
       <workItem from="1697777714545" duration="9514000" />
       <workItem from="1697965176657" duration="17801000" />
-      <workItem from="1698216437347" duration="54676000" />
+      <workItem from="1698216437347" duration="56219000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="354632000" />
+    <option name="totallyTimeSpent" value="356175000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -654,8 +654,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="440" column="26" lean-forward="true" selection-start-line="440" selection-start-column="26" selection-end-line="440" selection-end-column="26" />
+        <state relative-caret-position="351">
+          <caret line="442" column="321" selection-start-line="442" selection-start-column="309" selection-end-line="442" selection-end-column="321" />
           <folding>
             <element signature="e#4989#7000#0#PHP" />
             <element signature="e#7009#9038#0#PHP" />
@@ -675,8 +675,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="571">
-          <caret line="1655" column="22" selection-start-line="1655" selection-start-column="22" selection-end-line="1655" selection-end-column="22" />
+        <state relative-caret-position="315">
+          <caret line="1647" column="113" selection-start-line="1647" selection-start-column="113" selection-end-line="1647" selection-end-column="113" />
           <folding>
             <element signature="e#92#256#0#PHP" />
             <element signature="e#8361#8527#0#PHP" />

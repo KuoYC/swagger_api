@@ -1578,26 +1578,28 @@
          * @param $memView  1:待檢視
          * @param $memSign  1:待簽
          * @param $memOver  1:已簽
+         * @param $conStatusNot
          * @param $anum
          * @param $num
          *
          * @return mixed
          */
-        function queryContractForAction($temId, $comId, $comCode, $conSerial, $conStatus, $perKey, $perBu1Code, $memOwner, $memDraft, $memView, $memSign, $memOver, $anum, $num)
+        function queryContractForAction($temId, $comId, $comCode, $conSerial, $conStatus, $perKey, $perBu1Code, $memOwner, $memDraft, $memView, $memSign, $memOver, $conStatusNot, $anum, $num)
         {
             $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'conStatus'  => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL,
-                            'memOwner'   => $Conn->UtilCheckNotNullIsNumeric($memOwner) ? $memOwner : NULL,
-                            'memDraft'   => $Conn->UtilCheckNotNullIsNumeric($memDraft) ? $memDraft : NULL,
-                            'memView'    => $Conn->UtilCheckNotNullIsNumeric($memView) ? $memView : NULL,
-                            'memSign'    => $Conn->UtilCheckNotNullIsNumeric($memSign) ? $memSign : NULL,
-                            'memOver'    => $Conn->UtilCheckNotNullIsNumeric($memOver) ? $memOver : NULL
+            $arrPar = array('conSerial'    => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
+                            'comId'        => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
+                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'conStatus'    => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
+                            'perKey'       => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
+                            'perBu1Code'   => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
+                            'temId'        => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL,
+                            'memOwner'     => $Conn->UtilCheckNotNullIsNumeric($memOwner) ? $memOwner : NULL,
+                            'memDraft'     => $Conn->UtilCheckNotNullIsNumeric($memDraft) ? $memDraft : NULL,
+                            'memView'      => $Conn->UtilCheckNotNullIsNumeric($memView) ? $memView : NULL,
+                            'memSign'      => $Conn->UtilCheckNotNullIsNumeric($memSign) ? $memSign : NULL,
+                            'memOver'      => $Conn->UtilCheckNotNullIsNumeric($memOver) ? $memOver : NULL,
+                            'conStatusNot' => $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? $conStatusNot : NULL
             );
             //SQL
             $sql = ' SELECT SQL_CALC_FOUND_ROWS T.`temId`, T.`temTitle`, C.`conId`, C.`conTitle`, C.`conStatus`, C.`conSerial`, C.`conCreateTime`, C.`comCode`, C.`perKey`, C.`conType`, F.`frmTitle`, P.`perBu1`, P.`perBu2`, P.`perBu3`, CM.`comTitle`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver` FROM `contract` C
@@ -1643,6 +1645,7 @@
             $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? ' AND C.`conStatus` != :conStatusNot' : '';
             $sql .= ' AND ((M.`CT` > 0 AND C.`conStatus` IN (0, 1, 3)) OR (CM.`comCode` = :perBu1Code AND C.`perKey` = :perKey AND C.`conStatus` IN (0, 2, 4)))';
             if ($Conn->UtilCheckNotNullIsNumeric($memOwner) || $Conn->UtilCheckNotNullIsNumeric($memDraft) || $Conn->UtilCheckNotNullIsNumeric($memView) || $Conn->UtilCheckNotNullIsNumeric($memSign) || $Conn->UtilCheckNotNullIsNumeric($memOver)) {
                 $sql .= ' AND (1=2';
