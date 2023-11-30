@@ -501,41 +501,6 @@
                     else {
                         if (isset($_GET['action']) && '1' == $_GET['action']) {
                             $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'], $_GET['conStatusNot'], $_GET['conMark'], $_GET['conInh'], NULL, NULL);
-                            /**
-                             * $rows = array('T.`temId`', 'T.`temTitle`', 'C.`conId`', 'C.`conTitle`', 'C.`conStatus`', 'C.`conSerial`', 'C.`conCreateTime`', 'C.`comCode`', 'C.`perKey`', 'C.`conType`', 'F.`frmTitle`', 'P.`perBu1`', 'P.`perBu2`', 'P.`perBu3`', 'CM.`comTitle`');
-                             * switch ($_GET['action']) {
-                             * case '0':// todo: contract GET[{action=0}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-相關(發起, 退回, 待簽, 已簽)
-                             * $contract_list = $ContractMgr->queryContractForAction0($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * case '1':// todo: contract GET[{action=1}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-待檢視
-                             * $contract_list = $ContractMgr->queryContractForAction1($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * case '2':// todo: contract GET[{action=2}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-待簽
-                             * $contract_list = $ContractMgr->queryContractForAction2($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * case '3':// todo: contract GET[{action=3}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-等待(待檢視+待簽)
-                             * $contract_list = $ContractMgr->queryContractForAction3($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * case '4':// todo: contract GET[{action=4}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-已簽
-                             * $contract_list = $ContractMgr->queryContractForAction4($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * case '5':// todo: contract GET[{action=5}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-全部相關
-                             * $contract_list = $ContractMgr->queryContractForAction5($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['conStatus'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * case '6':// todo: contract GET[{action=6}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-完成
-                             * $contract_list = $ContractMgr->queryContractForAction6($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * case '7':// todo: contract GET[{action=7}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-拒絕
-                             * $contract_list = $ContractMgr->queryContractForAction7($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * case '8':// todo: contract GET[{action=8}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-完成或拒絕
-                             * $contract_list = $ContractMgr->queryContractForAction8($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                             * break;
-                             * default:
-                             * $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'],NULL, NULL);
-                             * break;
-                             * }
-                             **/
                         }
                         else {
                             $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);

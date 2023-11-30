@@ -1,4 +1,7 @@
 {
     "baseURL": "http://www.api.ks/",
+    "baseURL-bk1": "https://ju-house.com/",
+    "baseURL-bk3": "http://cathayhong.site:8080/",
+    "baseURL-bk4": "https://10.75.37.42:8080/",
     "test": true
 }
