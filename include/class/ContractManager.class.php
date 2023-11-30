@@ -784,24 +784,24 @@
          *
          * @param $rows
          * @param $disId
-         * @param $comId
+         * @param $comCode
          * @param $anum
          * @param $num
          *
          * @return mixed
          */
-        function queryRatio($rows, $disId, $comId, $anum, $num)
+        function queryRatio($rows, $disId, $comCode, $anum, $num)
         {
             $Conn = new ConnManager();
-            $arrPar = array('disId' => $Conn->UtilCheckNotNullIsNumeric($disId) ? $disId : NULL,
-                            'comId' => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL);
+            $arrPar = array('disId'   => $Conn->UtilCheckNotNullIsNumeric($disId) ? $disId : NULL,
+                            'comCode' => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL);
             //SQL
             $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `ratio` R
                      LEFT JOIN `distribution` D ON D.`disId` = R.`disId`
                      LEFT JOIN `company` C ON C.`comId` = R.`comId`
                      WHERE 1=1';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($disId) ? ' AND R.`disId` = :disId' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND R.`comId` = :comId' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($comCode) ? ' AND R.`comCode` = :comCode' : '';
             $sql .= $Conn->getLimit($anum, $num);
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
@@ -823,7 +823,7 @@
             //SQL
             $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `ratio` R
                      LEFT JOIN `distribution` D ON D.`disId` = R.`disId`
-                     LEFT JOIN `company` C ON C.`comId` = R.`comId`
+                     LEFT JOIN `company` C ON C.`comCode` = R.`comCode`
                      WHERE R.`ratId` = :ratId';
             $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
@@ -834,21 +834,21 @@
          * todo:insertRatio 新增公司分攤比例
          *
          * @param $disId
-         * @param $comId
+         * @param $comCode
          * @param $ratRatio
          *
          * @return array|int|Number
          */
-        function insertRatio($disId, $comId, $ratRatio)
+        function insertRatio($disId, $comCode, $ratRatio)
         {
             $Conn = new ConnManager();
             $arrPar = array('disId'    => $Conn->UtilCheckNotNullIsNumeric($disId) ? $disId : 0,
-                            'comId'    => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : 0,
+                            'comCode'  => $Conn->UtilCheckNotNull($comCode) ? $comCode : '',
                             'ratRatio' => $Conn->UtilCheckNotNullIsNumeric($ratRatio) ? $ratRatio : 0);
             //SQL
             $sql = ' INSERT INTO `ratio`(`disId`, `comId`, `ratRatio`)
                      SELECT :disId, :comId, :ratRatio FROM DUAL 
-                     WHERE NOT EXISTS (SELECT `disId`, `comId` FROM `ratio` WHERE `disId` = :disId AND `comId` = :comId)';
+                     WHERE NOT EXISTS (SELECT `disId`, `comId` FROM `ratio` WHERE `disId` = :disId AND `comCode` = :comCode)';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -1579,12 +1579,14 @@
          * @param $memSign  1:待簽
          * @param $memOver  1:已簽
          * @param $conStatusNot
+         * @param $conMark  1:棄用
+         * @param $conInh   1:被繼承
          * @param $anum
          * @param $num
          *
          * @return mixed
          */
-        function queryContractForAction($temId, $comId, $comCode, $conSerial, $conStatus, $perKey, $perBu1Code, $memOwner, $memDraft, $memView, $memSign, $memOver, $conStatusNot, $anum, $num)
+        function queryContractForAction($temId, $comId, $comCode, $conSerial, $conStatus, $perKey, $perBu1Code, $memOwner, $memDraft, $memView, $memSign, $memOver, $conStatusNot, $conMark, $conInh, $anum, $num)
         {
             $Conn = new ConnManager();
             $arrPar = array('conSerial'    => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
@@ -1599,10 +1601,12 @@
                             'memView'      => $Conn->UtilCheckNotNullIsNumeric($memView) ? $memView : NULL,
                             'memSign'      => $Conn->UtilCheckNotNullIsNumeric($memSign) ? $memSign : NULL,
                             'memOver'      => $Conn->UtilCheckNotNullIsNumeric($memOver) ? $memOver : NULL,
-                            'conStatusNot' => $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? $conStatusNot : NULL
+                            'conStatusNot' => $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? $conStatusNot : NULL,
+                            'conMark'      => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : NULL,
+                            'conInh'       => $Conn->UtilCheckNotNullIsNumeric($conInh) ? $conInh : NULL
             );
             //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS T.`temId`, T.`temTitle`, C.`conId`, C.`conTitle`, C.`conStatus`, C.`conSerial`, C.`conCreateTime`, C.`comCode`, C.`perKey`, C.`conType`, F.`frmTitle`, P.`perBu1`, P.`perBu2`, P.`perBu3`, CM.`comTitle`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver` FROM `contract` C
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS T.`temId`, T.`temTitle`, C.`conId`, C.`conTitle`, C.`conStatus`, C.`conSerial`, C.`conVer`, C.`conCreateTime`, C.`comCode`, C.`perKey`, C.`conType`, F.`frmTitle`, P.`perBu1`, P.`perBu2`, P.`perBu3`, CM.`comTitle`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver` FROM `contract` C
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
@@ -1646,6 +1650,8 @@
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? ' AND C.`conStatus` != :conStatusNot' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conMark) ? ' AND C.`conMark` = :conMark' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conInh) ? ' AND C.`conInh` = :conInh' : '';
             $sql .= ' AND ((M.`CT` > 0 AND C.`conStatus` IN (0, 1, 3)) OR (CM.`comCode` = :perBu1Code AND C.`perKey` = :perKey AND C.`conStatus` IN (0, 2, 4)))';
             if ($Conn->UtilCheckNotNullIsNumeric($memOwner) || $Conn->UtilCheckNotNullIsNumeric($memDraft) || $Conn->UtilCheckNotNullIsNumeric($memView) || $Conn->UtilCheckNotNullIsNumeric($memSign) || $Conn->UtilCheckNotNullIsNumeric($memOver)) {
                 $sql .= ' AND (1=2';
@@ -2198,40 +2204,71 @@
          * @param $comCode
          * @param $frmId
          * @param $conSerial
+         * @param $conVer
+         * @param $conMark
          * @param $conTitle
          * @param $conType
          * @param $conDate
          * @param $conWork
          * @param $conCompany
-         * @param $conFileMeeting
-         * @param $conFilePlan
-         * @param $conFile
          * @param $conValue
          * @param $conStatus
          *
          * @return array|int|Number
          */
-        function insertContract($temId, $perKey, $comCode, $frmId, $conSerial, $conTitle, $conType, $conDate, $conWork, $conCompany, $conFileMeeting, $conFilePlan, $conFile, $conValue, $conStatus)
+        function insertContract($temId, $perKey, $comCode, $frmId, $conSerial, $conVer, $conMark, $conTitle, $conType, $conDate, $conWork, $conCompany, $conValue, $conStatus)
         {
             $Conn = new ConnManager();
-            $arrPar = array('temId'          => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : 0,
-                            'perKey'         => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'comCode'        => $Conn->UtilCheckNotNull($comCode) ? $comCode : 0,
-                            'frmId'          => $Conn->UtilCheckNotNull($frmId) ? $frmId : 0,
-                            'conSerial'      => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : '',
-                            'conTitle'       => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
-                            'conType'        => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
-                            'conDate'        => $Conn->UtilCheckNotNullIsDate($conDate) ? $conDate : NULL,
-                            'conWork'        => $Conn->UtilCheckNotNull($conWork) ? $conWork : '',
-                            'conCompany'     => $Conn->UtilCheckNotNull($conCompany) ? $conCompany : '',
-                            'conFileMeeting' => $Conn->UtilCheckNotNull($conFileMeeting) ? $conFileMeeting : '',
-                            'conFilePlan'    => $Conn->UtilCheckNotNull($conFilePlan) ? $conFilePlan : '',
-                            'conFile'        => $Conn->UtilCheckNotNull($conFile) ? $conFile : '',
-                            'conValue'       => $Conn->UtilCheckNotNull($conValue) ? $conValue : '',
-                            'conStatus'      => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : -1);
+            $arrPar = array('temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : 0,
+                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : 0,
+                            'frmId'      => $Conn->UtilCheckNotNull($frmId) ? $frmId : 0,
+                            'conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : '',
+                            'conVer'     => $Conn->UtilCheckNotNull($conVer) ? $conVer : 'A',
+                            'conMark'    => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : 0,
+                            'conTitle'   => $Conn->UtilCheckNotNull($conTitle) ? $conTitle : '',
+                            'conType'    => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
+                            'conDate'    => $Conn->UtilCheckNotNullIsDate($conDate) ? $conDate : NULL,
+                            'conWork'    => $Conn->UtilCheckNotNull($conWork) ? $conWork : '',
+                            'conCompany' => $Conn->UtilCheckNotNull($conCompany) ? $conCompany : '',
+                            'conValue'   => $Conn->UtilCheckNotNull($conValue) ? $conValue : '',
+                            'conStatus'  => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : -1);
             //SQL
-            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `frmId`, `conSerial`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conFileMeeting`, `conFilePlan`, `conFile`, `conValue`, `conStatus`, `conUpdateTime`, `conCreateTime`)
-                     VALUES(:temId, :perKey, :comCode, :frmId, :conSerial, :conTitle, :conType, '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', :conWork, :conCompany, :conFileMeeting, :conFilePlan, :conFile, :conValue, :conStatus, NOW(), NOW())';
+            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `frmId`, `conSerial`, `conVer`, `conMark`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conValue`, `conStatus`, `conUpdateTime`, `conCreateTime`)
+                     VALUES(:temId, :perKey, :comCode, :frmId, :conSerial, :conVer, :conMark, :conTitle, :conType, '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', :conWork, :conCompany, :conValue, :conStatus, NOW(), NOW())';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:copyContract 複製文件
+         *
+         * @param $conId
+         * @param $conType
+         * @param $conSerial
+         * @param $conVer
+         * @param $conMark
+         * @param $conStatus
+         *
+         * @return array|int|Number
+         */
+        function copyContract($conId, $conType, $conSerial, $conVer, $conMark, $conStatus)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
+                            'conType'   => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
+                            'conSerial' => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : '',
+                            'conVer'    => $Conn->UtilCheckNotNull($conVer) ? $conVer : 'A',
+                            'conMark'   => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : 0,
+                            'conStatus' => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : 0);
+            //SQL
+            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `frmId`, `conSerial`, `conVer`, `conMark`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conValue`, `conStatus`, `conInh`, `conUpdateTime`, `conCreateTime`)
+                     SELECT `temId`, `perKey`, `comCode`, `frmId`, '.($Conn->UtilCheckNotNull($conSerial) ? ' :conSerial' : ' `conSerial`').', :conVer, :conMark, `conTitle`, :conType, `conDate`, `conWork`, `conCompany`, `conValue`, :conStatus, 0, NOW(), NOW() FROM `contract` WHERE `conId` = :conId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -2251,10 +2288,11 @@
          * @param $conCompany
          * @param $conValue
          * @param $conId
+         * @param $conStatus
          *
          * @return array|int
          */
-        function updateContractByID($conId, $conTitle, $frmId, $conDate, $conWork, $conCompany, $conValue)
+        function updateContractByID($conId, $conTitle, $frmId, $conDate, $conWork, $conCompany, $conValue, $conStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('conId'      => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
@@ -2263,11 +2301,13 @@
                             'conDate'    => $Conn->UtilCheckNotNullIsDate($conDate) ? $conDate : NULL,
                             'conWork'    => $Conn->UtilCheckNotNull($conWork) ? $conWork : '',
                             'conCompany' => $Conn->UtilCheckNotNull($conCompany) ? $conCompany : '',
-                            'conValue'   => $Conn->UtilCheckNotNull($conValue) ? $conValue : '');
+                            'conValue'   => $Conn->UtilCheckNotNull($conValue) ? $conValue : '',
+                            'conStatus'  => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL);
             //SQL
             $sql = ' UPDATE `contract`
-                     SET `conTitle` = :conTitle, `frmId` = :frmId, `conDate` = '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', `conWork` = :conWork, `conCompany` = :conCompany, `conValue` = :conValue, `conUpdateTime` = NOW()
-                     WHERE `conId` = :conId';
+                     SET `conTitle` = :conTitle, `frmId` = :frmId, `conDate` = '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', `conWork` = :conWork, `conCompany` = :conCompany, `conValue` = :conValue, `conUpdateTime` = NOW()';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ', `conStatus` = :conStatus' : '';
+            $sql .= '  WHERE `conId` = :conId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
         }
@@ -2311,6 +2351,67 @@
                      SET `conStatus` = :conStatus, `conUpdateTime` = NOW()';
             $sql .= $Conn->UtilCheckNotNullIsDate($conDate) ? ' , `conDate` = :conDate' : '';
             $sql .= ' WHERE `conId` = :conId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:updateContractMarkByID 修改文件作廢
+         *
+         * @param $conId
+         * @param $conMark
+         *
+         * @return array|int
+         */
+        function updateContractMarkByID($conId, $conMark)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'   => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
+                            'conMark' => $Conn->UtilCheckNotNullIsDate($conMark) ? $conMark : 0);
+            //SQL
+            $sql = ' UPDATE `contract`
+                     SET `conMark` = :conMark, `conUpdateTime` = NOW()';
+            $sql .= ' WHERE `conId` = :conId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:updateContractInheritByID 修改文件繼承
+         *
+         * @param $conId
+         * @param $conInh
+         *
+         * @return array|int
+         */
+        function updateContractInheritByID($conId, $conInh)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'  => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
+                            'conInh' => $Conn->UtilCheckNotNullIsDate($conInh) ? $conInh : 0);
+            //SQL
+            $sql = ' UPDATE `contract`
+                     SET `conInh` = :conInh, `conUpdateTime` = NOW()';
+            $sql .= ' WHERE `conId` = :conId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:cleanContractInheritByID 清除文件繼承
+         *
+         * @param $conInh
+         *
+         * @return array|int
+         */
+        function cleanContractInheritByID($conInh)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conInh' => $Conn->UtilCheckNotNullIsDate($conInh) ? $conInh : 0);
+            //SQL
+            $sql = ' UPDATE `contract`
+                     SET `conInh` = 0, `conUpdateTime` = NOW()';
+            $sql .= ' WHERE `conInh` = :conInh AND `conMark` = 0';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
         }
@@ -2377,7 +2478,7 @@
             $sql .= ' WHERE 1=1';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conId) ? ' AND CL.`conId` = :conId' : '';
             $sql .= $Conn->getLimit($anum, $num);
-            $sql .= ' ORDER BY `colCreateTime` DESC';
+            $sql .= ' ORDER BY `colCreateTime` ASC';
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
             return $aryData;
@@ -2720,6 +2821,31 @@
         }
 
         /**
+         * todo:copyMember 複製簽核流程
+         *
+         * @param $conId
+         * @param $conIdNew
+         *
+         * @return array|int|Number
+         */
+        function copyMember($conId, $conIdNew)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'    => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
+                            'conIdNew' => $Conn->UtilCheckNotNullIsNumeric($conIdNew) ? $conIdNew : 0);
+            //SQL
+            $sql = ' INSERT INTO `member`(`conId`, `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, `memLV0Status`, `memLV0Msg`, `memLV0Time`, `memLVCKey`, `memLVCName`, `memLVCPositionName`, `memLVCStatus`, `memLVCTime`, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, `memLV1Status`, `memLV1Msg`, `memLV1Time`, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, `memLV2Status`, `memLV2Msg`, `memLV2Time`, `memPhone`, `memNowKey`, `memNowStatus`, `memStatus`)
+                     SELECT :conIdNew, `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, -1, NULL, NULL, \'\', \'\', \'\', -1, NULL, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, -1, NULL, NULL, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, -1, NULL, NULL, `memPhone`, \'\', -1, -1 FROM `member` WHERE `conId` = :conId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
          * todo:updateMemberByID 修改簽核流程
          *
          * @param $memId
@@ -3036,7 +3162,7 @@
                     $sql_iteId .= ('' != $sql_iteId ? ',' : '').$iteId;
                 }
                 if ('' != $sql_iteId) {
-                    $sql_iteId = ' AND `memId` NOT IN ('.$sql_iteId.')';
+                    $sql_iteId = ' AND `iteId` NOT IN ('.$sql_iteId.')';
                 }
             }
             $sql .= $sql_iteId;
@@ -3098,6 +3224,31 @@
         }
 
         /**
+         * todo:copyItem 複製作業內容
+         *
+         * @param $conId
+         * @param $conIdNew
+         *
+         * @return array|int|Number
+         */
+        function copyItem($conId, $conIdNew)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'    => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
+                            'conIdNew' => $Conn->UtilCheckNotNullIsNumeric($conIdNew) ? $conIdNew : 0);
+            //SQL
+            $sql = ' INSERT INTO `item`(`conId`, `iteTitle`, `worId`, `iteTime`, `iteSubsidiaries`, `iteControl`, `disId`, `manId`, `iteProportion`, `iteTypeNote`, `iteDescription`, `iteFileMeeting`, `iteFilePlan`, `iteFile`, `iteWord`, `iteNote`)
+                     SELECT :conIdNew, `iteTitle`, `worId`, `iteTime`, `iteSubsidiaries`, `iteControl`, `disId`, `manId`, `iteProportion`, `iteTypeNote`, `iteDescription`, `iteFileMeeting`, `iteFilePlan`, `iteFile`, `iteWord`, `iteNote` FROM `item` WHERE `conId` = :conId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
          * todo:updateItem 修改作業內容
          *
          * @param $iteId
@@ -3149,6 +3300,861 @@
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
         }
+
+        /**
+         * todo:queryApportion 查看費用
+         *
+         * @param $rows
+         * @param $conId
+         * @param $perKey
+         * @param $appYear
+         * @param $appStatus
+         * @param $appMark
+         * @param $appInh
+         * @param $anum
+         * @param $num
+         *
+         * @return mixed
+         */
+        function queryApportion($rows, $conId, $perKey, $appYear, $appStatus, $appMark, $appInh, $anum, $num)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appYear'   => $Conn->UtilCheckNotNullIsNumeric($appYear) ? $appYear : NULL,
+                            'conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL,
+                            'perKey'    => $Conn->UtilCheckNotNull($perKey) ? $perKey : NULL,
+                            'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : NULL,
+                            'appMark'   => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : NULL,
+                            'appInh'    => $Conn->UtilCheckNotNullIsNumeric($appInh) ? $appInh : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `apportion` A
+                     LEFT JOIN `contract` C ON C.`conId` = A.`conId`
+                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
+                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     WHERE 1 = 1';
+            $sql .= $Conn->UtilCheckNotNull($appYear) ? ' AND A.`appYear` = :appYear' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conId) ? ' AND A.`conId` = :conId' : '';
+            $sql .= $Conn->UtilCheckNotNull($perKey) ? ' AND C.`perKey` = :perKey' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($appStatus) ? ' AND A.`appStatus` = :appStatus' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($appMark) ? ' AND A.`appMark` = :appMark' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($appInh) ? ' AND A.`appInh` = :appInh' : '';
+            $sql .= $Conn->getLimit($anum, $num);
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:queryApportionByID 查看單一費用
+         *
+         * @param $rows
+         * @param $appId
+         *
+         * @return mixed
+         */
+        function queryApportionByID($rows, $appId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : '');
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `apportion` A
+                     LEFT JOIN `contract` C ON C.`conId` = A.`conId`
+                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
+                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
+                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     WHERE A.`appId` = :appId';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:queryApportionLastByContract 查看計畫書相關最後單一費用
+         *
+         * @param $rows
+         * @param $conId
+         * @param $appStatus
+         *
+         * @return mixed
+         */
+        function queryApportionLastByContract($rows, $conId, $appStatus)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : '',
+                            'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `apportion` A
+                     LEFT JOIN `contract` C ON C.`conId` = A.`conId`
+                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
+                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     WHERE A.`conId` = :conId';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($appStatus) ? ' AND A.`appStatus` = :appStatus' : '';
+            $sql .= ' AND A.`appMark` = 0';
+            $sql .= ' ORDER BY A.`appCreateTime` DESC';
+            $sql .= ' LIMIT 0, 1';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:insertApportion 新增費用
+         *
+         * @param $conId
+         * @param $appYear
+         * @param $appVer
+         * @param $appMark
+         * @param $appStatus
+         *
+         * @return array|int|Number
+         */
+        function insertApportion($conId, $appYear, $appVer, $appMark, $appStatus)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
+                            'appYear'   => $Conn->UtilCheckNotNull($appYear) ? $appYear : '',
+                            'appVer'    => $Conn->UtilCheckNotNull($appVer) ? $appVer : 'A',
+                            'appMark'   => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : 0,
+                            'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : -1);
+            //SQL
+            $sql = ' INSERT INTO `apportion`(`conId`, `appYear`, `appVer`, `appMark`, `appStatus`, `appUpdateTime`, `appCreateTime`)
+                     VALUES(:conId, :appYear, :appVer, :appMark, :appStatus, NOW(), NOW())';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:copyApportion 複製費用
+         *
+         * @param $appId
+         * @param $appYear
+         * @param $appVer
+         * @param $appMark
+         * @param $appStatus
+         *
+         * @return array|int|Number
+         */
+        function copyApportion($appId, $appYear, $appVer, $appMark, $appStatus)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId'     => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0,
+                            'appYear'   => $Conn->UtilCheckNotNull($appYear) ? $appYear : '',
+                            'appVer'    => $Conn->UtilCheckNotNull($appVer) ? $appVer : 'A',
+                            'appMark'   => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : 0,
+                            'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : 0);
+            //SQL
+            $sql = ' INSERT INTO `apportion`(`conId`, `appYear`, `appVer`, `appMark`, `appStatus`, `appInh`, `appUpdateTime`, `appCreateTime`)
+                     SELECT `conId`, '.($Conn->UtilCheckNotNull($appYear) ? ' :appYear' : ' `appYear`').', :appVer, :appMark, :appStatus, 0, NOW(), NOW() FROM `apportion` WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:updateApportionUpdateTimeByID 修改費用修改時間
+         *
+         * @param $appId
+         *
+         * @return array|int
+         */
+        function updateApportionUpdateTimeByID($appId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : '');
+            //SQL
+            $sql = ' UPDATE `apportion`
+                     SET `appUpdateTime` = NOW()';
+            $sql .= ' WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:updateApportionStatusByID 修改費用狀態
+         *
+         * @param $appStatus
+         * @param $appId
+         *
+         * @return array|int
+         */
+        function updateApportionStatusByID($appId, $appStatus)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId'     => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : '',
+                            'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : 0);
+            //SQL
+            $sql = ' UPDATE `apportion`
+                     SET `appStatus` = :appStatus, `appUpdateTime` = NOW()';
+            $sql .= ' WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:updateApportionMarkByID 修改費用作廢
+         *
+         * @param $appId
+         * @param $appMark
+         *
+         * @return array|int
+         */
+        function updateApportionMarkByID($appId, $appMark)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId'   => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0,
+                            'appMark' => $Conn->UtilCheckNotNullIsDate($appMark) ? $appMark : 0);
+            //SQL
+            $sql = ' UPDATE `apportion`
+                     SET `appMark` = :appMark, `appUpdateTime` = NOW()';
+            $sql .= ' WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:updateApportionInheritByID 修改費用繼承
+         *
+         * @param $appId
+         * @param $appInh
+         *
+         * @return array|int
+         */
+        function updateApportionInheritByID($appId, $appInh)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId'  => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0,
+                            'appInh' => $Conn->UtilCheckNotNullIsDate($appInh) ? $appInh : 0);
+            //SQL
+            $sql = ' UPDATE `apportion`
+                     SET `appInh` = :appInh, `appUpdateTime` = NOW()';
+            $sql .= ' WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:cleanApportionInheritByID 清除費用繼承
+         *
+         * @param $appInh
+         *
+         * @return array|int
+         */
+        function cleanApportionInheritByID($appInh)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appInh' => $Conn->UtilCheckNotNullIsDate($appInh) ? $appInh : 0);
+            //SQL
+            $sql = ' UPDATE `apportion`
+                     SET `appInh` = 0, `appUpdateTime` = NOW()';
+            $sql .= ' WHERE `appInh` = :appInh AND `appMark` = 0';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:deleteApportionByID 刪除費用
+         *
+         * @param int $appId 編號
+         *
+         * @return int|boolean
+         */
+        function deleteApportionByID($appId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0);
+            //SQL
+            $sql = ' DELETE FROM `apportion`
+                     WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:queryExes 查看分攤明細
+         *
+         * @param $rows
+         * @param $appId
+         *
+         * @return mixed
+         */
+        function queryExes($rows, $appId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `exes` E
+                     LEFT JOIN `item` I ON I.`iteId` = E.`iteId`
+                     LEFT JOIN `apportion` A ON A.`appId` = E.`appId`
+                     LEFT JOIN `contract` C ON C.`conId` = A.`conId`
+                     LEFT JOIN `work` W ON W.`worId` = I.`worId`
+                     LEFT JOIN `distribution` D ON D.`disId` = I.`disId`
+                     LEFT JOIN `manner` M ON M.`manId` = I.`manId`
+                     LEFT JOIN `source` S ON S.`souId` = I.`iteTime`
+                     WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($appId) ? ' AND E.`appId` = :appId' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:queryExesByID 查看單一分攤明細
+         *
+         * @param $rows
+         * @param $exeId
+         *
+         * @return mixed
+         */
+        function queryExesByID($rows, $exeId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('exeId' => $Conn->UtilCheckNotNullIsNumeric($exeId) ? $exeId : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `exes` E
+                     LEFT JOIN `item` I ON I.`iteId` = E.`iteId`
+                     LEFT JOIN `apportion` A ON A.`appId` = E.`appId`
+                     LEFT JOIN `contract` C ON C.`conId` = A.`conId`
+                     LEFT JOIN `work` W ON W.`worId` = I.`worId`
+                     LEFT JOIN `distribution` D ON D.`disId` = I.`disId`
+                     LEFT JOIN `manner` M ON M.`manId` = I.`manId`
+                     LEFT JOIN `source` S ON S.`souId` = I.`iteTime`
+                     WHERE E.`exeId` = :exeId';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:deleteExesByID 刪除分攤明細
+         *
+         * @param $exeId
+         *
+         * @return mixed
+         */
+        function deleteExesByID($exeId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('exeId' => $Conn->UtilCheckNotNullIsNumeric($exeId) ? $exeId : 0);
+            //SQL
+            $sql = ' DELETE FROM `exes`
+                     WHERE `exeId` = :exeId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:deleteExesByApportion 刪除分攤明細
+         *
+         * @param $appId
+         * @param $exeId_list
+         *
+         * @return mixed
+         */
+        function deleteExesByApportion($appId, $exeId_list)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0);
+            //SQL
+            $sql = ' DELETE FROM `exes`
+                     WHERE `appId` = :appId';
+            $sql_exeId = '';
+            if (is_array($exeId_list)) {
+                foreach ($exeId_list as $exeId) {
+                    $sql_exeId .= ('' != $sql_exeId ? ',' : '').$exeId;
+                }
+                if ('' != $exeId_list) {
+                    $sql_exeId = ' AND `exeId` NOT IN ('.$sql_exeId.')';
+                }
+            }
+            $sql .= $sql_exeId;
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:insertExes 新增分攤明細
+         *
+         * @param $appId
+         * @param $iteId
+         * @param $exeTitle
+         * @param $exeCost
+         * @param $exeCreateMonth
+         * @param $exeMonth
+         * @param $exeStartYear
+         * @param $exeNote
+         *
+         * @return array|int|Number
+         */
+        function insertExes($appId, $iteId, $exeTitle, $exeCost, $exeCreateMonth, $exeMonth, $exeStartYear, $exeNote)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId'          => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0,
+                            'iteId'          => $Conn->UtilCheckNotNullIsNumeric($iteId) ? $iteId : 0,
+                            'exeTitle'       => $Conn->UtilCheckNotNull($exeTitle) ? $exeTitle : '',
+                            'exeCost'        => $Conn->UtilCheckNotNullIsNumeric($exeCost) ? $exeCost : 0,
+                            'exeCreateMonth' => $Conn->UtilCheckNotNull($exeCreateMonth) ? $exeCreateMonth : '',
+                            'exeMonth'       => $Conn->UtilCheckNotNullIsNumeric($exeMonth) ? $exeMonth : 0,
+                            'exeStartYear'   => $Conn->UtilCheckNotNull($exeStartYear) ? $exeStartYear : '',
+                            'exeNote'        => $Conn->UtilCheckNotNull($exeNote) ? $exeNote : '');
+            //SQL
+            $sql = ' INSERT INTO `exes`(`appId`, `iteId`, `exeTitle`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`)
+                     VALUES(:appId, :iteId, :exeTitle, :exeCost, :exeCreateMonth, :exeMonth, :exeStartYear, :exeNote)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:copyExes 複製分攤明細
+         *
+         * @param $appId
+         * @param $appIdNew
+         *
+         * @return array|int|Number
+         */
+        function copyExes($appId, $appIdNew)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId'    => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0,
+                            'appIdNew' => $Conn->UtilCheckNotNullIsNumeric($appIdNew) ? $appIdNew : 0);
+            //SQL
+            $sql = ' INSERT INTO `exes`(`appId`, `iteId`, `exeTitle`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`, `exeStatus`)
+                     SELECT :appIdNew, `iteId`, `exeTitle`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`, `exeStatus` FROM `exes` WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:updateExes 修改分攤明細
+         *
+         * @param $exeId
+         * @param $iteId
+         * @param $exeTitle
+         * @param $exeCost
+         * @param $exeCreateMonth
+         * @param $exeMonth
+         * @param $exeStartYear
+         * @param $exeNote
+         *
+         * @return array|int
+         */
+        function updateExes($exeId, $iteId, $exeTitle, $exeCost, $exeCreateMonth, $exeMonth, $exeStartYear, $exeNote)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('iteId'          => $Conn->UtilCheckNotNullIsNumeric($iteId) ? $iteId : 0,
+                            'exeTitle'       => $Conn->UtilCheckNotNull($exeTitle) ? $exeTitle : '',
+                            'exeCost'        => $Conn->UtilCheckNotNullIsNumeric($exeCost) ? $exeCost : 0,
+                            'exeCreateMonth' => $Conn->UtilCheckNotNull($exeCreateMonth) ? $exeCreateMonth : '',
+                            'exeMonth'       => $Conn->UtilCheckNotNullIsNumeric($exeMonth) ? $exeMonth : 0,
+                            'exeStartYear'   => $Conn->UtilCheckNotNull($exeStartYear) ? $exeStartYear : '',
+                            'exeNote'        => $Conn->UtilCheckNotNull($exeNote) ? $exeNote : '',
+                            'exeId'          => $Conn->UtilCheckNotNullIsNumeric($exeId) ? $exeId : 0);
+            //SQL
+            $sql = ' UPDATE `exes`
+                     SET `iteId` = :iteId, `exeTitle` = :exeTitle, `exeCost` = :exeCost, `exeCreateMonth` = :exeCreateMonth, `exeMonth` = :exeMonth, `exeStartYear` = :exeStartYear, `exeNote` = :exeNote
+                     WHERE `exeId` = :exeId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:queryAnnual 查看各年度分攤費用
+         *
+         * @param $rows
+         * @param $exeId
+         *
+         * @return mixed
+         */
+        function queryAnnual($rows, $exeId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('exeId' => $Conn->UtilCheckNotNullIsNumeric($exeId) ? $exeId : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `annual` A
+                     LEFT JOIN `exes` E ON E.`exeId` = A.`exeId`
+                     WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($exeId) ? ' AND A.`exeId` = :exeId' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:queryAnnualByID 查看單一各年度分攤費用
+         *
+         * @param $rows
+         * @param $annId
+         *
+         * @return mixed
+         */
+        function queryAnnualByID($rows, $annId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('annId' => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `annual` A
+                     LEFT JOIN `exes` E ON E.`exeId` = A.`exeId`
+                     WHERE A.`annId` = :annId';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:insertAnnual 新增各年度分攤費用
+         *
+         * @param $exeId
+         * @param $annYear
+         * @param $annStartMonth
+         * @param $annEndMonth
+         * @param $annMonth
+         * @param $annCost
+         *
+         * @return array|int|Number
+         */
+        function insertAnnual($exeId, $annYear, $annStartMonth, $annEndMonth, $annMonth, $annCost)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('exeId'         => $Conn->UtilCheckNotNullIsNumeric($exeId) ? $exeId : 0,
+                            'annYear'       => $Conn->UtilCheckNotNull($annYear) ? $annYear : '',
+                            'annStartMonth' => $Conn->UtilCheckNotNull($annStartMonth) ? $annStartMonth : '',
+                            'annEndMonth'   => $Conn->UtilCheckNotNull($annEndMonth) ? $annEndMonth : '',
+                            'annMonth'      => $Conn->UtilCheckNotNullIsNumeric($annMonth) ? $annMonth : 0,
+                            'annCost'       => $Conn->UtilCheckNotNullIsNumeric($annCost) ? $annCost : 0);
+            //SQL
+            $sql = ' INSERT INTO `annual`(`exeId`, `annYear`, `annStartMonth`, `annEndMonth`, `annMonth`, `annCost`)
+                     VALUES(:exeId, :annYear, :annStartMonth, :annEndMonth, :annMonth, :annCost)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:updateAnnual 修改各年度分攤費用
+         *
+         * @param $annId
+         * @param $annYear
+         * @param $annStartMonth
+         * @param $annEndMonth
+         * @param $annMonth
+         * @param $annCost
+         *
+         * @return array|int
+         */
+        function updateAnnual($annId, $annYear, $annStartMonth, $annEndMonth, $annMonth, $annCost)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('annId'         => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : 0,
+                            'annYear'       => $Conn->UtilCheckNotNull($annYear) ? $annYear : '',
+                            'annStartMonth' => $Conn->UtilCheckNotNull($annStartMonth) ? $annStartMonth : '',
+                            'annEndMonth'   => $Conn->UtilCheckNotNull($annEndMonth) ? $annEndMonth : '',
+                            'annMonth'      => $Conn->UtilCheckNotNullIsNumeric($annMonth) ? $annMonth : 0,
+                            'annCost'       => $Conn->UtilCheckNotNullIsNumeric($annCost) ? $annCost : 0);
+            //SQL
+            $sql = ' UPDATE `annual`
+                     SET `annYear` = :annYear, `annStartMonth` = :annStartMonth, `annEndMonth` = :annEndMonth, `annMonth` = :annMonth, `annCost` = :annCost, `annStatus` = :annStatus
+                     WHERE `annId` = :annId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:deleteAnnualByID 刪除各年度分攤費用
+         *
+         * @param $annId
+         *
+         * @return mixed
+         */
+        function deleteAnnualByID($annId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('annId' => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : 0);
+            //SQL
+            $sql = ' DELETE FROM `annual`
+                     WHERE `annId` = :annId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:deleteAnnualByApportion 刪除各年度分攤費用
+         *
+         * @param $exeId
+         * @param $annId_list
+         *
+         * @return mixed
+         */
+        function deleteAnnualByApportion($exeId, $annId_list)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('exeId' => $Conn->UtilCheckNotNullIsNumeric($exeId) ? $exeId : 0);
+            //SQL
+            $sql = ' DELETE FROM `annual`
+                     WHERE `exeId` = :exeId';
+            $sql_annId = '';
+            if (is_array($annId_list)) {
+                foreach ($annId_list as $annId) {
+                    $sql_annId .= ('' != $annId ? ',' : '').$annId;
+                }
+                if ('' != $annId_list) {
+                    $sql_annId = ' AND `exeId` NOT IN ('.$sql_annId.')';
+                }
+            }
+            $sql .= $sql_annId;
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+
+        /**
+         * todo:querySubsidiary 查看各公司分攤費用
+         *
+         * @param $rows
+         * @param $annId
+         *
+         * @return mixed
+         */
+        function querySubsidiary($rows, $annId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('annId' => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `subsidiary` S
+                     LEFT JOIN `annual` A ON S.`annId` = S.`annId`
+                     LEFT JOIN `exes` E ON E.`exeId` = A.`exeId`
+                     WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($annId) ? ' AND S.`annId` = :annId' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:querySubsidiaryByID 查看單一各公司分攤費用
+         *
+         * @param $rows
+         * @param $subId
+         *
+         * @return mixed
+         */
+        function querySubsidiaryByID($rows, $subId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('subId' => $Conn->UtilCheckNotNullIsNumeric($subId) ? $subId : NULL);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `subsidiary` S
+                     LEFT JOIN `annual` A ON S.`annId` = S.`annId`
+                     LEFT JOIN `exes` E ON E.`exeId` = A.`exeId`
+                     WHERE S.`subId` = :subId';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:deleteSubsidiaryByID 刪除各公司分攤費用
+         *
+         * @param $subId
+         *
+         * @return mixed
+         */
+        function deleteSubsidiaryByID($subId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('subId' => $Conn->UtilCheckNotNullIsNumeric($subId) ? $subId : 0);
+            //SQL
+            $sql = ' DELETE FROM `subsidiary`
+                     WHERE `subId` = :subId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:deleteSubsidiaryByApportion 刪除各公司分攤費用
+         *
+         * @param $annId
+         * @param $subId_list
+         *
+         * @return mixed
+         */
+        function deleteSubsidiaryByApportion($annId, $subId_list)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('annId' => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : 0);
+            //SQL
+            $sql = ' DELETE FROM `subsidiary`
+                     WHERE `annId` = :annId';
+            $sql_subId = '';
+            if (is_array($subId_list)) {
+                foreach ($subId_list as $subId) {
+                    $sql_subId .= ('' != $sql_subId ? ',' : '').$subId;
+                }
+                if ('' != $subId_list) {
+                    $sql_subId = ' AND `annId` NOT IN ('.$sql_subId.')';
+                }
+            }
+            $sql .= $sql_subId;
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:insertSubsidiary 新增各公司分攤費用
+         *
+         * @param $annId
+         * @param $comCode
+         * @param $subAmount
+         * @param $subPercent
+         * @param $subCost
+         *
+         * @return array|int|Number
+         */
+        function insertSubsidiary($annId, $comCode, $subAmount, $subPercent, $subCost)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('annId'      => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : 0,
+                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : '',
+                            'subAmount'  => $Conn->UtilCheckNotNullIsNumeric($subAmount) ? $subAmount : 0,
+                            'subPercent' => $Conn->UtilCheckNotNullIsNumeric($subPercent) ? $subPercent : 0,
+                            'subCost'    => $Conn->UtilCheckNotNullIsNumeric($subCost) ? $subCost : 0);
+            //SQL
+            $sql = ' INSERT INTO `subsidiary`(`annId`, `comCode`, `subAmount`, `subPercent`, `subCost`)
+                     VALUES(:annId, :comCode, :subAmount, :subPercent, :subCost)';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:copySubsidiary 複製各公司分攤費用
+         *
+         * @param $annId
+         * @param $annIdNew
+         *
+         * @return array|int|Number
+         */
+        function copySubsidiary($annId, $annIdNew)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('annId'    => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : 0,
+                            'annIdNew' => $Conn->UtilCheckNotNullIsNumeric($annIdNew) ? $annIdNew : 0);
+            //SQL
+            $sql = ' INSERT INTO `subsidiary`(`annId`, `comCode`, `subAmount`, `subPercent`, `subCost`)
+                     SELECT :annIdNew, `comCode`, `subAmount`, `subPercent`, `subCost` FROM `subsidiary` WHERE `annId` = :annId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:updateSubsidiary 修改各公司分攤費用
+         *
+         * @param $subId
+         * @param $comCode
+         * @param $subAmount
+         * @param $subPercent
+         * @param $subCost
+         *
+         * @return array|int
+         */
+        function updateSubsidiary($subId, $comCode, $subAmount, $subPercent, $subCost)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : '',
+                            'subAmount'  => $Conn->UtilCheckNotNullIsNumeric($subAmount) ? $subAmount : 0,
+                            'subPercent' => $Conn->UtilCheckNotNullIsNumeric($subPercent) ? $subPercent : 0,
+                            'subCost'    => $Conn->UtilCheckNotNullIsNumeric($subCost) ? $subCost : 0,
+                            'subId'      => $Conn->UtilCheckNotNullIsNumeric($subId) ? $subId : 0);
+            //SQL
+            $sql = ' UPDATE `subsidiary`
+                     SET `comCode` = :comCode, `subAmount` = :subAmount, `subPercent` = :subPercent, `subCost` = :subCost
+                     WHERE `subId` = :subId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+
+        /**
+         * todo:queryInfoByID 查看單一設定資訊
+         *
+         * @param $rows
+         * @param $infId
+         *
+         * @return mixed
+         */
+        function queryInfoByID($rows, $infId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('infId' => $Conn->UtilCheckNotNullIsNumeric($infId) ? $infId : '');
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `info`
+                     WHERE `infId` = :infId';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:updateInfoByID 修改設定資訊
+         *
+         * @param $infId
+         * @param $infYear
+         * @param $infPM
+         * @param $infSP
+         *
+         * @return array|int
+         */
+        function updateInfoByID($infId, $infYear, $infPM, $infSP)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('infId'   => $Conn->UtilCheckNotNullIsNumeric($infId) ? $infId : 0,
+                            'infYear' => $Conn->UtilCheckNotNullIsNumeric($infYear) ? $infYear : NULL,
+                            'infPM'   => $Conn->UtilCheckNotNullIsNumeric($infPM) ? $infPM : NULL,
+                            'infSP'   => $Conn->UtilCheckNotNullIsNumeric($infSP) ? $infSP : NULL);
+            //SQL
+            $sql = ' UPDATE `info`
+                     SET `infUpdateTime` = NOW()';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($infYear) ? ' , `infYear` = :infYear' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($infPM) ? ' , `infPM` = :infPM' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($infSP) ? ' , `infSP` = :infSP' : '';
+            $sql .= ' WHERE `infId` = :infId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+
+
+
+
 
 //        /**
 //         * todo:查看項目預計分攤

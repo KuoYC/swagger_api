@@ -15,9 +15,48 @@
     $return_data['code'] = 0;
     $return_data['message'] = '請求成功';
     switch ($_GET['type']) {
-        case 'personnel': // todo: personnel 取得員工資訊
+        /**
+         * todo: personnel 取得員工資訊
+         * GET personnel
+         * input:string
+         * {
+         *      keyword:            string(null)
+         *      perBu1Code:         string(null)
+         *      perBu2Code:         string(null)
+         *      perBu3Code:         string(null)
+         *      perKey:             string(null)
+         *      perEmail:           string(null)
+         *      perAccount:         string(null)
+         *      perNo:              string(null)
+         *      perPosition:        string(null)
+         * }
+         * return:
+         * {
+         *      "perMobile":        "0922333444",
+         *      "perPositionName":  "高級專員",
+         *      "perPhone1":        "02",
+         *      "perPhone3":        "5077",
+         *      "perKey":           "00588240::51::01::TC10000::TC10050",
+         *      "perBu2":           "國內通路A1-通路營運部",
+         *      "perAccount":       "J25905937C",
+         *      "perBu1Code":       "01",
+         *      "perName":          "傅○瑋",
+         *      "perBu2Code":       "TC10000",
+         *      "perBu3Code":       "TC10050",
+         *      "perEmail":         "00588240@cathlife.com.tw",
+         *      "perPar":           "0",
+         *      "perId":            "1",
+         *      "perBu1":           "國泰世華",
+         *      "perNo":            "00588240",
+         *      "perPhone2":        "0227551399",
+         *      "perNick":          "",
+         *      "perBu3":           "通路營運部",
+         *      "perPosition":      "51"
+         * }
+         */
+        case 'personnel':
             switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET':// todo: personnel GET[{keyword|null}|{perBu1Code|null}|{perBu2Code|null}|{perBu3Code|null}|{perKey|null}|{perEmail|null}|{perAccount|null}|{perNo|null}|{perPosition|null}} 取得員工資訊
+                case 'GET':
                     $personnel_list = $ContractMgr->queryPersonnel(NULL, $_GET['keyword'], $_GET['perBu1Code'], $_GET['perBu2Code'], $_GET['perBu3Code'], $_GET['perKey'], $_GET['perEmail'], $_GET['perAccount'], $_GET['perNo'], $_GET['perPosition'], NULL, NULL);
                     $return_data['data'] = $personnel_list['data'];
                     break;
@@ -25,9 +64,19 @@
             break;
 
 
-        case 'personnel_group': // todo: personnel_group 從personnel取得部門與科部名稱
+        /**
+         * todo: personnel_group 從personnel取得部門與科部名稱
+         * GET personnel_group
+         * input:string
+         * {
+         *      col:                int
+         *      perBu1Code:         string(col in (2, 3))
+         *      perBu2Code: `       string(col in (3))
+         * }
+         */
+        case 'personnel_group':
             switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET':// todo: personnel_group GET[col, {perBu1Code|null}, {perBu2Code|null}] 從personnel取得部門與科部名稱 ps.col=1取得Bu1, col=2取得Bu2(perBu1Code必要), col=3取得Bu3(perBu1Code, perBu2Code必要)
+                case 'GET':
                     switch ($_GET['col']) {
                         case '1':
                             $personnel_group_list = $ContractMgr->queryPersonnelGroupForBu1();
@@ -43,6 +92,9 @@
                     break;
             }
             break;
+        /**
+         * todo: news 公告操作
+         */
         case 'news':// todo: news 公告操作
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: news GET[nwsId|null] 取得[單一|全部]公告
@@ -429,10 +481,18 @@
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract GET[conId|{temId|comId|null}] 取得[單一|全部]文件
                     if (isset($_GET['conId'])) {
-                        $contract_sl = $ContractMgr->queryContractByID(NULL, $_GET['conId']);
+                        $contract_sl = $ContractMgr->queryContractByID(array('C.*', 'T.*', 'CM.*', 'P.*', 'F.`frmTitle`'), $_GET['conId']);
                         $return_data['count'] = $contract_sl['count'];
                         if (0 < $contract_sl['count']) {
                             $contract_sl['data']['conValue'] = htmlspecialchars_decode($contract_sl['data']['conValue']);
+                            $item_list = $ContractMgr->queryItem('', $_GET['conId']);
+                            for ($i = 0; $i < $item_list['count']; $i++) {
+                                $item_list['data'][$i]['iteProportion'] = htmlspecialchars_decode($item_list['data'][$i]['iteProportion']);
+                            }
+                            $member_list = $ContractMgr->queryMember(NULL, $_GET['conId'], $_GET['memType']);
+
+                            $contract_sl['data']['itemData'] = $item_list['data'];
+                            $contract_sl['data']['memberData'] = $member_list['data'];
 //                            $contract_sl['data']['filePath'] = 'https://ju-house.com/upload/';
                             $contract_sl['data']['filePath'] = 'http://www.api.ks/upload/';
                             $return_data['data'] = replaceArr($contract_sl['data']);
@@ -440,42 +500,42 @@
                     }
                     else {
                         if (isset($_GET['action']) && '1' == $_GET['action']) {
-                            $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'], $_GET['conStatusNot'],NULL, NULL);
+                            $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'], $_GET['conStatusNot'], $_GET['conMark'], $_GET['conInh'], NULL, NULL);
                             /**
-                            $rows = array('T.`temId`', 'T.`temTitle`', 'C.`conId`', 'C.`conTitle`', 'C.`conStatus`', 'C.`conSerial`', 'C.`conCreateTime`', 'C.`comCode`', 'C.`perKey`', 'C.`conType`', 'F.`frmTitle`', 'P.`perBu1`', 'P.`perBu2`', 'P.`perBu3`', 'CM.`comTitle`');
-                            switch ($_GET['action']) {
-                                case '0':// todo: contract GET[{action=0}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-相關(發起, 退回, 待簽, 已簽)
-                                    $contract_list = $ContractMgr->queryContractForAction0($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                case '1':// todo: contract GET[{action=1}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-待檢視
-                                    $contract_list = $ContractMgr->queryContractForAction1($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                case '2':// todo: contract GET[{action=2}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-待簽
-                                    $contract_list = $ContractMgr->queryContractForAction2($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                case '3':// todo: contract GET[{action=3}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-等待(待檢視+待簽)
-                                    $contract_list = $ContractMgr->queryContractForAction3($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                case '4':// todo: contract GET[{action=4}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-已簽
-                                    $contract_list = $ContractMgr->queryContractForAction4($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                case '5':// todo: contract GET[{action=5}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-全部相關
-                                    $contract_list = $ContractMgr->queryContractForAction5($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['conStatus'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                case '6':// todo: contract GET[{action=6}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-完成
-                                    $contract_list = $ContractMgr->queryContractForAction6($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                case '7':// todo: contract GET[{action=7}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-拒絕
-                                    $contract_list = $ContractMgr->queryContractForAction7($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                case '8':// todo: contract GET[{action=8}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-完成或拒絕
-                                    $contract_list = $ContractMgr->queryContractForAction8($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
-                                    break;
-                                default:
-                                    $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'],NULL, NULL);
-                                    break;
-                            }
-                            **/
+                             * $rows = array('T.`temId`', 'T.`temTitle`', 'C.`conId`', 'C.`conTitle`', 'C.`conStatus`', 'C.`conSerial`', 'C.`conCreateTime`', 'C.`comCode`', 'C.`perKey`', 'C.`conType`', 'F.`frmTitle`', 'P.`perBu1`', 'P.`perBu2`', 'P.`perBu3`', 'CM.`comTitle`');
+                             * switch ($_GET['action']) {
+                             * case '0':// todo: contract GET[{action=0}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-相關(發起, 退回, 待簽, 已簽)
+                             * $contract_list = $ContractMgr->queryContractForAction0($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '1':// todo: contract GET[{action=1}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-待檢視
+                             * $contract_list = $ContractMgr->queryContractForAction1($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '2':// todo: contract GET[{action=2}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-待簽
+                             * $contract_list = $ContractMgr->queryContractForAction2($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '3':// todo: contract GET[{action=3}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-等待(待檢視+待簽)
+                             * $contract_list = $ContractMgr->queryContractForAction3($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '4':// todo: contract GET[{action=4}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-已簽
+                             * $contract_list = $ContractMgr->queryContractForAction4($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '5':// todo: contract GET[{action=5}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-全部相關
+                             * $contract_list = $ContractMgr->queryContractForAction5($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['conStatus'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '6':// todo: contract GET[{action=6}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-完成
+                             * $contract_list = $ContractMgr->queryContractForAction6($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '7':// todo: contract GET[{action=7}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-拒絕
+                             * $contract_list = $ContractMgr->queryContractForAction7($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '8':// todo: contract GET[{action=8}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-完成或拒絕
+                             * $contract_list = $ContractMgr->queryContractForAction8($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * default:
+                             * $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'],NULL, NULL);
+                             * break;
+                             * }
+                             **/
                         }
                         else {
                             $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
@@ -490,46 +550,46 @@
                     break;
                 case 'PUT'://todo contract PUT 修改文件資料
                     $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
-                    $contract_up = $ContractMgr->updateContractByID($data['conId'], $data['conTitle'], $data['frmId'], $data['conDate'], $data['conWork'], $data['conCompany'], $data['conValue']);
-                    if ($contract_up) {
-                        if (isset($data['itemList']) && NULL != $data['itemList']) {
-                            //刪除不再資料列中的資料
-                            $iteId_list = NULL;
-                            foreach ($data['itemList'] as $ite) {
-                                $iteId_list[] = $ite['iteId'];
-                            }
-                            $item_list = $ContractMgr->queryItem(array('I.`iteId`'), $data['conId']);
-                            $o_iteId_list = NULL;
-                            foreach ($item_list['data'] as $ite) {
-                                $o_iteId_list[] = $ite['iteId'];
-                            }
-                            $dl_iteId_list = array_diff($o_iteId_list, $iteId_list);
+                    $contract_up = $ContractMgr->updateContractByID($data['conId'], $data['conTitle'], $data['frmId'], $data['conDate'], $data['conWork'], $data['conCompany'], $data['conValue'], $data['conStatus']);
+                    if (isset($data['itemData']) && NULL != $data['itemData']) {
+                        //刪除不再資料列中的資料
+                        $iteId_list = NULL;
+                        foreach ($data['itemData'] as $ite) {
+                            $iteId_list[] = $ite['iteId'];
+                        }
+                        $item_list = $ContractMgr->queryItem(array('I.`iteId`'), $data['conId']);
+                        $o_iteId_list = NULL;
+                        foreach ($item_list['data'] as $ite) {
+                            $o_iteId_list[] = $ite['iteId'];
+                        }
+                        $dl_iteId_list = array_diff($o_iteId_list, $iteId_list);
 
-                            if (0 < count($dl_iteId_list)) {
-                                $item_dl = $ContractMgr->deleteItemByContract($data['conId'], $dl_iteId_list);
+                        if (0 < count($dl_iteId_list)) {
+                            $item_dl = $ContractMgr->deleteItemByContract($data['conId'], $dl_iteId_list);
+                        }
+                        //============
+                        foreach ($data['itemData'] as $ite) {
+                            if ($ite['iteId']) {
+                                $item_up = $ContractMgr->updateItem($ite['iteId'], $data['conId'], $ite['iteTitle'], $ite['worId'], $ite['iteTime'], $ite['iteSubsidiaries'], $ite['iteControl'],
+                                                                    $ite['disId'], $ite['manId'], $ite['iteProportion'], $ite['iteTypeNote'], $ite['iteDescription'],
+                                                                    NULL, NULL, NULL, $ite['iteWord'], $ite['iteNote']);
                             }
-                            //============
-                            foreach ($data['itemList'] as $ite) {
-                                if ($ite['iteId']) {
-                                    $item_up = $ContractMgr->updateItem($ite['iteId'], $data['conId'], $ite['iteTitle'], $ite['worId'], $ite['iteTime'], $ite['iteSubsidiaries'], $ite['iteControl'],
-                                                                        $ite['disId'], $ite['manId'], $ite['iteProportion'], $ite['iteTypeNote'], $ite['iteDescription'],
-                                                                        NULL, NULL, NULL, $ite['iteWord'], $ite['iteNote']);
-                                }
-                                else {
-                                    $item_ad = $ContractMgr->insertItem($data['conId'],
-                                                                        $ite['iteTitle'], $ite['worId'], $ite['iteTime'], $ite['iteSubsidiaries'], $ite['iteControl'],
-                                                                        $ite['disId'], $ite['manId'], $ite['iteProportion'], $ite['iteTypeNote'], $ite['iteDescription'],
-                                                                        NULL, NULL, NULL, $ite['iteWord'], $ite['iteNote']);
-                                }
+                            else {
+                                $item_ad = $ContractMgr->insertItem($data['conId'],
+                                                                    $ite['iteTitle'], $ite['worId'], $ite['iteTime'], $ite['iteSubsidiaries'], $ite['iteControl'],
+                                                                    $ite['disId'], $ite['manId'], $ite['iteProportion'], $ite['iteTypeNote'], $ite['iteDescription'],
+                                                                    NULL, NULL, NULL, $ite['iteWord'], $ite['iteNote']);
                             }
                         }
-                        if (isset($data['memberList']) && is_array($data['memberList'])) {
-                            //刪除不再資料列中的資料
-                            $memId_list = NULL;
-                            foreach ($data['memberList'] as $mbr) {
-                                $memId_list[] = $mbr['memId'];
-                            }
-                            $member_list = $ContractMgr->queryMember(array('M.`memId`'), $data['conId'], NULL);
+                    }
+                    if (isset($data['memberData']) && is_array($data['memberData'])) {
+                        //刪除不再資料列中的資料
+                        $memId_list = NULL;
+                        foreach ($data['memberData'] as $mbr) {
+                            $memId_list[] = $mbr['memId'];
+                        }
+                        $member_list = $ContractMgr->queryMember(array('M.`memId`'), $data['conId'], NULL);
+                        if ($member_list['count'] > 0) {
                             $o_memId_list = NULL;
                             foreach ($member_list['data'] as $mbr) {
                                 $o_memId_list[] = $mbr['memId'];
@@ -539,28 +599,28 @@
                             if (0 < count($dl_memId_list)) {
                                 $member_dl = $ContractMgr->deleteMemberByContract($data['conId'], $dl_memId_list);
                             }
-                            //==============
-                            foreach ($data['memberList'] as $mbr) {
-                                if ($mbr['memId'] && '0' != $mbr['memId']) {
-                                    $member_up = $ContractMgr->updateMemberByID($mbr['memId'], $mbr['memType'], $mbr['memBu1Code'], $mbr['memBu2Code'], $mbr['memBu2'], $mbr['memBu3Code'], $mbr['memBu3'],
-                                                                                $mbr['memLV0Key'], $mbr['memLV0Name'], $mbr['memLV0PositionName'],
-                                                                                $mbr['memLVCKey'], $mbr['memLVCName'], $mbr['memLVCPositionName'],
-                                                                                $mbr['memLV1Key'], $mbr['memLV1Name'], $mbr['memLV1PositionName'],
-                                                                                $mbr['memLV2Key'], $mbr['memLV2Name'], $mbr['memLV2PositionName'],
-                                                                                $mbr['memPhone'], NULL);
-                                }
-                                else {
-                                    $member_ad = $ContractMgr->insertMember($data['conId'], $mbr['memType'], $mbr['memBu1Code'], $mbr['memBu2Code'], $mbr['memBu2'], $mbr['memBu3Code'], $mbr['memBu3'],
+                        }
+                        //==============
+                        foreach ($data['memberData'] as $mbr) {
+                            if ($mbr['memId'] && '0' != $mbr['memId']) {
+                                $member_up = $ContractMgr->updateMemberByID($mbr['memId'], $mbr['memType'], $mbr['memBu1Code'], $mbr['memBu2Code'], $mbr['memBu2'], $mbr['memBu3Code'], $mbr['memBu3'],
                                                                             $mbr['memLV0Key'], $mbr['memLV0Name'], $mbr['memLV0PositionName'],
                                                                             $mbr['memLVCKey'], $mbr['memLVCName'], $mbr['memLVCPositionName'],
                                                                             $mbr['memLV1Key'], $mbr['memLV1Name'], $mbr['memLV1PositionName'],
                                                                             $mbr['memLV2Key'], $mbr['memLV2Name'], $mbr['memLV2PositionName'],
                                                                             $mbr['memPhone'], NULL);
-                                }
+                            }
+                            else {
+                                $member_ad = $ContractMgr->insertMember($data['conId'], $mbr['memType'], $mbr['memBu1Code'], $mbr['memBu2Code'], $mbr['memBu2'], $mbr['memBu3Code'], $mbr['memBu3'],
+                                                                        $mbr['memLV0Key'], $mbr['memLV0Name'], $mbr['memLV0PositionName'],
+                                                                        $mbr['memLVCKey'], $mbr['memLVCName'], $mbr['memLVCPositionName'],
+                                                                        $mbr['memLV1Key'], $mbr['memLV1Name'], $mbr['memLV1PositionName'],
+                                                                        $mbr['memLV2Key'], $mbr['memLV2Name'], $mbr['memLV2PositionName'],
+                                                                        $mbr['memPhone'], NULL);
                             }
                         }
-                        $return_data['data'] = 'success';
                     }
+                    $return_data['data'] = 'success';
                     break;
                 case 'DELETE'://dl
                     if (isset($_GET['conId'])) {
@@ -569,6 +629,7 @@
                             $return_data['data'] = 'success';
                         }
                     }
+                    break;
                 default:
                     $return_data = FALSE;
                     break;
@@ -578,16 +639,45 @@
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract GET[perKey, temId] 取得[單一|全部]文件
                     $date_key = date('YmdHis', time());
-                    $contract_ad = $ContractMgr->insertContract($_GET['temId'], $_GET['perKey'], $_GET['comCode'], '', $date_key, '', $_GET['conType'], '', '', '', '', '', '', '', '-1');
-                    $return_data['conId'] = $contract_ad;
-                    $return_data['data'] = 'success';
+                    $template_sl = $ContractMgr->queryTemplateByID('', $_GET['temId']);
+                    if (0 < $template_sl['count']) {
+                        $contract_ad = $ContractMgr->insertContract($_GET['temId'], $_GET['perKey'], $_GET['comCode'], '', $date_key, 'A', '0', '', $_GET['conType'], '', '', '', $template_sl['data']['temStyle'], '-1');
+                        $return_data['conId'] = $contract_ad;
+                        $return_data['data'] = 'success';
+                    }
+                    else {
+                        $return_data = FALSE;
+                    }
                     break;
                 default:
                     $return_data = FALSE;
                     break;
             }
             break;
-        case 'contractCreate'://todo: contract_create新增文件資料
+        case 'contractCopy'://todo: contractCopy 複製一份文件 ##new##
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':// todo: contract GET[perKey, temId] 取得[單一|全部]文件
+                    $contract_sl = $ContractMgr->queryContractByID('', $_GET['conId']);
+                    if (0 < $contract_sl['count']) {
+                        $contract_copy = $ContractMgr->copyContract($_GET['conId'], $_GET['conType'], $contract_sl['data']['conSerial'], chr(ord(trim($contract_sl['data']['conSerial'])) + 1), $_GET['conMark'], $_GET['conStatus']);
+                        if ($contract_copy) {
+                            $item_copy = $ContractMgr->copyItem($_GET['conId'], $contract_copy);
+                            $member_copy = $ContractMgr->copyMember($_GET['conId'], $contract_copy);
+                            $contract_inh_up = $ContractMgr->updateContractInheritByID($_GET['conId'], $contract_copy);
+                        }
+                        $return_data['conId'] = $contract_copy;
+                        $return_data['data'] = 'success';
+                    }
+                    else {
+                        $return_data = FALSE;
+                    }
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'contractCreate'://todo: contractCreate 新增文件資料
             if ('POST' == $_SERVER['REQUEST_METHOD']) {
                 $date = date('Ymd', time());
                 $contract_list = $ContractMgr->queryContract(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -660,7 +750,7 @@
                 }
 
                 $contract_ad = $ContractMgr->insertContract($_POST['temId'], $_POST['perKey'], $_POST['comCode'], $date.'-'.str_pad($contract_list['count'] + 1, 3, '0', STR_PAD_LEFT),
-                                                            $_POST['conTitle'], $_POST['conType'], $_POST['conDate'], $_POST['conWork'], $_POST['conCompany'], $conFileMeeting, $conFilePlan, $conFile, $_POST['conValue'], 0);
+                                                            $_POST['conTitle'], $_POST['conType'], $_POST['conDate'], $_POST['conWork'], $_POST['conCompany'], $_POST['conValue'], 0);
                 if ($contract_ad) {
                     if (isset($_POST['itemList']) && NULL != $_POST['itemList']) {
                         $_POST['itemList'] = json_decode(htmlspecialchars_decode($_POST['itemList']), TRUE);
@@ -688,7 +778,7 @@
                 }
             }
             break;
-        case 'contractUpdate'://todo: contract_update修改文件資料
+        case 'contractUpdate'://todo: contractUpdate
             if ('POST' == $_SERVER['REQUEST_METHOD']) {
                 $contract_sl = $ContractMgr->queryContractByID(NULL, $_POST['conId']);
                 if (0 < $contract_sl['count']) {
@@ -864,7 +954,7 @@
                 }
             }
             break;
-        case 'contractStatus': // todo: contract_status 修改文件狀態
+        case 'contractStatus': // todo: contractStatus 修改文件狀態
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT':// todo: contract_status PUT[conId, conStatus, {conDate|null}] 修改文件狀態
                     $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
@@ -872,9 +962,24 @@
                     if (isset($data['conId'])) {
                         $contract_up = $ContractMgr->updateContractStatusByID($data['conId'], $data['conStatus'], $data['conDate']);
                         if ($contract_up) {
+                            if ('2' == $data['conStatus']) {
+                                $contract_sl = $ContractMgr->queryContractByID('', $data['conId']);
+                                if ($contract_sl['count'] > 0) {
+                                    $contract_copy = $ContractMgr->copyContract($data['conId'], $contract_sl['data']['conType'], $contract_sl['data']['conSerial'], $contract_sl['data']['conVer'], 0, 0);
+                                    if ($contract_copy) {
+                                        $item_copy = $ContractMgr->copyItem($_GET['conId'], $contract_copy);
+                                        $member_copy = $ContractMgr->copyMember($_GET['conId'], $contract_copy);
+                                        $contract_inh_up = $ContractMgr->updateContractInheritByID($_GET['conId'], $contract_copy);
+                                    }
+                                }
+                                $contract_mark_up = $ContractMgr->updateContractMarkByID($data['conId'], '1');
+                            }
+                            if ('4' == $data['conStatus']) {
+                                $contract_inh_clean = $ContractMgr->cleanContractInheritByID($data['conId']);
+                            }
                             if (isset($data['conLog'])) {
                                 $log = json_decode($data['conLog'], TRUE);
-                                $ContractMgr->insertContractLog($log['conId'], $log['memId'], $log['perKey'], $log['colMemberStatus'], $log['colMsg'], $log);
+                                $ContractMgr->insertContractLog($log['conId'], $log['memId'], $log['perKey'], $log['colMemberStatus'], $log['colMsg'], $log['colStatus']);
                             }
                             $return_data['data'] = 'success';
                         }
@@ -885,7 +990,86 @@
                     break;
             }
             break;
-        case 'contractDefault':// todo: contract_default 重置文件狀態
+        case 'contractInherit': // todo: contractInherit 修改文件繼承編號
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'PUT':// todo: contract_status PUT[conId, conStatus, {conDate|null}] 修改文件狀態
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+
+                    if (isset($data['conId'], $data['conIdNew'])) {
+                        $contract_inh_up = $ContractMgr->updateContractInheritByID($data['conId'], $data['conIdNew']);
+                        if ($contract_inh_up) {
+                            $return_data['data'] = 'success';
+                        }
+                    }
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'contractLog'://todo: contractLog取得文件Log資料
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':// todo: contractLog取得文件Log資料 GET[conId] 取得[單一]文件
+                    if (isset($_GET['conId'])) {
+                        $contract_log_list = $ContractMgr->queryContractLog('', $_GET['conId'], '', '');
+                        $return_data['count'] = $contract_log_list['count'];
+                        if (0 < $contract_log_list['count']) {
+                            $return_data['data'] = replaceArr($contract_log_list['data']);
+                        }
+                    }
+                    else {
+                        if (isset($_GET['action']) && '1' == $_GET['action']) {
+                            $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'], $_GET['conStatusNot'], $_GET['conMark'], $_GET['conInh'], NULL, NULL);
+                            /**
+                             * $rows = array('T.`temId`', 'T.`temTitle`', 'C.`conId`', 'C.`conTitle`', 'C.`conStatus`', 'C.`conSerial`', 'C.`conCreateTime`', 'C.`comCode`', 'C.`perKey`', 'C.`conType`', 'F.`frmTitle`', 'P.`perBu1`', 'P.`perBu2`', 'P.`perBu3`', 'CM.`comTitle`');
+                             * switch ($_GET['action']) {
+                             * case '0':// todo: contract GET[{action=0}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-相關(發起, 退回, 待簽, 已簽)
+                             * $contract_list = $ContractMgr->queryContractForAction0($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '1':// todo: contract GET[{action=1}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-待檢視
+                             * $contract_list = $ContractMgr->queryContractForAction1($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '2':// todo: contract GET[{action=2}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-待簽
+                             * $contract_list = $ContractMgr->queryContractForAction2($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '3':// todo: contract GET[{action=3}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-等待(待檢視+待簽)
+                             * $contract_list = $ContractMgr->queryContractForAction3($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '4':// todo: contract GET[{action=4}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-已簽
+                             * $contract_list = $ContractMgr->queryContractForAction4($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '5':// todo: contract GET[{action=5}|{temId|comId|comCode|conSerial|conStatus|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-全部相關
+                             * $contract_list = $ContractMgr->queryContractForAction5($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['conStatus'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '6':// todo: contract GET[{action=6}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-完成
+                             * $contract_list = $ContractMgr->queryContractForAction6($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '7':// todo: contract GET[{action=7}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-拒絕
+                             * $contract_list = $ContractMgr->queryContractForAction7($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * case '8':// todo: contract GET[{action=8}|{temId|comId|comCode|conSerial|null}|{perKey|perNo|perPosition|perBu1Code}] 取得文件-完成或拒絕
+                             * $contract_list = $ContractMgr->queryContractForAction8($rows, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['perKey'], $_GET['perBu1Code'], NULL, NULL);
+                             * break;
+                             * default:
+                             * $contract_list = $ContractMgr->queryContractForAction($_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'],NULL, NULL);
+                             * break;
+                             * }
+                             **/
+                        }
+                        else {
+                            $contract_list = $ContractMgr->queryContract(NULL, $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
+                        }
+                        if ($contract_list['count'] > 0) {
+                            for ($i = 0; $i < $contract_list['count']; $i++) {
+                                $contract_list['data'][$i]['conValue'] = htmlspecialchars_decode($contract_list['data'][$i]['conValue']);
+                            }
+                        }
+                        $return_data['data'] = replaceArr($contract_list['data']);
+                    }
+                    break;
+            }
+            break;
+        case 'contractDefault':// todo: contractDefault 重置文件狀態
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT':// todo: contract_default PUT[conId] 重置文件狀態 ps.將文件conStatus=0, conDate不予理會, member.conId相關全部資料重置(xxStatus=-1, xxMsg=null, xxTime=null, memNow=null, memNowPosition=null)
                     $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
@@ -903,7 +1087,7 @@
                     break;
             }
             break;
-        case 'contractMember':// todo: contract_member 取得文件相關的所有簽核名單
+        case 'contractMember':// todo: contractMember 取得文件相關的所有簽核名單
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract_member GET[conId, {memType|null}]
                     $member_list = $ContractMgr->queryMember(NULL, $_GET['conId'], $_GET['memType']);
@@ -1008,6 +1192,164 @@
             }
             break;
 
+        case 'apportion'://todo: apportion 費用操作
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':// todo: apportion GET[conId|{conId|comId|null}] 取得[單一|全部]文件
+                    if (isset($_GET['appId'])) {
+                        $apportion_sl = $ContractMgr->queryApportionByID(NULL, $_GET['appId']);
+                        $return_data['count'] = $apportion_sl['count'];
+                        if (0 < $apportion_sl['count']) {
+                            $exes_list = $ContractMgr->queryExes('', $_GET['appId']);
+                            if (0 < $exes_list['count']) {
+                                for ($i = 0; $i < $exes_list['count']; $i++) {
+                                    $annual_list = $ContractMgr->queryAnnual('', $exes_list['data'][$i]);
+                                    $exes_list['data'][$i]['annualData'] = $annual_list['data'];
+                                    if (0 < $annual_list['count']) {
+                                        for ($j = 0; $j < $annual_list['count']; $j++) {
+                                            $subsidiary_list = $ContractMgr->querySubsidiary('', $annual_list['data'][$j]['annId']);
+                                            $exes_list['data'][$i]['annualData'][$j]['subsidiaryData'] = $subsidiary_list['data'];
+                                        }
+                                    }
+                                }
+                            }
+                            $item_list = $ContractMgr->queryItem('', $apportion_sl['data']['conId']);
+                            for ($i = 0; $i < $item_list['count']; $i++) {
+                                $item_list['data'][$i]['iteProportion'] = htmlspecialchars_decode($item_list['data'][$i]['iteProportion']);
+                            }
+                            $apportion_sl['data']['exesData'] = $exes_list['data'];
+                            $apportion_sl['data']['itemData'] = $item_list['data'];
+                            $return_data['data'] = replaceArr($apportion_sl['data']);
+                        }
+                    }
+                    elseif (isset($_GET['conId'])) {
+                        $apportion_sl = $ContractMgr->queryApportionLastByContract(array('A.`appId`'), $_GET['conId'], $_GET['appStatus']);
+                        $return_data['count'] = $apportion_sl['count'];
+                        if (0 < $apportion_sl['count']) {
+                            $return_data['appId'] = $apportion_sl['data']['appId'];
+                        }
+                    }
+                    else {
+                        $apportion_list = $ContractMgr->queryApportion(NULL, $_GET['conId'], $_GET['perKey'], $_GET['appYear'], $_GET['appStatus'], $_GET['appMark'], $_GET['appInh'], NULL, NULL);
+                        $return_data['data'] = replaceArr($apportion_list['data']);
+                    }
+                    break;
+                case 'PUT'://todo contract PUT 修改文件資料
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+                    if (isset($data['exesData']) && NULL != $data['exesData']) {
+                        //刪除不再資料列中的資料
+                        $exeId_list = NULL;
+                        foreach ($data['exesData'] as $exe) {
+                            $exeId_list[] = $exe['exeId'];
+                        }
+                        $exes_list = $ContractMgr->queryExes(array('E.`exeId`'), $data['appId']);
+                        $o_exeId_list = NULL;
+                        foreach ($exes_list['data'] as $exe) {
+                            $o_exeId_list[] = $exe['exeId'];
+                        }
+                        $dl_exeId_list = array_diff($o_exeId_list, $exeId_list);
+
+                        if (0 < count($dl_exeId_list)) {
+                            $exes_dl = $ContractMgr->deleteExesByApportion($data['appId'], $dl_exeId_list);
+                        }
+                        //============
+                        foreach ($data['exesData'] as $exe) {
+                            $exeId = 0;
+                            if ($exe['exeId']) {
+                                $exeId = $exe['exeId'];
+                                $exes_up = $ContractMgr->updateExes($exe['exeId'], $data['iteId'], $exe['exeTitle'], $exe['exeCost'], $exe['exeCreateMonth'], $exe['exeMonth'], $exe['exeStartYear'],
+                                                                    $exe['exeNote']);
+                            }
+                            else {
+                                $exes_ad = $ContractMgr->insertExes($data['appId'], $data['iteId'], $exe['exeTitle'], $exe['exeCost'], $exe['exeCreateMonth'], $exe['exeMonth'], $exe['exeStartYear'],
+                                                                    $exe['exeNote']);
+                                $exeId = $exes_ad;
+                            }
+                            if (isset($exe['annualData']) && NULL != $exe['annualData']) {
+                                //刪除不再資料列中的資料
+                                $annId_list = NULL;
+                                foreach ($exe['annualData'] as $ann) {
+                                    $annId_list[] = $ann['annId'];
+                                }
+                                $annual_list = $ContractMgr->queryAnnual(array('A.`annId`'), $exeId);
+                                $o_annId_list = NULL;
+                                foreach ($annual_list['data'] as $ann) {
+                                    $o_annId_list[] = $ann['annId'];
+                                }
+                                $dl_annId_list = array_diff($o_annId_list, $annId_list);
+
+                                if (0 < count($dl_annId_list)) {
+                                    $ann_dl = $ContractMgr->deleteAnnualByApportion($exeId, $dl_annId_list);
+                                }
+                                //============
+                                $annId = 0;
+                                foreach ($exe['annualData'] as $ann) {
+                                    if ($ann['annId']) {
+                                        $ann_up = $ContractMgr->updateAnnual($ann['annId'], $ann['annId'], $ann['annStartMonth'], $ann['annEndMonth'], $ann['annMonth'], $ann['annCost']);
+                                        $ann_id = $ann['annId'];
+                                    }
+                                    else {
+                                        $ann_ad = $ContractMgr->insertAnnual($exeId, $ann['annId'], $ann['annStartMonth'], $ann['annEndMonth'], $ann['annMonth'], $ann['annCost']);
+                                        $ann_id = $ann_ad;
+                                    }
+                                    if (isset($ann['subsidiaryData']) && NULL != $ann['subsidiaryData']) {
+                                        //刪除不再資料列中的資料
+                                        $subId_list = NULL;
+                                        foreach ($ann['subsidiaryData'] as $sub) {
+                                            $subId_list[] = $sub['subId'];
+                                        }
+                                        $subsidiary_list = $ContractMgr->querySubsidiary(array('S.`subId`'), $annId);
+                                        $o_subId_list = NULL;
+                                        foreach ($subsidiary_list['data'] as $sub) {
+                                            $o_subId_list[] = $sub['subId'];
+                                        }
+                                        $dl_subId_list = array_diff($o_subId_list, $subId_list);
+
+                                        if (0 < count($dl_subId_list)) {
+                                            $sub_dl = $ContractMgr->deleteSubsidiaryByApportion($annId, $dl_subId_list);
+                                        }
+                                        //============
+                                        foreach ($ann['subsidiaryData'] as $sub) {
+                                            if ($sub['subId']) {
+                                                $sub_up = $ContractMgr->updateSubsidiary($sub['subId'], $sub['comCode'], $sub['subAmount'], $sub['subPercent'], $sub['subCost']);
+                                            }
+                                            else {
+                                                $ann_ad = $ContractMgr->insertSubsidiary($annId, $sub['comCode'], $sub['subAmount'], $sub['subPercent'], $sub['subCost']);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $return_data['data'] = 'success';
+                    break;
+                case 'DELETE'://dl
+                    if (isset($_GET['appId'])) {
+                        $apportion_dl = $ContractMgr->deleteApportionByID($_GET['appId']);
+                        if ($apportion_dl) {
+                            $return_data['data'] = 'success';
+                        }
+                    }
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'apportionId'://todo: apportionId 取得新增的appId
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':// todo: apportionId GET[conId] 取得[單一|全部]文件
+                    $date_key = date('Y', time());
+                    $apportion_ad = $ContractMgr->insertApportion($_GET['conId'], $date_key, 'A', '0', '-1');
+                    $return_data['appId'] = $apportion_ad;
+                    $return_data['data'] = 'success';
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+
 
         case 'item':
             switch ($_SERVER['REQUEST_METHOD']) {
@@ -1018,66 +1360,18 @@
             }
             break;
 
-
-        case 'search_source':
+        case 'info':// todo: info 系統資訊設定
             switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET'://sl
-                    $contract_template_list = $ContractMgr->querySearchSource(NULL);
-                    $return_data['data'] = replaceArr($contract_template_list['data']);
+                case 'GET':// todo: work GET[worId|null] 取得[單一|全部]作業種類
+                    $info_sl = $ContractMgr->queryInfoByID(NULL, 1);
+                    $return_data['data'] = $info_sl['data'];
                     break;
-            }
-            break;
-        case 'contract_item_subsidiary':
-            switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET'://sl
-                    $item_subsidiary_list = $ContractMgr->queryItemSubsidiary(NULL, $_GET['ctId'], $_GET['ctiId']);
-                    $return_data['data'] = replaceArr($item_subsidiary_list['data']);
-                    break;
-            }
-            break;
-        case 'contract_item_report':
-            switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET'://sl
-
-                    $item_report_list = $ContractMgr->queryItemReport($_GET['ctStatus']);
-                    $return_data['data'] = replaceArr($item_report_list['data']);
-                    break;
-            }
-            break;
-        case 'contract_exes_year':
-            switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET'://sl
-                    $exes_year = NULL;
-                    $exes_year_list = $ContractMgr->queryExesYear();
-                    for ($i = 0; $i < $exes_year_list['count']; $i++) {
-                        $exes_year[] = $exes_year_list['data'][$i]['CIES_YEAR'];
+                case 'PUT':// todo: work PUT[worId, worTitle]修改作業種類
+                    $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+                    $info_up = $ContractMgr->updateInfoByID(1, $data['infYear'], $data['infPM'], $data['infSP']);
+                    if ($info_up) {
+                        $return_data['data'] = 'success';
                     }
-                    $return_data['data'] = replaceArr($exes_year);
-                    break;
-            }
-            break;
-        case 'contract_item_exes':
-            switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET'://sl
-                    $item_exes_list = $ContractMgr->queryItemExesByItem($_GET['ctStatus']);
-                    $return_data['data'] = replaceArr($item_exes_list['data']);
-                    break;
-            }
-            break;
-        case 'contract_exes':
-            switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET'://sl
-                    $exes_list = $ContractMgr->queryExes($_GET['ctStatus']);
-                    $return_data['data'] = replaceArr($exes_list['data']);
-                    break;
-            }
-            break;
-        case 'item_exes':
-            switch ($_SERVER['REQUEST_METHOD']) {
-                case 'GET'://sl
-                    $rows = array('CIE.*');
-                    $exes_list = $ContractMgr->queryItemExes($rows, $_GET['ctId']);
-                    $return_data['data'] = replaceArr($exes_list['data']);
                     break;
             }
             break;
