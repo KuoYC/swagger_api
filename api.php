@@ -426,12 +426,27 @@
                     if (isset($_GET['manId'])) {
                         $manner_sl = $ContractMgr->queryMannerByID(NULL, $_GET['manId']);
                         if (0 < $manner_sl['count']) {
+                            $manner_sl['data']['manRatio'] = htmlspecialchars_decode($manner_sl['data']['manRatio']);
                             $return_data['data'] = $manner_sl['data'];
                         }
                     }
                     else {
                         $manner_list = $ContractMgr->queryManner(NULL, NULL, NULL, NULL);
+                        for ($i = 0; $i < $manner_list['count']; $i++) {
+                            $manner_list['data'][$i]['manRatio'] = htmlspecialchars_decode($manner_list['data'][$i]['manRatio']);
+                        }
                         $return_data['data'] = $manner_list['data'];
+                    }
+                    break;
+                case 'PUT':// todo: manner PUT[worId, worTitle]修改公告
+                    $data = json_decode(file_get_contents('php://input'), TRUE);
+                    if (isset($data['mannerData'])) {
+                        foreach ($data['mannerData'] as $man) {
+                            if (isset($man['manId'], $man['manRatio']) && 'null' != $man['manRatio']) {
+                                $manner_up = $ContractMgr->updateMannerByID($man['manId'], $man['manTitle'], $man['manType'], $man['manRatio']);
+                            }
+                        }
+                        $return_data['data'] = 'success';
                     }
                     break;
             }
@@ -884,10 +899,10 @@
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: apportion GET[conId|{conId|comId|null}] 取得[單一|全部]文件
                     if (isset($_GET['appId'])) {
-                        $apportion_sl = $ContractMgr->queryApportionByID(NULL, $_GET['appId']);
+                        $apportion_sl = $ContractMgr->queryApportionByID(array('A.*', 'CM.*', 'P.*', 'C.`perKey`', 'C.`comCode`', 'C.`frmId`', 'C.`conSerial`', 'C.`conVer`', 'C.`conTitle`', 'C.`conWork`', 'C.`conCompany`', 'T.`temTitle`'), $_GET['appId']);
                         $return_data['count'] = $apportion_sl['count'];
                         if (0 < $apportion_sl['count']) {
-                            $exes_list = $ContractMgr->queryExes('', $_GET['appId']);
+                            $exes_list = $ContractMgr->queryExes(array('E.*', 'I.*', 'W.*', 'D.*', 'M.*', 'S.*'), $_GET['appId']);
                             if (0 < $exes_list['count']) {
                                 for ($i = 0; $i < $exes_list['count']; $i++) {
                                     $annual_list = $ContractMgr->queryAnnual('', $exes_list['data'][$i]);
@@ -896,6 +911,8 @@
                                         for ($j = 0; $j < $annual_list['count']; $j++) {
                                             $subsidiary_list = $ContractMgr->querySubsidiary('', $annual_list['data'][$j]['annId']);
                                             $exes_list['data'][$i]['annualData'][$j]['subsidiaryData'] = $subsidiary_list['data'];
+                                            $exes_list['data'][$i]['iteProportion'] = htmlspecialchars_decode($exes_list['data'][$i]['iteProportion']);
+                                            $exes_list['data'][$i]['manRatio'] = htmlspecialchars_decode($exes_list['data'][$i]['manRatio']);
                                         }
                                     }
                                 }
@@ -903,6 +920,7 @@
                             $item_list = $ContractMgr->queryItem('', $apportion_sl['data']['conId']);
                             for ($i = 0; $i < $item_list['count']; $i++) {
                                 $item_list['data'][$i]['iteProportion'] = htmlspecialchars_decode($item_list['data'][$i]['iteProportion']);
+                                $item_list['data'][$i]['manRatio'] = htmlspecialchars_decode($item_list['data'][$i]['manRatio']);
                             }
                             $apportion_sl['data']['exesData'] = $exes_list['data'];
                             $apportion_sl['data']['itemData'] = $item_list['data'];
@@ -944,11 +962,11 @@
                             $exeId = 0;
                             if ($exe['exeId']) {
                                 $exeId = $exe['exeId'];
-                                $exes_up = $ContractMgr->updateExes($exe['exeId'], $data['iteId'], $exe['exeTitle'], $exe['exeCost'], $exe['exeCreateMonth'], $exe['exeMonth'], $exe['exeStartYear'],
+                                $exes_up = $ContractMgr->updateExes($exe['exeId'], $exe['iteId'], $exe['exeTitle'], $exe['exePM'], $exe['exeSP'], $exe['exeCost'], $exe['exeCreateMonth'], $exe['exeMonth'], $exe['exeStartYear'],
                                                                     $exe['exeNote']);
                             }
                             else {
-                                $exes_ad = $ContractMgr->insertExes($data['appId'], $data['iteId'], $exe['exeTitle'], $exe['exeCost'], $exe['exeCreateMonth'], $exe['exeMonth'], $exe['exeStartYear'],
+                                $exes_ad = $ContractMgr->insertExes($exe['appId'], $exe['iteId'], $exe['exeTitle'], $exe['exePM'], $exe['exeSP'], $exe['exeCost'], $exe['exeCreateMonth'], $exe['exeMonth'], $exe['exeStartYear'],
                                                                     $exe['exeNote']);
                                 $exeId = $exes_ad;
                             }
@@ -972,11 +990,11 @@
                                 $annId = 0;
                                 foreach ($exe['annualData'] as $ann) {
                                     if ($ann['annId']) {
-                                        $ann_up = $ContractMgr->updateAnnual($ann['annId'], $ann['annId'], $ann['annStartMonth'], $ann['annEndMonth'], $ann['annMonth'], $ann['annCost']);
+                                        $ann_up = $ContractMgr->updateAnnual($ann['annId'], $ann['annYear'], $ann['annStartMonth'], $ann['annEndMonth'], $ann['annMonth'], $ann['annCost']);
                                         $ann_id = $ann['annId'];
                                     }
                                     else {
-                                        $ann_ad = $ContractMgr->insertAnnual($exeId, $ann['annId'], $ann['annStartMonth'], $ann['annEndMonth'], $ann['annMonth'], $ann['annCost']);
+                                        $ann_ad = $ContractMgr->insertAnnual($exeId, $ann['annYear'], $ann['annStartMonth'], $ann['annEndMonth'], $ann['annMonth'], $ann['annCost']);
                                         $ann_id = $ann_ad;
                                     }
                                     if (isset($ann['subsidiaryData']) && NULL != $ann['subsidiaryData']) {
@@ -993,7 +1011,7 @@
                                         $dl_subId_list = array_diff($o_subId_list, $subId_list);
 
                                         if (0 < count($dl_subId_list)) {
-                                            $sub_dl = $ContractMgr->deleteSubsidiaryByApportion($annId, $dl_subId_list);
+                                            $sub_dl = $ContractMgr->deleteSubsidiaryByApportion($ann_id, $dl_subId_list);
                                         }
                                         //============
                                         foreach ($ann['subsidiaryData'] as $sub) {
@@ -1001,7 +1019,7 @@
                                                 $sub_up = $ContractMgr->updateSubsidiary($sub['subId'], $sub['comCode'], $sub['subAmount'], $sub['subPercent'], $sub['subCost']);
                                             }
                                             else {
-                                                $ann_ad = $ContractMgr->insertSubsidiary($annId, $sub['comCode'], $sub['subAmount'], $sub['subPercent'], $sub['subCost']);
+                                                $ann_ad = $ContractMgr->insertSubsidiary($ann_id, $sub['comCode'], $sub['subAmount'], $sub['subPercent'], $sub['subCost']);
                                             }
                                         }
                                     }

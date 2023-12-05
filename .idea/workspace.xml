@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/reAPI.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e59db8fe-0a60-4119-a6ff-764f1167db19.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e59db8fe-0a60-4119-a6ff-764f1167db19.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/api.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/class/ContractManager.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/class/ContractManager.class.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,49 +45,23 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.589725">
+    <splitter split-orientation="horizontal" split-proportion="0.6128799">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="228">
-                  <caret line="3352" column="11" lean-forward="true" selection-start-line="3352" selection-start-column="11" selection-end-line="3352" selection-end-column="11" />
-                  <folding>
-                    <element signature="e#92#256#0#PHP" />
-                    <element signature="e#8536#8976#0#PHP" />
-                    <element signature="e#8986#9136#0#PHP" />
-                    <element signature="e#9145#9643#0#PHP" />
-                    <element signature="e#9653#9788#0#PHP" />
-                    <element signature="e#9797#10311#0#PHP" />
-                    <element signature="e#10321#10478#0#PHP" />
-                    <element signature="e#10487#11022#0#PHP" />
-                    <element signature="e#11032#11170#0#PHP" />
-                    <element signature="e#11179#11562#0#PHP" />
-                    <element signature="e#11572#11739#0#PHP" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="311">
-                  <caret line="886" column="66" lean-forward="true" selection-start-line="886" selection-start-column="66" selection-end-line="886" selection-end-column="66" />
+                <state relative-caret-position="229">
+                  <caret line="911" column="84" selection-start-line="911" selection-start-column="84" selection-end-line="911" selection-end-column="84" />
                   <folding>
                     <element signature="e#1978#2463#0#PHP" />
                     <element signature="e#2052#3073#0#PHP" />
-                    <element signature="e#3118#5675#0#PHP" />
                     <element signature="e#4989#7000#0#PHP" />
                     <element signature="e#7009#9038#0#PHP" />
                     <element signature="e#9747#11878#0#PHP" />
                     <element signature="e#11887#14460#0#PHP" />
                     <element signature="e#14469#16915#0#PHP" />
-                    <element signature="e#16924#19546#0#PHP" />
                     <element signature="e#19555#20348#0#PHP" />
-                    <element signature="e#20357#21098#0#PHP" />
-                    <element signature="e#21107#23290#0#PHP" />
                     <element signature="e#24115#37732#0#PHP" />
                     <element signature="e#31720#33999#0#PHP" />
                     <element signature="e#32259#32391#0#PHP" />
@@ -105,101 +81,37 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Cathay-main/app/document-detail.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="163">
-                  <caret line="445" selection-start-line="445" selection-end-line="485" />
-                  <folding>
-                    <element signature="n#section#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
-                    <element signature="n#div#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
-                    <element signature="n#div#1;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
-                    <element signature="n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
-                    <element signature="n#div#1;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
-                    <element signature="n#div#2;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
-                    <element signature="n#div#3;n#div#1;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
-                    <element signature="n#div#3;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/include/config/Web_Config.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="52">
-                  <caret line="13" column="21" selection-start-line="13" selection-start-column="21" selection-end-line="13" selection-end-column="21" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/include/class/ConnManager.class.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="212">
-                  <caret line="1084" column="11" selection-start-line="1084" selection-start-column="11" selection-end-line="1084" selection-end-column="11" />
-                  <folding>
-                    <element signature="e#3492#3529#0#PHP" />
-                    <element signature="e#3684#3942#0#PHP" />
-                    <element signature="e#3951#4613#0#PHP" />
-                    <element signature="e#4623#4882#0#PHP" />
-                    <element signature="e#4891#5560#0#PHP" />
-                    <element signature="e#5570#5804#0#PHP" />
-                    <element signature="e#5813#6987#0#PHP" />
-                    <element signature="e#6997#7187#0#PHP" />
-                    <element signature="e#7196#8176#0#PHP" />
-                    <element signature="e#8186#8258#0#PHP" />
-                    <element signature="e#9317#9990#0#PHP" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/include/config/Config.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="328">
-                  <caret line="89" column="60" selection-start-line="89" selection-start-column="60" selection-end-line="89" selection-end-column="60" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Cathay-main/app/payment-share-2.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="7944">
-                  <caret line="601" column="18" selection-start-line="601" selection-start-column="18" selection-end-line="601" selection-end-column="18" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/.htaccess">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="357">
-                  <caret line="17" selection-start-line="17" selection-end-line="17" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/.gitignore">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="252">
-                  <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
-                </state>
-              </provider>
-            </entry>
-          </file>
         </leaf>
       </split-first>
       <split-second>
         <leaf>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/api.php">
+            <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="342">
-                  <caret line="493" selection-start-line="488" selection-end-line="493" />
+                <state relative-caret-position="283">
+                  <caret line="3818" column="46" selection-start-line="3818" selection-start-column="46" selection-end-line="3818" selection-end-column="46" />
+                  <folding>
+                    <element signature="e#92#256#0#PHP" />
+                    <element signature="e#8536#8976#0#PHP" />
+                    <element signature="e#8986#9136#0#PHP" />
+                    <element signature="e#9145#9643#0#PHP" />
+                    <element signature="e#9653#9788#0#PHP" />
+                    <element signature="e#9797#10311#0#PHP" />
+                    <element signature="e#10321#10478#0#PHP" />
+                    <element signature="e#10487#11022#0#PHP" />
+                    <element signature="e#11032#11170#0#PHP" />
+                    <element signature="e#11179#11562#0#PHP" />
+                    <element signature="e#11572#11739#0#PHP" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/reAPI.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="421">
+                  <caret line="40" selection-start-line="40" selection-end-line="40" />
                 </state>
               </provider>
             </entry>
@@ -217,16 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>insertMem</find>
-      <find>contract</find>
-      <find>contractMark</find>
-      <find>文件</find>
-      <find>費用</find>
-      <find>con</find>
-      <find>conFileMeeting</find>
-      <find>$date_key</find>
-      <find>appSer</find>
-      <find>appYear</find>
       <find>exeTitle</find>
       <find>case 'wor</find>
       <find>作業種類</find>
@@ -243,10 +145,20 @@
       <find>$</find>
       <find>insertApp</find>
       <find>MemberData</find>
-      <find>apportion</find>
       <find>contractStatus</find>
-      <find>'contract'</find>
       <find>niceScroll</find>
+      <find>'contract'</find>
+      <find>contact</find>
+      <find>'ratio'</find>
+      <find>ratio</find>
+      <find>temStyle</find>
+      <find>tooltip</find>
+      <find>dropdown</find>
+      <find>dropdown(</find>
+      <find>'template'</find>
+      <find>apportion</find>
+      <find>`exes`</find>
+      <find>'apportion'</find>
     </findStrings>
     <replaceStrings>
       <replace>conCompany</replace>
@@ -280,6 +192,11 @@
       <replace>:</replace>
       <replace>memberData</replace>
     </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/Cathay-maindropdown</dir>
+      <dir>$PROJECT_DIR$/Cathay-main</dir>
+      <dir>$PROJECT_DIR$/Cathay-main/app/assets/bundles</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -315,8 +232,9 @@
         <option value="$PROJECT_DIR$/Cathay-main/app/document-detail.html" />
         <option value="$PROJECT_DIR$/include/class/ConnManager.class.php" />
         <option value="$PROJECT_DIR$/cost.html" />
-        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
+        <option value="$PROJECT_DIR$/reAPI.php" />
         <option value="$PROJECT_DIR$/api.php" />
+        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
       </list>
     </option>
   </component>
@@ -352,6 +270,13 @@
               <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
               <item name="Cathay-main" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
+              <item name="Cathay-main" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
@@ -439,12 +364,12 @@
       <workItem from="1697272108286" duration="8338000" />
       <workItem from="1697777714545" duration="9514000" />
       <workItem from="1697965176657" duration="17801000" />
-      <workItem from="1698216437347" duration="114540000" />
+      <workItem from="1698216437347" duration="132052000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="414496000" />
+    <option name="totallyTimeSpent" value="432008000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -457,12 +382,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1672" height="948" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15214723" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15214723" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.35315984" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.35315984" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -686,23 +612,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/reAPI.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="886" column="66" lean-forward="true" selection-start-line="886" selection-start-column="66" selection-end-line="886" selection-end-column="66" />
+        <state relative-caret-position="229">
+          <caret line="911" column="84" selection-start-line="911" selection-start-column="84" selection-end-line="911" selection-end-column="84" />
           <folding>
             <element signature="e#1978#2463#0#PHP" />
             <element signature="e#2052#3073#0#PHP" />
-            <element signature="e#3118#5675#0#PHP" />
             <element signature="e#4989#7000#0#PHP" />
             <element signature="e#7009#9038#0#PHP" />
             <element signature="e#9747#11878#0#PHP" />
             <element signature="e#11887#14460#0#PHP" />
             <element signature="e#14469#16915#0#PHP" />
-            <element signature="e#16924#19546#0#PHP" />
             <element signature="e#19555#20348#0#PHP" />
-            <element signature="e#20357#21098#0#PHP" />
-            <element signature="e#21107#23290#0#PHP" />
             <element signature="e#24115#37732#0#PHP" />
             <element signature="e#31720#33999#0#PHP" />
             <element signature="e#32259#32391#0#PHP" />
@@ -723,8 +652,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="3352" column="11" lean-forward="true" selection-start-line="3352" selection-start-column="11" selection-end-line="3352" selection-end-column="11" />
+        <state relative-caret-position="283">
+          <caret line="3818" column="46" selection-start-line="3818" selection-start-column="46" selection-end-line="3818" selection-end-column="46" />
           <folding>
             <element signature="e#92#256#0#PHP" />
             <element signature="e#8536#8976#0#PHP" />
