@@ -2074,6 +2074,26 @@
         }
 
         /**
+         * todo:queryContractByID 查看單一文件
+         *
+         * @param $rows
+         * @param $conInh
+         *
+         * @return mixed
+         */
+        function queryContractByInh($rows, $conInh)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conInh' => $Conn->UtilCheckNotNullIsNumeric($conInh) ? $conInh : -1);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
+                     WHERE C.`conInh` = :conInh';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
          * todo:insertContract 新增文件
          *
          * @param $temId
@@ -2142,10 +2162,10 @@
                             'conSerial' => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : '',
                             'conVer'    => $Conn->UtilCheckNotNull($conVer) ? $conVer : 'A',
                             'conMark'   => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : 0,
-                            'conStatus' => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : 0);
+                            'conStatus' => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : -1);
             //SQL
             $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `frmId`, `conSerial`, `conVer`, `conMark`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conValue`, `conStatus`, `conInh`, `conUpdateTime`, `conCreateTime`)
-                     SELECT `temId`, `perKey`, `comCode`, `frmId`, '.($Conn->UtilCheckNotNull($conSerial) ? ' :conSerial' : ' `conSerial`').', :conVer, :conMark, `conTitle`, :conType, `conDate`, `conWork`, `conCompany`, `conValue`, :conStatus, 0, NOW(), NOW() FROM `contract` WHERE `conId` = :conId';
+                     SELECT `temId`, `perKey`, `comCode`, `frmId`, `conSerial`, :conVer, :conMark, `conTitle`, :conType, `conDate`, `conWork`, `conCompany`, `conValue`, :conStatus, 0, NOW(), NOW() FROM `contract` WHERE `conId` = :conId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -3294,9 +3314,14 @@
          *
          * @param $rows
          * @param $conId
+         * @param $conSerial
+         * @param $conMark
+         * @param $conStatus
+         * @param $conStatusNot
          * @param $perKey
          * @param $appYear
          * @param $appStatus
+         * @param $appStatusNot
          * @param $appMark
          * @param $appInh
          * @param $anum
@@ -3304,15 +3329,20 @@
          *
          * @return mixed
          */
-        function queryApportion($rows, $conId, $perKey, $appYear, $appStatus, $appMark, $appInh, $anum, $num)
+        function queryApportion($rows, $conId, $conSerial, $conMark, $conStatus, $conStatusNot, $perKey, $appYear, $appStatus, $appStatusNot, $appMark, $appInh, $anum, $num)
         {
             $Conn = new ConnManager();
-            $arrPar = array('appYear'   => $Conn->UtilCheckNotNullIsNumeric($appYear) ? $appYear : NULL,
-                            'conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL,
-                            'perKey'    => $Conn->UtilCheckNotNull($perKey) ? $perKey : NULL,
-                            'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : NULL,
-                            'appMark'   => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : NULL,
-                            'appInh'    => $Conn->UtilCheckNotNullIsNumeric($appInh) ? $appInh : NULL);
+            $arrPar = array('appYear'      => $Conn->UtilCheckNotNullIsNumeric($appYear) ? $appYear : NULL,
+                            'conId'        => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL,
+                            'conSerial'    => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
+                            'conMark'      => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : NULL,
+                            'conStatus'    => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
+                            'conStatusNot' => $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? $conStatusNot : NULL,
+                            'perKey'       => $Conn->UtilCheckNotNull($perKey) ? $perKey : NULL,
+                            'appStatus'    => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : NULL,
+                            'appStatusNot' => $Conn->UtilCheckNotNullIsNumeric($appStatusNot) ? $appStatusNot : NULL,
+                            'appMark'      => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : NULL,
+                            'appInh'       => $Conn->UtilCheckNotNullIsNumeric($appInh) ? $appInh : NULL);
             //SQL
             $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `apportion` A
                      LEFT JOIN `contract` C ON C.`conId` = A.`conId`
@@ -3323,8 +3353,13 @@
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conId) ? ' AND A.`conId` = :conId' : '';
             $sql .= $Conn->UtilCheckNotNull($perKey) ? ' AND C.`perKey` = :perKey' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($appStatus) ? ' AND A.`appStatus` = :appStatus' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($appStatusNot) ? ' AND A.`appStatus` != :appStatusNot' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($appMark) ? ' AND A.`appMark` = :appMark' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($appInh) ? ' AND A.`appInh` = :appInh' : '';
+            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conMark) ? ' AND C.`conMark` = :conMark' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus`' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? ' AND C.`conStatus` != :conStatus' : '';
             $sql .= $Conn->getLimit($anum, $num);
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
@@ -3393,11 +3428,12 @@
          * @param $appYear
          * @param $appVer
          * @param $appMark
+         * @param $appType
          * @param $appStatus
          *
          * @return array|int|Number
          */
-        function insertApportion($conId, $perKey, $comCode, $appYear, $appVer, $appMark, $appStatus)
+        function insertApportion($conId, $perKey, $comCode, $appYear, $appVer, $appMark, $appType, $appStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
@@ -3406,10 +3442,11 @@
                             'appYear'   => $Conn->UtilCheckNotNull($appYear) ? $appYear : '',
                             'appVer'    => $Conn->UtilCheckNotNull($appVer) ? $appVer : 'A',
                             'appMark'   => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : 0,
+                            'appType'   => $Conn->UtilCheckNotNullIsNumeric($appType) ? $appType : 0,
                             'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : -1);
             //SQL
-            $sql = ' INSERT INTO `apportion`(`conId`, `perKey`, `comCode`, `appYear`, `appVer`, `appMark`, `appStatus`, `appUpdateTime`, `appCreateTime`)
-                     VALUES(:conId, :perKey, :comCode, :appYear, :appVer, :appMark, :appStatus, NOW(), NOW())';
+            $sql = ' INSERT INTO `apportion`(`conId`, `perKey`, `comCode`, `appYear`, `appVer`, `appMark`, `appType`, `appStatus`, `appUpdateTime`, `appCreateTime`)
+                     VALUES(:conId, :perKey, :comCode, :appYear, :appVer, :appMark, :appType, :appStatus, NOW(), NOW())';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -3684,10 +3721,11 @@
          * @param $exeMonth
          * @param $exeStartYear
          * @param $exeNote
+         * @param $exeStatus
          *
          * @return array|int|Number
          */
-        function insertExes($appId, $iteId, $exeTitle, $exePM, $exeSP, $exeCost, $exeCreateMonth, $exeMonth, $exeStartYear, $exeNote)
+        function insertExes($appId, $iteId, $exeTitle, $exePM, $exeSP, $exeCost, $exeCreateMonth, $exeMonth, $exeStartYear, $exeNote, $exeStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('appId'          => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0,
@@ -3699,10 +3737,11 @@
                             'exeCreateMonth' => $Conn->UtilCheckNotNull($exeCreateMonth) ? $exeCreateMonth : '',
                             'exeMonth'       => $Conn->UtilCheckNotNullIsNumeric($exeMonth) ? $exeMonth : 0,
                             'exeStartYear'   => $Conn->UtilCheckNotNull($exeStartYear) ? $exeStartYear : '',
-                            'exeNote'        => $Conn->UtilCheckNotNull($exeNote) ? $exeNote : '');
+                            'exeNote'        => $Conn->UtilCheckNotNull($exeNote) ? $exeNote : '',
+                            'exeStatus'      => $Conn->UtilCheckNotNullIsNumeric($exeStatus) ? $exeStatus : 0);
             //SQL
-            $sql = ' INSERT INTO `exes`(`appId`, `iteId`, `exeTitle`, `exePM`, `exeSP`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`)
-                     VALUES(:appId, :iteId, :exeTitle, :exePM, :exeSP, :exeCost, :exeCreateMonth, :exeMonth, :exeStartYear, :exeNote)';
+            $sql = ' INSERT INTO `exes`(`appId`, `iteId`, `exeTitle`, `exePM`, `exeSP`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`, `exeStatus`)
+                     VALUES(:appId, :iteId, :exeTitle, :exePM, :exeSP, :exeCost, :exeCreateMonth, :exeMonth, :exeStartYear, :exeNote, :exeStatus)';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -3826,10 +3865,11 @@
          * @param $annEndMonth
          * @param $annMonth
          * @param $annCost
+         * @param $annStatus
          *
          * @return array|int|Number
          */
-        function insertAnnual($exeId, $annYear, $annStartMonth, $annEndMonth, $annMonth, $annCost)
+        function insertAnnual($exeId, $annYear, $annStartMonth, $annEndMonth, $annMonth, $annCost, $annStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('exeId'         => $Conn->UtilCheckNotNullIsNumeric($exeId) ? $exeId : 0,
@@ -3837,10 +3877,11 @@
                             'annStartMonth' => $Conn->UtilCheckNotNull($annStartMonth) ? $annStartMonth : '',
                             'annEndMonth'   => $Conn->UtilCheckNotNull($annEndMonth) ? $annEndMonth : '',
                             'annMonth'      => $Conn->UtilCheckNotNullIsNumeric($annMonth) ? $annMonth : 0,
-                            'annCost'       => $Conn->UtilCheckNotNullIsNumeric($annCost) ? $annCost : 0);
+                            'annCost'       => $Conn->UtilCheckNotNullIsNumeric($annCost) ? $annCost : 0,
+                            'annStatus'     => $Conn->UtilCheckNotNullIsNumeric($annStatus) ? $annStatus : 0);
             //SQL
-            $sql = ' INSERT INTO `annual`(`exeId`, `annYear`, `annStartMonth`, `annEndMonth`, `annMonth`, `annCost`)
-                     VALUES(:exeId, :annYear, :annStartMonth, :annEndMonth, :annMonth, :annCost)';
+            $sql = ' INSERT INTO `annual`(`exeId`, `annYear`, `annStartMonth`, `annEndMonth`, `annMonth`, `annCost`, `annStatus`)
+                     VALUES(:exeId, :annYear, :annStartMonth, :annEndMonth, :annMonth, :annCost, :annStatus)';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
