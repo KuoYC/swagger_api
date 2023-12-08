@@ -906,30 +906,32 @@
                         $apportion_sl = $ContractMgr->queryApportionByID(array('A.*', 'CM.*', 'P.*', 'C.`conSerial`', 'C.`conVer`', 'C.`conTitle`', 'C.`conWork`', 'C.`conCompany`', 'T.`temTitle`', 'T.`temExes`', 'C.`conApp`'), $_GET['appId']);
                         $return_data['count'] = $apportion_sl['count'];
                         if (0 < $apportion_sl['count']) {
-                            $exes_list = $ContractMgr->queryExes(array('E.*', 'I.*', 'W.*', 'D.*', 'M.*', 'S.*'), $_GET['appId']);
-                            if (0 < $exes_list['count']) {
-                                for ($i = 0; $i < $exes_list['count']; $i++) {
-                                    $annual_list = $ContractMgr->queryAnnual('', $exes_list['data'][$i]);
-                                    $exes_list['data'][$i]['annualData'] = $annual_list['data'];
-                                    if (0 < $annual_list['count']) {
-                                        for ($j = 0; $j < $annual_list['count']; $j++) {
-                                            $subsidiary_list = $ContractMgr->querySubsidiary('', $annual_list['data'][$j]['annId']);
-                                            $exes_list['data'][$i]['annualData'][$j]['subsidiaryData'] = $subsidiary_list['data'];
-                                            $exes_list['data'][$i]['iteProportion'] = htmlspecialchars_decode($exes_list['data'][$i]['iteProportion']);
-                                            $exes_list['data'][$i]['manRatio'] = htmlspecialchars_decode($exes_list['data'][$i]['manRatio']);
+                                $exes_list = $ContractMgr->queryExes(array('E.*', 'I.*', 'W.*', 'D.*', 'M.*', 'S.*'), $_GET['appId']);
+                                if (0 < $exes_list['count']) {
+                                    for ($i = 0; $i < $exes_list['count']; $i++) {
+                                        $annual_list = $ContractMgr->queryAnnual('', $exes_list['data'][$i]);
+                                        $exes_list['data'][$i]['annualData'] = $annual_list['data'];
+                                        if (0 < $annual_list['count']) {
+                                            for ($j = 0; $j < $annual_list['count']; $j++) {
+                                                $subsidiary_list = $ContractMgr->querySubsidiary('', $annual_list['data'][$j]['annId']);
+                                                $exes_list['data'][$i]['annualData'][$j]['subsidiaryData'] = $subsidiary_list['data'];
+                                                $exes_list['data'][$i]['iteProportion'] = htmlspecialchars_decode($exes_list['data'][$i]['iteProportion']);
+                                                $exes_list['data'][$i]['manRatio'] = htmlspecialchars_decode($exes_list['data'][$i]['manRatio']);
+                                            }
                                         }
                                     }
                                 }
+                                $item_list = $ContractMgr->queryItem('', $apportion_sl['data']['conId']);
+                                for ($i = 0; $i < $item_list['count']; $i++) {
+                                    $item_list['data'][$i]['iteProportion'] = htmlspecialchars_decode($item_list['data'][$i]['iteProportion']);
+                                    $item_list['data'][$i]['manRatio'] = htmlspecialchars_decode($item_list['data'][$i]['manRatio']);
+                                }
+                                $apportion_sl['data']['exesData'] = $exes_list['data'];
+                                $apportion_sl['data']['itemData'] = $item_list['data'];
+                                $member_list = $ContractMgr->queryMember(NULL, $_GET['conId'], $_GET['appId'], $_GET['memType'], '', '');
+                                $apportion_sl['data']['memberData'] = $member_list['data'];
+                                $return_data['data'] = replaceArr($apportion_sl['data']);
                             }
-                            $item_list = $ContractMgr->queryItem('', $apportion_sl['data']['conId']);
-                            for ($i = 0; $i < $item_list['count']; $i++) {
-                                $item_list['data'][$i]['iteProportion'] = htmlspecialchars_decode($item_list['data'][$i]['iteProportion']);
-                                $item_list['data'][$i]['manRatio'] = htmlspecialchars_decode($item_list['data'][$i]['manRatio']);
-                            }
-                            $apportion_sl['data']['exesData'] = $exes_list['data'];
-                            $apportion_sl['data']['itemData'] = $item_list['data'];
-                            $return_data['data'] = replaceArr($apportion_sl['data']);
-                        }
                     }
                     elseif (isset($_GET['conId'])) {
                         $apportion_sl = $ContractMgr->queryApportionLastByContract(array('A.`appId`'), $_GET['conId'], $_GET['appStatus']);
