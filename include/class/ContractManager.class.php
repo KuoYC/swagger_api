@@ -3381,6 +3381,7 @@
             //SQL
             $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `apportion` A
                      LEFT JOIN `contract` C ON C.`conId` = A.`conId`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = A.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = A.`perKey`
@@ -3485,6 +3486,30 @@
             else {
                 return $aryExecute;
             }
+        }
+
+        /**
+         * todo:updateApportionByID 修改費用
+         *
+         * @param $appId
+         * @param $appDate
+         * @param $appStatus
+         *
+         * @return array|int
+         */
+        function updateApportionByID($appId, $appDate, $appStatus)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId'      => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : '',
+                            'appDate'    => $Conn->UtilCheckNotNullIsDate($appDate) ? $appDate : NULL,
+                            'appStatus'  => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : NULL);
+            //SQL
+            $sql = ' UPDATE `apportion`
+                     SET `appDate` = '.($Conn->UtilCheckNotNullIsDate($appDate) ? ':appDate' : 'NULL').', `appUpdateTime` = NOW()';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($appStatus) ? ', `appStatus` = :appStatus' : '';
+            $sql .= '  WHERE `conId` = :conId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
         }
 
         /**

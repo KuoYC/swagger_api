@@ -42,17 +42,34 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.8259608">
+    <splitter split-orientation="horizontal" split-proportion="0.4430747">
       <split-first>
         <leaf>
           <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="249">
+                  <caret line="3091" column="17" selection-start-line="3091" selection-start-column="17" selection-end-line="3091" selection-end-column="17" />
+                  <folding>
+                    <element signature="e#92#256#0#PHP" />
+                    <element signature="e#90757#90909#0#PHP" />
+                    <element signature="e#90918#91708#0#PHP" />
+                    <element signature="e#96985#97363#0#PHP" />
+                    <element signature="e#97372#99312#0#PHP" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="145">
-                  <caret line="1096" column="132" selection-start-line="1096" selection-start-column="132" selection-end-line="1096" selection-end-column="132" />
+                <state relative-caret-position="185">
+                  <caret line="950" column="26" selection-start-line="950" selection-start-column="26" selection-end-line="950" selection-end-column="26" />
                   <folding>
                     <element signature="e#28431#30594#0#PHP" />
-                    <element signature="e#53554#54726#0#PHP" />
+                    <element signature="e#57365#63097#0#PHP" />
+                    <element signature="e#63118#66189#0#PHP" />
                   </folding>
                 </state>
               </provider>
@@ -63,14 +80,12 @@
       <split-second>
         <leaf>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
+            <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="197">
-                  <caret line="3337" selection-start-line="3336" selection-end-line="3337" />
+                <state relative-caret-position="145">
+                  <caret line="502" column="62" selection-start-line="502" selection-start-column="62" selection-end-line="502" selection-end-column="62" />
                   <folding>
-                    <element signature="e#92#256#0#PHP" />
-                    <element signature="e#90757#90909#0#PHP" />
-                    <element signature="e#90918#91708#0#PHP" />
+                    <element signature="e#28431#30594#0#PHP" />
                   </folding>
                 </state>
               </provider>
@@ -89,13 +104,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ratio</find>
       <find>temStyle</find>
       <find>tooltip</find>
       <find>dropdown</find>
       <find>dropdown(</find>
       <find>'template'</find>
-      <find>apportion</find>
       <find>`exes`</find>
       <find>$keyword</find>
       <find>contact</find>
@@ -111,7 +124,6 @@
       <find>die</find>
       <find>contract'</find>
       <find>signMember</find>
-      <find>'apportion'</find>
       <find>'contract'</find>
       <find>'contra</find>
       <find>updateMember</find>
@@ -119,6 +131,9 @@
       <find>'contractI</find>
       <find>'apportionI</find>
       <find>updateContractM</find>
+      <find>'apportion'</find>
+      <find>'apportion</find>
+      <find>apportion</find>
     </findStrings>
     <replaceStrings>
       <replace>$ite[</replace>
@@ -336,12 +351,12 @@
       <workItem from="1697777714545" duration="9514000" />
       <workItem from="1697965176657" duration="17801000" />
       <workItem from="1698216437347" duration="150557000" />
-      <workItem from="1701968046256" duration="11586000" />
+      <workItem from="1701968046256" duration="15024000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="462099000" />
+    <option name="totallyTimeSpent" value="465537000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -354,13 +369,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1672" height="948" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15398774" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.35315984" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.35315984" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32961586" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -577,25 +591,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
+    <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="3337" selection-start-line="3336" selection-end-line="3337" />
+        <state relative-caret-position="185">
+          <caret line="950" column="26" selection-start-line="950" selection-start-column="26" selection-end-line="950" selection-end-column="26" />
           <folding>
-            <element signature="e#92#256#0#PHP" />
-            <element signature="e#90757#90909#0#PHP" />
-            <element signature="e#90918#91708#0#PHP" />
+            <element signature="e#28431#30594#0#PHP" />
+            <element signature="e#57365#63097#0#PHP" />
+            <element signature="e#63118#66189#0#PHP" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api.php">
+    <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="1096" column="132" selection-start-line="1096" selection-start-column="132" selection-end-line="1096" selection-end-column="132" />
+        <state relative-caret-position="249">
+          <caret line="3091" column="17" selection-start-line="3091" selection-start-column="17" selection-end-line="3091" selection-end-column="17" />
           <folding>
-            <element signature="e#28431#30594#0#PHP" />
-            <element signature="e#53554#54726#0#PHP" />
+            <element signature="e#92#256#0#PHP" />
+            <element signature="e#90757#90909#0#PHP" />
+            <element signature="e#90918#91708#0#PHP" />
+            <element signature="e#96985#97363#0#PHP" />
+            <element signature="e#97372#99312#0#PHP" />
           </folding>
         </state>
       </provider>

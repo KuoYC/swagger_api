@@ -907,13 +907,13 @@
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: apportion GET[conId|{conId|comId|null}] 取得[單一|全部]文件
                     if (isset($_GET['appId'])) {
-                        $apportion_sl = $ContractMgr->queryApportionByID(array('A.*', 'CM.*', 'P.*', 'C.`conSerial`', 'C.`conVer`', 'C.`conTitle`', 'C.`conWork`', 'C.`conCompany`', 'T.`temTitle`', 'T.`temExes`', 'C.`conApp`'), $_GET['appId']);
+                        $apportion_sl = $ContractMgr->queryApportionByID(array('A.*', 'CM.*', 'P.*', 'C.`conSerial`', 'C.`conVer`', 'C.`conTitle`', 'C.`conWork`', 'F.`frmTitle`', 'C.`conDate`', 'C.`conCompany`', 'T.`temTitle`', 'T.`temExes`', 'C.`conApp`'), $_GET['appId']);
                         $return_data['count'] = $apportion_sl['count'];
                         if (0 < $apportion_sl['count']) {
                             $exes_list = $ContractMgr->queryExes(array('E.*', 'I.*', 'W.*', 'D.*', 'M.*', 'S.*'), $_GET['appId']);
                             if (0 < $exes_list['count']) {
                                 for ($i = 0; $i < $exes_list['count']; $i++) {
-                                    $annual_list = $ContractMgr->queryAnnual('', $exes_list['data'][$i]);
+                                    $annual_list = $ContractMgr->queryAnnual('', $exes_list['data'][$i]['exeId']);
                                     $exes_list['data'][$i]['annualData'] = $annual_list['data'];
                                     if (0 < $annual_list['count']) {
                                         for ($j = 0; $j < $annual_list['count']; $j++) {
@@ -951,6 +951,7 @@
                     break;
                 case 'PUT'://todo apportion PUT 修改文件資料
                     $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
+                    $apportion_up = $ContractMgr->updateApportionByID($data['appId'], $data['appDate'], $data['appStatus']);
                     if (isset($data['exesData']) && NULL != $data['exesData']) {
                         //刪除不再資料列中的資料
                         $exeId_list = NULL;
