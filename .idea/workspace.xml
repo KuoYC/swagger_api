@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/class/ContractManager.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/class/ContractManager.class.php" afterDir="false" />
     </list>
@@ -42,34 +43,21 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4430747">
+    <splitter split-orientation="horizontal" split-proportion="0.35174417">
       <split-first>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="249">
-                  <caret line="3091" column="17" selection-start-line="3091" selection-start-column="17" selection-end-line="3091" selection-end-column="17" />
-                  <folding>
-                    <element signature="e#92#256#0#PHP" />
-                    <element signature="e#90757#90909#0#PHP" />
-                    <element signature="e#90918#91708#0#PHP" />
-                    <element signature="e#96985#97363#0#PHP" />
-                    <element signature="e#97372#99312#0#PHP" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="185">
-                  <caret line="950" column="26" selection-start-line="950" selection-start-column="26" selection-end-line="950" selection-end-column="26" />
+                <state relative-caret-position="224">
+                  <caret line="1118" column="124" selection-start-line="1118" selection-start-column="124" selection-end-line="1118" selection-end-column="124" />
                   <folding>
-                    <element signature="e#28431#30594#0#PHP" />
-                    <element signature="e#57365#63097#0#PHP" />
-                    <element signature="e#63118#66189#0#PHP" />
+                    <element signature="e#34538#35518#0#PHP" />
+                    <element signature="e#35527#36960#0#PHP" />
+                    <element signature="e#36969#39598#0#PHP" />
+                    <element signature="e#39607#40406#0#PHP" />
+                    <element signature="e#40415#46906#0#PHP" />
+                    <element signature="e#46915#47861#0#PHP" />
                   </folding>
                 </state>
               </provider>
@@ -80,12 +68,18 @@
       <split-second>
         <leaf>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/api.php">
+            <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="145">
-                  <caret line="502" column="62" selection-start-line="502" selection-start-column="62" selection-end-line="502" selection-end-column="62" />
+                <state relative-caret-position="363">
+                  <caret line="3350" column="34" selection-start-line="3350" selection-start-column="34" selection-end-line="3350" selection-end-column="34" />
                   <folding>
-                    <element signature="e#28431#30594#0#PHP" />
+                    <element signature="e#92#256#0#PHP" />
+                    <element signature="e#53858#54498#0#PHP" />
+                    <element signature="e#54507#62717#0#PHP" />
+                    <element signature="e#90757#90909#0#PHP" />
+                    <element signature="e#90918#91708#0#PHP" />
+                    <element signature="e#96985#97363#0#PHP" />
+                    <element signature="e#97372#99312#0#PHP" />
                   </folding>
                 </state>
               </provider>
@@ -104,7 +98,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>temStyle</find>
       <find>tooltip</find>
       <find>dropdown</find>
       <find>dropdown(</find>
@@ -134,6 +127,7 @@
       <find>'apportion'</find>
       <find>'apportion</find>
       <find>apportion</find>
+      <find>'contrac</find>
     </findStrings>
     <replaceStrings>
       <replace>$ite[</replace>
@@ -209,8 +203,8 @@
         <option value="$PROJECT_DIR$/cost.html" />
         <option value="$PROJECT_DIR$/reAPI.php" />
         <option value="$PROJECT_DIR$/include/ContractManager.class.php" />
-        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
         <option value="$PROJECT_DIR$/api.php" />
+        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
       </list>
     </option>
   </component>
@@ -229,30 +223,13 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
               <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
-              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
-              <item name="Cathay-main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
-              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
-              <item name="Cathay-main" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
-              <item name="swagger_api" type="462c0819:PsiDirectoryNode" />
-              <item name="Cathay-main" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="swagger_api" type="b2602c69:ProjectViewProjectNode" />
@@ -282,7 +259,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -352,11 +328,12 @@
       <workItem from="1697965176657" duration="17801000" />
       <workItem from="1698216437347" duration="150557000" />
       <workItem from="1701968046256" duration="15024000" />
+      <workItem from="1702292302046" duration="4931000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="465537000" />
+    <option name="totallyTimeSpent" value="470468000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -369,8 +346,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1672" height="948" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15398774" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15582822" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -593,22 +571,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="950" column="26" selection-start-line="950" selection-start-column="26" selection-end-line="950" selection-end-column="26" />
+        <state relative-caret-position="224">
+          <caret line="1118" column="124" selection-start-line="1118" selection-start-column="124" selection-end-line="1118" selection-end-column="124" />
           <folding>
-            <element signature="e#28431#30594#0#PHP" />
-            <element signature="e#57365#63097#0#PHP" />
-            <element signature="e#63118#66189#0#PHP" />
+            <element signature="e#34538#35518#0#PHP" />
+            <element signature="e#35527#36960#0#PHP" />
+            <element signature="e#36969#39598#0#PHP" />
+            <element signature="e#39607#40406#0#PHP" />
+            <element signature="e#40415#46906#0#PHP" />
+            <element signature="e#46915#47861#0#PHP" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="3091" column="17" selection-start-line="3091" selection-start-column="17" selection-end-line="3091" selection-end-column="17" />
+        <state relative-caret-position="363">
+          <caret line="3350" column="34" selection-start-line="3350" selection-start-column="34" selection-end-line="3350" selection-end-column="34" />
           <folding>
             <element signature="e#92#256#0#PHP" />
+            <element signature="e#53858#54498#0#PHP" />
+            <element signature="e#54507#62717#0#PHP" />
             <element signature="e#90757#90909#0#PHP" />
             <element signature="e#90918#91708#0#PHP" />
             <element signature="e#96985#97363#0#PHP" />

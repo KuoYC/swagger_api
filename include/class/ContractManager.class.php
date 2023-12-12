@@ -1096,7 +1096,7 @@
         function insertContact($comCode, $perKey)
         {
             $Conn = new ConnManager();
-            $arrPar = array('comCode' => $Conn->UtilCheckNotNullIsNumeric($comCode) ? $comCode : 0,
+            $arrPar = array('comCode' => $Conn->UtilCheckNotNull($comCode) ? $comCode : 0,
                             'perKey'  => $Conn->UtilCheckNotNull($perKey) ? $perKey : '');
             //SQL
             $sql = ' INSERT INTO `contact`(`comCode`, `perKey`)
@@ -3359,7 +3359,7 @@
             $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conMark) ? ' AND C.`conMark` = :conMark' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus`' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? ' AND C.`conStatus` != :conStatus' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? ' AND C.`conStatus` != :conStatusNot' : '';
             $sql .= $Conn->getLimit($anum, $num);
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
@@ -4218,6 +4218,113 @@
         }
 
 
+        /**
+         * todo:querySearchForAction 查看文件費用資料
+         *
+         * @param $keyword
+         * @param $temId
+         * @param $comId
+         * @param $comCode
+         * @param $conSerial
+         * @param $conStatus
+         * @param $perKey
+         * @param $perBu1Code
+         * @param $memOwner 1:擁有者
+         * @param $memDraft 1:草稿
+         * @param $memView  1:待檢視
+         * @param $memSign  1:待簽
+         * @param $memOver  1:已簽
+         * @param $conStatusNot
+         * @param $conMark  1:棄用
+         * @param $conInh   1:被繼承
+         * @param $anum
+         * @param $num
+         *
+         * @return mixed
+         */
+        function querySearchForAction($keyword, $temId, $comId, $comCode, $conSerial, $conStatus, $perKey, $perBu1Code, $memOwner, $memDraft, $memView, $memSign, $memOver, $conStatusNot, $conMark, $conInh, $anum, $num)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('keyword'      => $Conn->UtilCheckNotNull($keyword) ? $Conn->getRegexpString($keyword, '|') : NULL,
+                            'conSerial'    => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
+                            'comId'        => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
+                            'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
+                            'conStatus'    => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
+                            'perKey'       => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
+                            'perBu1Code'   => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
+                            'temId'        => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL,
+                            'memOwner'     => $Conn->UtilCheckNotNullIsNumeric($memOwner) ? $memOwner : NULL,
+                            'memDraft'     => $Conn->UtilCheckNotNullIsNumeric($memDraft) ? $memDraft : NULL,
+                            'memView'      => $Conn->UtilCheckNotNullIsNumeric($memView) ? $memView : NULL,
+                            'memSign'      => $Conn->UtilCheckNotNullIsNumeric($memSign) ? $memSign : NULL,
+                            'memOver'      => $Conn->UtilCheckNotNullIsNumeric($memOver) ? $memOver : NULL,
+                            'conStatusNot' => $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? $conStatusNot : NULL,
+                            'conMark'      => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : NULL,
+                            'conInh'       => $Conn->UtilCheckNotNullIsNumeric($conInh) ? $conInh : NULL
+            );
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS T.`temId`, T.`temTitle`, C.`conId`, C.`conTitle`, C.`conStatus`, C.`conSerial`, C.`conVer`, C.`conCreateTime`, C.`comCode`, C.`perKey`, C.`conType`, F.`frmTitle`, P.`perBu1`, P.`perBu2`, P.`perBu3`, CM.`comTitle`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver` FROM `contract` C
+                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
+                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
+                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
+                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
+                     LEFT JOIN (
+                                SELECT M.`conId`, COUNT(*) AS `CT`, 
+                                    CASE WHEN SUM(`memOwner`) > 0 THEN 1 ELSE 0 END AS `memOwner`,
+                                    CASE WHEN SUM(`memDraft`) > 0 THEN 1 ELSE 0 END AS `memDraft`,
+                                    CASE WHEN SUM(`memView`) > 0 THEN 1 ELSE 0 END AS `memView`,
+                                    CASE WHEN SUM(`memSign`) > 0 THEN 1 ELSE 0 END AS `memSign`,
+                                    CASE WHEN SUM(`memOver`) > 0 THEN 1 ELSE 0 END AS `memOver` FROM (
+                                        SELECT M.`conId`, 
+                                            CASE WHEN (M.`memType` = 0 AND M.`memLV0Key` = :perKey) THEN 1 ELSE 0 END AS `memOwner`,
+                                            CASE WHEN (M.`memType` = 0 AND M.`memLV0Status` = -1) THEN 1 ELSE 0 END AS `memDraft`,
+                                            CASE WHEN (M.`memType` = 0 AND M.`memLVCStatus` = 0 AND CT.`perKey` = :perKey) OR 
+                                                      (M.`memNowKey` = :perKey AND M.`memNowStatus` = 0) THEN 1 ELSE 0 END AS `memView`,
+                                            CASE WHEN (M.`memType` = 0 AND M.`memLVCStatus` = 1 AND CT.`perKey` = :perKey) OR 
+                                                      (M.`memNowKey` = :perKey AND M.`memNowStatus` = 1) THEN 1 ELSE 0 END AS `memSign`,
+                                            CASE WHEN (M.`memType` = 0 AND M.`memLVCStatus` = 3 AND CT.`perKey` = :perKey) OR 
+                                                      (M.`memLV0Key` = :perKey AND M.`memLV0Status` = 3) OR
+                                                      (M.`memLV1Key` = :perKey AND M.`memLV1Status` = 3) OR
+                                                      (M.`memLV2Key` = :perKey AND M.`memLV2Status` = 3) THEN 1 ELSE 0 END AS `memOver`
+                                        FROM `member` M
+                                        LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
+                                        LEFT JOIN `contact` CT ON CP.`comCode` = CT.`comCode` AND CT.`perKey` = :perKey
+                                        WHERE 1=1 
+                                            AND (
+                                                ((M.`memType` = 0 AND M.`memLV0Key` = :perKey) OR (M.`memType` != 0 AND M.`memLV0Key` = :perKey AND M.`memLV0Status` NOT IN (-1, 2))) OR
+                                                (M.`memLV0Key` = :perKey AND M.`memLV0Status` != -1) OR
+                                                (M.`memType` = 0 AND M.`memLVCStatus` != -1 AND M.`memLV0Status` = 3 AND CT.`perKey` =:perKey) OR
+                                                (M.`memLV1Key` = :perKey AND M.`memLV1Status` NOT IN (-1, 2) AND ((M.`memType` = 0 AND M.`memLVCStatus` = 3) OR (M.`memType` != 0 AND M.`memLV0Status` = 3))) OR
+                                                (M.`memLV2Key` = :perKey AND M.`memLV2Status` NOT IN (-1, 2) AND M.`memLV1Status` = 3)
+                                            )
+                                        ) M
+                                GROUP BY M.`conId`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver`
+                                ) M ON M.`conId` = C.`conId`
+                     WHERE 1 = 1';
+            $sql .= $Conn->UtilCheckNotNull($keyword) ? ' AND (C.`conTitle` REGEXP :keyword OR CONCAT(C.`conSerial`, C.`conVer`) REGEXP :keyword)' : '';
+            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
+            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? ' AND C.`conStatus` != :conStatusNot' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conMark) ? ' AND C.`conMark` = :conMark' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conInh) ? ' AND C.`conInh` = :conInh' : '';
+            $sql .= ' AND ((M.`CT` > 0 AND C.`conStatus` IN (0, 1, 3)) OR (CM.`comCode` = :perBu1Code AND C.`perKey` = :perKey AND C.`conStatus` IN (0, 2, 4)))';
+            if ($Conn->UtilCheckNotNullIsNumeric($memOwner) || $Conn->UtilCheckNotNullIsNumeric($memDraft) || $Conn->UtilCheckNotNullIsNumeric($memView) || $Conn->UtilCheckNotNullIsNumeric($memSign) || $Conn->UtilCheckNotNullIsNumeric($memOver)) {
+                $sql .= ' AND (1=2';
+                $sql .= $Conn->UtilCheckNotNullIsNumeric($memOwner) ? ' OR M.`memOwner` = :memOwner' : '';
+                $sql .= $Conn->UtilCheckNotNullIsNumeric($memDraft) ? ' OR M.`memDraft` = :memDraft' : '';
+                $sql .= $Conn->UtilCheckNotNullIsNumeric($memView) ? ' OR M.`memView` = :memView' : '';
+                $sql .= $Conn->UtilCheckNotNullIsNumeric($memSign) ? ' OR M.`memSign` = :memSign' : '';
+                $sql .= $Conn->UtilCheckNotNullIsNumeric($memOver) ? ' OR M.`memOver` = :memOver' : '';
+                $sql .= ' )';
+            }
+            $sql .= $Conn->getLimit($anum, $num);
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
 
 
 

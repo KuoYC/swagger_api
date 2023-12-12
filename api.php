@@ -492,6 +492,27 @@
                     break;
             }
             break;
+        case 'search'://todo: contract 文件操作
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':// todo: contract GET[conId|{temId|comId|null}] 取得[單一|全部]文件
+                    if (isset($_GET['action']) && '1' == $_GET['action']) {
+                        $contract_list = $ContractMgr->queryContractForAction($_GET['keyword'], $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'], $_GET['conStatusNot'], $_GET['conMark'], $_GET['conInh'], NULL, NULL);
+                    }
+                    else {
+                        $contract_list = $ContractMgr->queryContract(NULL, $_GET['keyword'], $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
+                    }
+                    if ($contract_list['count'] > 0) {
+                        for ($i = 0; $i < $contract_list['count']; $i++) {
+                            $contract_list['data'][$i]['conValue'] = htmlspecialchars_decode($contract_list['data'][$i]['conValue']);
+                        }
+                    }
+                    $return_data['data'] = replaceArr($contract_list['data']);
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
         case 'contract'://todo: contract 文件操作
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract GET[conId|{temId|comId|null}] 取得[單一|全部]文件
@@ -1107,10 +1128,10 @@
                         for ($i = 0; $i < $exes_list['count']; $i++) {
                             $exes_ad = $ContractMgr->insertExes($apportion_ad, $exes_list['data'][$i]['iteId'], $exes_list['data'][$i]['exeTitle'], $exes_list['data'][$i]['exePM'], $exes_list['data'][$i]['exeSP'], $exes_list['data'][$i]['exeCost'], $exes_list['data'][$i]['exeCreateMonth'], $exes_list['data'][$i]['exeMonth'], $exes_list['data'][$i]['exeStartYear'], $exes_list['data'][$i]['exeNote'], $exes_list['data'][$i]['exeStatus']);
                             $annual_list = $ContractMgr->queryAnnual('', $exes_list['data'][$i]['exeId']);
-                            for ($j=0;$j<$annual_list['count'];$j++) {
+                            for ($j = 0; $j < $annual_list['count']; $j++) {
                                 $annual_ad = $ContractMgr->insertAnnual($exes_ad, $annual_list['data'][$j]['annYear'], $annual_list['data'][$j]['annStartMonth'], $annual_list['data'][$j]['annEndMonth'], $annual_list['data'][$j]['annMonth'], $annual_list['data'][$j]['annCost'], $annual_list['data'][$j]['annStatus']);
                                 $subsidiary_list = $ContractMgr->querySubsidiary('', $annual_list['data'][$j]['annId']);
-                                for ($k=0;$k<$subsidiary_list['count'];$k++) {
+                                for ($k = 0; $k < $subsidiary_list['count']; $k++) {
                                     $subsidiary_ad = $ContractMgr->insertSubsidiary($annual_ad, $subsidiary_list['data'][$k]['comCode'], $subsidiary_list['data'][$k]['subAmount'], $subsidiary_list['data'][$k]['subPercent'], $subsidiary_list['data'][$k]['subCost']);
                                 }
                             }
