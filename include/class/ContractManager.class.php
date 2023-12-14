@@ -1546,510 +1546,6 @@
         }
 
         /**
-         * todo:queryContractForAction0 查看文件-相關(發起, 待簽, 已簽)
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $conStatus
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction0($rows, $temId, $comId, $comCode, $conSerial, $conStatus, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'conStatus'  => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).', CASE WHEN MS.`CTS` > 0 THEN 1 ELSE 0 END AS `memSign` FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT `conId`, COUNT(*) AS `CT` FROM `member` M
-                                LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
-                                LEFT JOIN `contact` CT ON CP.`comCode` = CT.`comCode` AND CT.`perKey` = :perKey
-                                WHERE M.`memBu1Code` = :perBu1Code 
-                                AND (
-                                        (M.`memLV0Key` = :perKey AND M.`memLV0Status` != -1) OR
-                                        (M.`memLVCStatus` != -1 AND M.`memType` = 0) OR
-                                        (M.`memLV1Key` = :perKey AND M.`memLV1Status` != -1) OR
-                                        (M.`memLV2Key` = :perKey AND M.`memLV2Status` != -1)
-                                    )
-                                GROUP BY M.`conId`
-                                ) M ON M.`conId` = C.`conId`
-                     LEFT JOIN (
-                                SELECT `conId`, COUNT(*) AS `CTS` FROM `member` M
-                                LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
-                                LEFT JOIN `contact` CT ON CP.`comCode` = CT.`comCode` AND CT.`perKey` = :perKey
-                                WHERE M.`memBu1Code` = :perBu1Code 
-                                AND (
-                                        (M.`memNowKey` = :perKey AND M.`memNowStatus` != -1) OR
-                                        (M.`memLVCStatus` IN  (1, 2) AND M.`memType` = 0)
-                                    )
-                                GROUP BY M.`conId`
-                                ) MS ON MS.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND ((M.`CT` > 0 AND C.`conStatus` IN (0, 1, 3)) OR (CM.`comCode` = :perBu1Code AND C.`perKey` = :perKey AND C.`conStatus` IN (0, 2)))';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-        /**
-         * todo:queryContractForAction1 查看文件-待檢視
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction1($rows, $temId, $comId, $comCode, $conSerial, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT M.`conId`, COUNT(*) AS `CT` FROM `member` M 
-                                LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
-                                LEFT JOIN `contact` CT ON CP.`comCode` = CT.`comCode` AND CT.`perKey` = :perKey
-                                WHERE M.`memBu1Code` = :perBu1Code 
-                                AND (
-                                        (`memNowKey` = :perKey AND `memNowStatus` = 0) OR
-                                        (M.`memLVCStatus` != -1 AND M.`memType` = 0 AND CT.`perKey` = :perKey)
-                                    )
-                                GROUP BY M.`conId`
-                                ) M ON M.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND M.`CT` > 0';
-            $sql .= ' AND C.`conStatus` = 1';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-        /**
-         * todo:queryContractForAction2 查看文件-待簽
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction2($rows, $temId, $comId, $comCode, $conSerial, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT M.`conId`, COUNT(*) AS `CT` FROM `member` M 
-                                LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
-                                LEFT JOIN `contact` CT ON CP.`comCode` = CT.`comCode` AND CT.`perKey` = :perKey
-                                WHERE M.`memBu1Code` = :perBu1Code 
-                                AND (
-                                        (`memNowKey` = :perKey AND `memNowStatus` = 0) OR
-                                        (M.`memLVCStatus` != -1 AND M.`memLVCStatus` != 3 AND M.`memType` = 0 AND CT.`perKey` = :perKey)
-                                    )
-                                GROUP BY M.`conId`
-                                ) M ON M.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND M.`CT` > 0';
-            $sql .= ' AND C.`conStatus` = 1';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-        /**
-         * todo:queryContractForAction3 查看文件-等待
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction3($rows, $temId, $comId, $comCode, $conSerial, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT M.`conId`, COUNT(*) AS `CT` FROM `member` M 
-                                LEFT JOIN `company` CP ON CP.`comCode` = M.`memBu1Code`
-                                LEFT JOIN `contact` CT ON CP.`comCode` = CT.`comCode` AND CT.`perKey` = :perKey
-                                WHERE M.`memBu1Code` = :perBu1Code 
-                                AND (
-                                        (`memNowKey` = :perKey AND (`memNowStatus` IN (0, 1))) OR
-                                        (M.`memLVCStatus` != -1 AND M.`memLVCStatus` != 3 AND M.`memType` = 0 AND CT.`perKey` = :perKey)
-                                    )
-                                GROUP BY M.`conId`
-                                ) M ON M.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND M.`CT` > 0';
-            $sql .= ' AND C.`conStatus` = 1';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-        /**
-         * todo:queryContractForAction4 查看文件-已簽
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction4($rows, $temId, $comId, $comCode, $conSerial, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
-                                WHERE `memBu1Code` = :perBu1Code 
-                                AND (
-                                        (`memLV0Key` = :perKey AND `memLV0Status` = 3) OR
-                                        (`memLVCKey` = :perKey AND `memLVCStatus` = 3) OR
-                                        (`memLV1Key` = :perKey AND `memLV1Status` = 3) OR
-                                        (`memLV2Key` = :perKey AND `memLV2Status` = 3)
-                                    )
-                                GROUP BY `conId`
-                                ) M ON M.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND M.`CT` > 0';
-            $sql .= ' AND C.`conStatus` = 1';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-        /**
-         * todo:queryContractForAction5 查看文件-全部相關
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $conStatus
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction5($rows, $temId, $comId, $comCode, $conSerial, $conStatus, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'conStatus'  => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
-                                WHERE `memBu1Code` = :perBu1Code 
-                                AND (
-                                        `memLV0Key` = :perKey OR
-                                        `memLVCKey` = :perKey OR
-                                        `memLV1Key` = :perKey OR
-                                        `memLV2Key` = :perKey 
-                                    )
-                                GROUP BY `conId`
-                                ) M ON M.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND (M.`CT` > 0 OR (CM.`comCode` = :perBu1Code AND C.`perKey` = :perKey))';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-        /**
-         * todo:queryContractForAction6 查看文件-完成
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction6($rows, $temId, $comId, $comCode, $conSerial, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
-                                WHERE `memBu1Code` = :perBu1Code 
-                                AND (
-                                        `memLV0Key` = :perKey OR
-                                        `memLVCKey` = :perKey OR
-                                        `memLV1Key` = :perKey OR
-                                        `memLV2Key` = :perKey
-                                    )
-                                GROUP BY `conId`
-                                ) M ON M.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND M.`CT` > 0';
-            $sql .= ' AND C.`conStatus` IN (3, 5)';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-        /**
-         * todo:queryContractForAction7 查看文件-拒絕
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction7($rows, $temId, $comId, $comCode, $conSerial, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
-                                WHERE `memBu1Code` = :perBu1Code 
-                                AND (
-                                        `memLV0Key` = :perKey OR
-                                        `memLVCKey` = :perKey OR
-                                        `memLV1Key` = :perKey OR
-                                        `memLV2Key` = :perKey
-                                    )
-                                GROUP BY `conId`
-                                ) M ON M.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND M.`CT` > 0';
-            $sql .= ' AND C.`conStatus` = 4';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-        /**
-         * todo:queryContractForAction8 查看文件-完成或拒絕
-         *
-         * @param $rows
-         * @param $temId
-         * @param $comId
-         * @param $comCode
-         * @param $conSerial
-         * @param $perKey
-         * @param $perBu1Code
-         * @param $anum
-         * @param $num
-         *
-         * @return mixed
-         */
-        function queryContractForAction8($rows, $temId, $comId, $comCode, $conSerial, $perKey, $perBu1Code, $anum, $num)
-        {
-            $Conn = new ConnManager();
-            $arrPar = array('conSerial'  => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
-                            'comId'      => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
-                            'comCode'    => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'perKey'     => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
-                            'perBu1Code' => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
-                            'temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL);
-            //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     LEFT JOIN `template` T ON T.`temId` = C.`temId`
-                     LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
-                     LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
-                     LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
-                     LEFT JOIN (
-                                SELECT `conId`, COUNT(*) AS `CT` FROM `member` 
-                                WHERE `memBu1Code` = :perBu1Code 
-                                AND (
-                                        `memLV0Key` = :perKey OR
-                                        `memLVCKey` = :perKey OR
-                                        `memLV1Key` = :perKey OR
-                                        `memLV2Key` = :perKey
-                                    )
-                                GROUP BY `conId`
-                                ) M ON M.`conId` = C.`conId`
-                     WHERE 1 = 1';
-            $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
-            $sql .= $Conn->UtilCheckNotNull($comId) ? ' AND CM.`comId` = :comId' : '';
-            $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= ' AND M.`CT` > 0';
-            $sql .= ' AND C.`conStatus` IN (3, 4, 5)';
-            $sql .= $Conn->getLimit($anum, $num);
-            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
-            $aryData['count'] = $Conn->pramGetRowCount();
-            return $aryData;
-        }
-
-
-        /**
          * todo:queryContractByID 查看單一文件
          *
          * @param $rows
@@ -2086,8 +1582,8 @@
             $Conn = new ConnManager();
             $arrPar = array('conInh' => $Conn->UtilCheckNotNullIsNumeric($conInh) ? $conInh : -1);
             //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract` C
-                     WHERE C.`conInh` = :conInh';
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `contract`
+                     WHERE `conInh` = :conInh';
             $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
             return $aryData;
@@ -2109,11 +1605,12 @@
          * @param $conWork
          * @param $conCompany
          * @param $conValue
+         * @param $conApp
          * @param $conStatus
          *
          * @return array|int|Number
          */
-        function insertContract($temId, $perKey, $comCode, $frmId, $conSerial, $conVer, $conMark, $conTitle, $conType, $conDate, $conWork, $conCompany, $conValue, $conStatus)
+        function insertContract($temId, $perKey, $comCode, $frmId, $conSerial, $conVer, $conMark, $conTitle, $conType, $conDate, $conWork, $conCompany, $conValue, $conApp, $conStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('temId'      => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : 0,
@@ -2129,10 +1626,11 @@
                             'conWork'    => $Conn->UtilCheckNotNull($conWork) ? $conWork : '',
                             'conCompany' => $Conn->UtilCheckNotNull($conCompany) ? $conCompany : '',
                             'conValue'   => $Conn->UtilCheckNotNull($conValue) ? $conValue : '',
+                            'conApp'     => $Conn->UtilCheckNotNullIsNumeric($conApp) ? $conApp : -1,
                             'conStatus'  => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : -1);
             //SQL
-            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `frmId`, `conSerial`, `conVer`, `conMark`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conValue`, `conStatus`, `conUpdateTime`, `conCreateTime`)
-                     VALUES(:temId, :perKey, :comCode, :frmId, :conSerial, :conVer, :conMark, :conTitle, :conType, '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', :conWork, :conCompany, :conValue, :conStatus, NOW(), NOW())';
+            $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `frmId`, `conSerial`, `conVer`, `conMark`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conValue`, `conApp`, `conStatus`, `conUpdateTime`, `conCreateTime`)
+                     VALUES(:temId, :perKey, :comCode, :frmId, :conSerial, :conVer, :conMark, :conTitle, :conType, '.($Conn->UtilCheckNotNullIsDate($conDate) ? ':conDate' : 'NULL').', :conWork, :conCompany, :conValue, :conApp, :conStatus, NOW(), NOW())';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -2270,7 +1768,7 @@
         {
             $Conn = new ConnManager();
             $arrPar = array('conId'   => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
-                            'conMark' => $Conn->UtilCheckNotNullIsDate($conMark) ? $conMark : 0);
+                            'conMark' => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : 0);
             //SQL
             $sql = ' UPDATE `contract`
                      SET `conMark` = :conMark, `conUpdateTime` = NOW()';
@@ -2291,10 +1789,31 @@
         {
             $Conn = new ConnManager();
             $arrPar = array('conId'  => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
-                            'conInh' => $Conn->UtilCheckNotNullIsDate($conInh) ? $conInh : 0);
+                            'conInh' => $Conn->UtilCheckNotNullIsNumeric($conInh) ? $conInh : 0);
             //SQL
             $sql = ' UPDATE `contract`
                      SET `conInh` = :conInh, `conUpdateTime` = NOW()';
+            $sql .= ' WHERE `conId` = :conId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:updateContractInheritByID 修改文件繼承
+         *
+         * @param $conId
+         * @param $conLock
+         *
+         * @return array|int
+         */
+        function updateContractLockByID($conId, $conLock)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId'  => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
+                            'conLock' => $Conn->UtilCheckNotNullIsNumeric($conLock) ? $conLock : 0);
+            //SQL
+            $sql = ' UPDATE `contract`
+                     SET `conLock` = :conLock, `conUpdateTime` = NOW()';
             $sql .= ' WHERE `conId` = :conId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
@@ -2765,17 +2284,24 @@
          *
          * @param $conId
          * @param $conIdNew
+         * @param $appId
+         * @param $appIdNew
          *
          * @return array|int|Number
          */
-        function copyMember($conId, $conIdNew)
+        function copyMember($conId, $conIdNew, $appId, $appIdNew)
         {
             $Conn = new ConnManager();
-            $arrPar = array('conId'    => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
-                            'conIdNew' => $Conn->UtilCheckNotNullIsNumeric($conIdNew) ? $conIdNew : 0);
+            $arrPar = array('conId'    => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL,
+                            'conIdNew' => $Conn->UtilCheckNotNullIsNumeric($conIdNew) ? $conIdNew : NULL,
+                            'appId'    => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : NULL,
+                            'appIdNew' => $Conn->UtilCheckNotNullIsNumeric($appIdNew) ? $appIdNew : NULL);
             //SQL
-            $sql = ' INSERT INTO `member`(`conId`, `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, `memLV0Status`, `memLV0Msg`, `memLV0Time`, `memLVCKey`, `memLVCName`, `memLVCPositionName`, `memLVCStatus`, `memLVCTime`, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, `memLV1Status`, `memLV1Msg`, `memLV1Time`, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, `memLV2Status`, `memLV2Msg`, `memLV2Time`, `memPhone`, `memNowKey`, `memNowStatus`, `memStatus`)
-                     SELECT :conIdNew, `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, -1, NULL, NULL, \'\', \'\', \'\', -1, NULL, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, -1, NULL, NULL, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, -1, NULL, NULL, `memPhone`, \'\', -1, -1 FROM `member` WHERE `conId` = :conId';
+            $sql = ' INSERT INTO `member`(`conId`, `appId`, `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, `memLV0Status`, `memLV0Msg`, `memLV0Time`, `memLVCKey`, `memLVCName`, `memLVCPositionName`, `memLVCStatus`, `memLVCTime`, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, `memLV1Status`, `memLV1Msg`, `memLV1Time`, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, `memLV2Status`, `memLV2Msg`, `memLV2Time`, `memPhone`, `memNowKey`, `memNowStatus`, `memStatus`)
+                     SELECT '.($Conn->UtilCheckNotNullIsNumeric($conIdNew) ? ':conIdNew' : '`conId`').', '.($Conn->UtilCheckNotNullIsNumeric($appIdNew) ? ':appId' : '`appId`').', `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, -1, NULL, NULL, \'\', \'\', \'\', -1, NULL, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, -1, NULL, NULL, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, -1, NULL, NULL, `memPhone`, \'\', -1, -1 
+                     FROM `member` WHERE 1=1';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($conId) ? ' AND `conId` = :conId' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($appId) ? ' AND `appId` = :appId' : '';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -2873,6 +2399,54 @@
         }
 
         /**
+         * todo:updateMemberByApportionDefault 重置文件相關簽核資料
+         *
+         * @param $appId
+         *
+         * @return array|int
+         */
+        function updateMemberByApportionDefault($appId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0);
+            //SQL
+            $sql = ' UPDATE `member`
+                     SET `memLV0Status` = -1, `memLV0Msg` = NULL, `memLV0Time` = NULL, 
+                         `memLVCStatus` = -1, `memLVCKey` = \'\', `memLVCName` = \'\', `memLVCPositionName` = \'\', `memLVCTime` = NULL, 
+                         `memLV1Status` = -1, `memLV1Msg` = NULL, `memLV1Time` = NULL, 
+                         `memLV2Status` = -1, `memLV2Msg` = NULL, `memLV2Time` = NULL, 
+                         `memNowKey` = \'\', `memNowStatus` = -1, `memStatus` = -1
+                     WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:updateMemberByContractApportionDefault 修改簽核人員資料(當文件費用一起簽時)
+         *
+         * @param $conId
+         * @param $appId
+         *
+         * @return array|int
+         */
+        function updateMemberByContractApportionDefault($conId, $appId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('conId' => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
+                            'appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0);
+            //SQL
+            $sql = ' UPDATE `member`
+                     SET `memLV0Status` = -1, `memLV0Msg` = NULL, `memLV0Time` = NULL, 
+                         `memLVCStatus` = -1, `memLVCKey` = \'\', `memLVCName` = \'\', `memLVCPositionName` = \'\', `memLVCTime` = NULL, 
+                         `memLV1Status` = -1, `memLV1Msg` = NULL, `memLV1Time` = NULL, 
+                         `memLV2Status` = -1, `memLV2Msg` = NULL, `memLV2Time` = NULL, 
+                         `memNowKey` = \'\', `memNowStatus` = -1, `memStatus` = -1
+                     WHERE `conId` = :conId AND `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
          * todo:updateMemberApportionByContract 修改簽核人員資料(當文件費用一起簽時)
          *
          * @param $conId
@@ -2880,7 +2454,7 @@
          *
          * @return array|int
          */
-        function updateMemberApportionByContract($conId, $appId)
+        function updateMemberAppIdByConId($conId, $appId)
         {
             $Conn = new ConnManager();
             $arrPar = array('conId' => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
@@ -3392,6 +2966,27 @@
         }
 
         /**
+         * todo:queryApportionByInh 查看單一費用
+         *
+         * @param $rows
+         * @param $appInh
+         *
+         * @return mixed
+         */
+        function queryApportionByInh($rows, $appInh)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('appInh' => $Conn->UtilCheckNotNullIsNumeric($appInh) ? $appInh : -1);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `apportion`
+                     WHERE `appInh` = :appInh';
+            $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+
+        /**
          * todo:queryApportionLastByContract 查看計畫書相關最後單一費用
          *
          * @param $rows
@@ -3461,6 +3056,7 @@
          * todo:copyApportion 複製費用
          *
          * @param $appId
+         * @param $conId
          * @param $appYear
          * @param $appVer
          * @param $appMark
@@ -3468,17 +3064,18 @@
          *
          * @return array|int|Number
          */
-        function copyApportion($appId, $appYear, $appVer, $appMark, $appStatus)
+        function copyApportion($appId, $conId, $appYear, $appVer, $appMark, $appStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('appId'     => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0,
+                            'conId'   => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL,
                             'appYear'   => $Conn->UtilCheckNotNull($appYear) ? $appYear : '',
                             'appVer'    => $Conn->UtilCheckNotNull($appVer) ? $appVer : 'A',
                             'appMark'   => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : 0,
                             'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : 0);
             //SQL
             $sql = ' INSERT INTO `apportion`(`conId`, `appYear`, `appVer`, `appMark`, `appStatus`, `appInh`, `appUpdateTime`, `appCreateTime`)
-                     SELECT `conId`, '.($Conn->UtilCheckNotNull($appYear) ? ' :appYear' : ' `appYear`').', :appVer, :appMark, :appStatus, 0, NOW(), NOW() FROM `apportion` WHERE `appId` = :appId';
+                     SELECT '.($Conn->UtilCheckNotNullIsNumeric($conId) ?':conId' : `conId`).', '.($Conn->UtilCheckNotNull($appYear) ? ' :appYear' : ' `appYear`').', :appVer, :appMark, :appStatus, 0, NOW(), NOW() FROM `apportion` WHERE `appId` = :appId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -3500,14 +3097,14 @@
         function updateApportionByID($appId, $appDate, $appStatus)
         {
             $Conn = new ConnManager();
-            $arrPar = array('appId'      => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : '',
-                            'appDate'    => $Conn->UtilCheckNotNullIsDate($appDate) ? $appDate : NULL,
-                            'appStatus'  => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : NULL);
+            $arrPar = array('appId'     => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : '',
+                            'appDate'   => $Conn->UtilCheckNotNullIsDate($appDate) ? $appDate : NULL,
+                            'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : NULL);
             //SQL
             $sql = ' UPDATE `apportion`
                      SET `appDate` = '.($Conn->UtilCheckNotNullIsDate($appDate) ? ':appDate' : 'NULL').', `appUpdateTime` = NOW()';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($appStatus) ? ', `appStatus` = :appStatus' : '';
-            $sql .= '  WHERE `conId` = :conId';
+            $sql .= '  WHERE `appId` = :appId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
         }
@@ -3535,18 +3132,21 @@
          * todo:updateApportionStatusByID 修改費用狀態
          *
          * @param $appStatus
+         * @param $appDate
          * @param $appId
          *
          * @return array|int
          */
-        function updateApportionStatusByID($appId, $appStatus)
+        function updateApportionStatusByID($appId, $appStatus, $appDate)
         {
             $Conn = new ConnManager();
             $arrPar = array('appId'     => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : '',
+                            'appDate'   => $Conn->UtilCheckNotNullIsDate($appDate) ? $appDate : NULL,
                             'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : 0);
             //SQL
             $sql = ' UPDATE `apportion`
                      SET `appStatus` = :appStatus, `appUpdateTime` = NOW()';
+            $sql .= $Conn->UtilCheckNotNullIsDate($appDate) ? ' , `appDate` = :appDate' : '';
             $sql .= ' WHERE `appId` = :appId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
@@ -3734,6 +3334,24 @@
         }
 
         /**
+         * todo:deleteExesByApportionId 刪除費用相關分攤明細
+         *
+         * @param $apportionId
+         *
+         * @return mixed
+         */
+        function deleteExesByApportionId($apportionId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('apportionId' => $Conn->UtilCheckNotNullIsNumeric($apportionId) ? $apportionId : 0);
+            //SQL
+            $sql = ' DELETE FROM `exes`
+                     WHERE `appId` = :apportionId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
          * todo:insertExes 新增分攤明細
          *
          * @param $appId
@@ -3792,6 +3410,31 @@
             //SQL
             $sql = ' INSERT INTO `exes`(`appId`, `iteId`, `exeTitle`, `exePM`, `exeSP`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`, `exeStatus`)
                      SELECT :appIdNew, `iteId`, `exeTitle`, `exePM`, `exeSP`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`, `exeStatus` FROM `exes` WHERE `appId` = :appId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+        /**
+         * todo:copyExesByID 複製分攤明細
+         *
+         * @param $exeId
+         * @param $appIdNew
+         *
+         * @return array|int|Number
+         */
+        function copyExesByID($exeId, $appIdNew)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('exeId'    => $Conn->UtilCheckNotNullIsNumeric($exeId) ? $exeId : 0,
+                            'appIdNew' => $Conn->UtilCheckNotNullIsNumeric($appIdNew) ? $appIdNew : 0);
+            //SQL
+            $sql = ' INSERT INTO `exes`(`appId`, `iteId`, `exeTitle`, `exePM`, `exeSP`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`, `exeStatus`)
+                     SELECT :appIdNew, `iteId`, `exeTitle`, `exePM`, `exeSP`, `exeCost`, `exeCreateMonth`, `exeMonth`, `exeStartYear`, `exeNote`, `exeStatus` FROM `exes` WHERE `exeId` = :exeId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -3917,6 +3560,32 @@
         }
 
         /**
+         * todo:copyAnnualByID 複製各年度分攤費用
+         *
+         * @param $annId
+         * @param $exeIdNew
+         *
+         * @return array|int|Number
+         */
+        function copyAnnualByID($annId, $exeIdNew)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('annId'    => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : 0,
+                            'exeIdNew' => $Conn->UtilCheckNotNullIsNumeric($exeIdNew) ? $exeIdNew : 0);
+            //SQL
+            $sql = ' INSERT INTO `annual`(`exeId`, `annYear`, `annStartMonth`, `annEndMonth`, `annMonth`, `annCost`, `annStatus`)
+                     SELECT :exeIdNew, `annYear`, `annStartMonth`, `annEndMonth`, `annMonth`, `annCost`, `annStatus` FROM `annual` WHERE `annId` = :annId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            if ($aryExecute) {
+                return $Conn->getLastId();
+            }
+            else {
+                return $aryExecute;
+            }
+        }
+
+
+        /**
          * todo:updateAnnual 修改各年度分攤費用
          *
          * @param $annId
@@ -3925,10 +3594,11 @@
          * @param $annEndMonth
          * @param $annMonth
          * @param $annCost
+         * @param $annStatus
          *
          * @return array|int
          */
-        function updateAnnual($annId, $annYear, $annStartMonth, $annEndMonth, $annMonth, $annCost)
+        function updateAnnual($annId, $annYear, $annStartMonth, $annEndMonth, $annMonth, $annCost, $annStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('annId'         => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : 0,
@@ -3936,11 +3606,13 @@
                             'annStartMonth' => $Conn->UtilCheckNotNull($annStartMonth) ? $annStartMonth : '',
                             'annEndMonth'   => $Conn->UtilCheckNotNull($annEndMonth) ? $annEndMonth : '',
                             'annMonth'      => $Conn->UtilCheckNotNullIsNumeric($annMonth) ? $annMonth : 0,
-                            'annCost'       => $Conn->UtilCheckNotNullIsNumeric($annCost) ? $annCost : 0);
+                            'annCost'       => $Conn->UtilCheckNotNullIsNumeric($annCost) ? $annCost : 0,
+                            'annStatus'     => $Conn->UtilCheckNotNullIsNumeric($annStatus) ? $annStatus : NULL);
             //SQL
             $sql = ' UPDATE `annual`
-                     SET `annYear` = :annYear, `annStartMonth` = :annStartMonth, `annEndMonth` = :annEndMonth, `annMonth` = :annMonth, `annCost` = :annCost, `annStatus` = :annStatus
-                     WHERE `annId` = :annId';
+                     SET `annYear` = :annYear, `annStartMonth` = :annStartMonth, `annEndMonth` = :annEndMonth, `annMonth` = :annMonth, `annCost` = :annCost';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($annStatus) ? ', `annStatus` = :annStatus' : '';
+            $sql .= ' WHERE `annId` = :annId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
         }
@@ -3988,6 +3660,25 @@
                 }
             }
             $sql .= $sql_annId;
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
+         * todo:deleteAnnualByApportionId 刪除費用相關各年度分攤費用
+         *
+         * @param $apportionId
+         *
+         * @return mixed
+         */
+        function deleteAnnualByApportionId($apportionId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('apportionId' => $Conn->UtilCheckNotNullIsNumeric($apportionId) ? $apportionId : 0);
+            //SQL
+            $sql = ' DELETE A FROM `annual` A
+                     LEFT JOIN `exes` E ON E.`exeId` = A.`exeId`
+                     WHERE E.`appId` = :apportionId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             return $aryExecute;
         }
@@ -4086,6 +3777,26 @@
         }
 
         /**
+         * todo:deleteSubsidiaryByApportion 刪除費用相關各公司分攤費用
+         *
+         * @param $apportionId
+         *
+         * @return mixed
+         */
+        function deleteSubsidiaryByApportionId($apportionId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('apportionId' => $Conn->UtilCheckNotNullIsNumeric($apportionId) ? $apportionId : 0);
+            //SQL
+            $sql = ' DELETE S FROM `subsidiary` S
+                     LEFT JOIN `annual` A ON A.`annId` = S.`annId`
+                     LEFT JOIN `exes` E ON E.`exeId` = A.`exeId`
+                     WHERE E.`appId` = :apportionId';
+            $aryExecute = $Conn->pramExecute($sql, $arrPar);
+            return $aryExecute;
+        }
+
+        /**
          * todo:insertSubsidiary 新增各公司分攤費用
          *
          * @param $annId
@@ -4117,21 +3828,21 @@
         }
 
         /**
-         * todo:copySubsidiary 複製各公司分攤費用
+         * todo:copySubsidiaryByID 複製各公司分攤費用
          *
-         * @param $annId
+         * @param $subId
          * @param $annIdNew
          *
          * @return array|int|Number
          */
-        function copySubsidiary($annId, $annIdNew)
+        function copySubsidiaryByID($subId, $annIdNew)
         {
             $Conn = new ConnManager();
-            $arrPar = array('annId'    => $Conn->UtilCheckNotNullIsNumeric($annId) ? $annId : 0,
+            $arrPar = array('subId'    => $Conn->UtilCheckNotNullIsNumeric($subId) ? $subId : 0,
                             'annIdNew' => $Conn->UtilCheckNotNullIsNumeric($annIdNew) ? $annIdNew : 0);
             //SQL
             $sql = ' INSERT INTO `subsidiary`(`annId`, `comCode`, `subAmount`, `subPercent`, `subCost`)
-                     SELECT :annIdNew, `comCode`, `subAmount`, `subPercent`, `subCost` FROM `subsidiary` WHERE `annId` = :annId';
+                     SELECT :annIdNew, `comCode`, `subAmount`, `subPercent`, `subCost` FROM `subsidiary` WHERE `subId` = :subId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -4226,7 +3937,7 @@
          * @param $comId
          * @param $comCode
          * @param $conSerial
-         * @param $conStatus
+         * @param $status
          * @param $perKey
          * @param $perBu1Code
          * @param $memOwner 1:擁有者
@@ -4234,22 +3945,22 @@
          * @param $memView  1:待檢視
          * @param $memSign  1:待簽
          * @param $memOver  1:已簽
-         * @param $conStatusNot
-         * @param $conMark  1:棄用
-         * @param $conInh   1:被繼承
+         * @param $statusNot
+         * @param $mark  1:棄用
+         * @param $inh   1:被繼承
          * @param $anum
          * @param $num
          *
          * @return mixed
          */
-        function querySearchForAction($keyword, $temId, $comId, $comCode, $conSerial, $conStatus, $perKey, $perBu1Code, $memOwner, $memDraft, $memView, $memSign, $memOver, $conStatusNot, $conMark, $conInh, $anum, $num)
+        function querySearchForAction($keyword, $temId, $comId, $comCode, $conSerial, $status, $perKey, $perBu1Code, $memOwner, $memDraft, $memView, $memSign, $memOver, $statusNot, $mark, $inh, $anum, $num)
         {
             $Conn = new ConnManager();
             $arrPar = array('keyword'      => $Conn->UtilCheckNotNull($keyword) ? $Conn->getRegexpString($keyword, '|') : NULL,
                             'conSerial'    => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'comId'        => $Conn->UtilCheckNotNullIsNumeric($comId) ? $comId : NULL,
                             'comCode'      => $Conn->UtilCheckNotNull($comCode) ? $comCode : NULL,
-                            'conStatus'    => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : NULL,
+                            'status'    => $Conn->UtilCheckNotNullIsNumeric($status) ? $status : NULL,
                             'perKey'       => $Conn->UtilCheckNotNull($perKey) ? $perKey : '',
                             'perBu1Code'   => $Conn->UtilCheckNotNull($perBu1Code) ? $perBu1Code : '',
                             'temId'        => $Conn->UtilCheckNotNullIsNumeric($temId) ? $temId : NULL,
@@ -4258,24 +3969,36 @@
                             'memView'      => $Conn->UtilCheckNotNullIsNumeric($memView) ? $memView : NULL,
                             'memSign'      => $Conn->UtilCheckNotNullIsNumeric($memSign) ? $memSign : NULL,
                             'memOver'      => $Conn->UtilCheckNotNullIsNumeric($memOver) ? $memOver : NULL,
-                            'conStatusNot' => $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? $conStatusNot : NULL,
-                            'conMark'      => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : NULL,
-                            'conInh'       => $Conn->UtilCheckNotNullIsNumeric($conInh) ? $conInh : NULL
+                            'statusNot' => $Conn->UtilCheckNotNullIsNumeric($statusNot) ? $statusNot : NULL,
+                            'mark'      => $Conn->UtilCheckNotNullIsNumeric($mark) ? $mark : NULL,
+                            'inh'       => $Conn->UtilCheckNotNullIsNumeric($inh) ? $inh : NULL
             );
             //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS T.`temId`, T.`temTitle`, C.`conId`, C.`conTitle`, C.`conStatus`, C.`conSerial`, C.`conVer`, C.`conCreateTime`, C.`comCode`, C.`perKey`, C.`conType`, F.`frmTitle`, P.`perBu1`, P.`perBu2`, P.`perBu3`, CM.`comTitle`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver` FROM `contract` C
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS T.`temId`, T.`temTitle`, T.`temExes`, C.*, F.`frmTitle`, P.`perBu1`, P.`perBu2`, P.`perBu3`, CM.`comTitle`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver` 
+                     FROM (
+                        SELECT * FROM (
+                            SELECT 0 AS `Type`, C.`conId`, C.`conApp`, C.`appId`, C.`conTitle`, C.`conType`, A.`appType`, C.`temId`, C.`perKey`, C.`comCode`, C.`frmId`, C.`conSerial`, `C`.`conVer`, A.`appYear`, A.`appVer`, C.`conMark`, A.`appMark`, C.`conMark` AS `Mark`, C.`conInh`, A.`appInh`, C.`conInh` AS `Inh`, C.`conStatus`, A.`appStatus`, C.`conStatus` AS `Status`, C.`conDate`, A.`appDate`, C.`conDate` AS `Date`, C.`conCreateTime`, A.`appCreateTime` FROM `contract` C
+                            LEFT JOIN `apportion` A ON C.`conApp` = `A`.`appId`
+                        ) C
+                        UNION
+                        SELECT * FROM (
+                            SELECT 1 AS `Type`, A.`conId`, 0, A.`appId`, C.`conTitle`, C.`conType`, A.`appType`, C.`temId`, A.`perKey`, A.`comCode`, C.`frmId`, C.`conSerial`, `C`.`conVer`, A.`appYear`, A.`appVer`, C.`conMark`, A.`appMark`, A.`appMark` AS `Mark`, C.`conInh`, A.`appInh`, A.`appInh` AS `Inh`, C.`conStatus`, A.`appStatus`, A.`appStatus` AS `Status`, C.`conDate`, A.`appDate`, A.`appDate` AS `Date`, C.`conCreateTime`, A.`appCreateTime` FROM `apportion` A
+                            LEFT JOIN `contract` C ON C.`conId` = A.`conId`
+                            WHERE C.`conApp` != A.`appId`
+                        ) A
+                     ) C
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      LEFT JOIN `company` CM ON CM.`comCode` = C.`comCode`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
                      LEFT JOIN `frame` F ON F.`frmId` = C.`frmId`
                      LEFT JOIN (
-                                SELECT M.`conId`, COUNT(*) AS `CT`, 
+                                SELECT M.`conId`, M.`appId`, COUNT(*) AS `CT`, 
                                     CASE WHEN SUM(`memOwner`) > 0 THEN 1 ELSE 0 END AS `memOwner`,
                                     CASE WHEN SUM(`memDraft`) > 0 THEN 1 ELSE 0 END AS `memDraft`,
                                     CASE WHEN SUM(`memView`) > 0 THEN 1 ELSE 0 END AS `memView`,
                                     CASE WHEN SUM(`memSign`) > 0 THEN 1 ELSE 0 END AS `memSign`,
                                     CASE WHEN SUM(`memOver`) > 0 THEN 1 ELSE 0 END AS `memOver` FROM (
-                                        SELECT M.`conId`, 
+                                        SELECT M.`conId`, M.`appId`, 
                                             CASE WHEN (M.`memType` = 0 AND M.`memLV0Key` = :perKey) THEN 1 ELSE 0 END AS `memOwner`,
                                             CASE WHEN (M.`memType` = 0 AND M.`memLV0Status` = -1) THEN 1 ELSE 0 END AS `memDraft`,
                                             CASE WHEN (M.`memType` = 0 AND M.`memLVCStatus` = 0 AND CT.`perKey` = :perKey) OR 
@@ -4298,28 +4021,30 @@
                                                 (M.`memLV2Key` = :perKey AND M.`memLV2Status` NOT IN (-1, 2) AND M.`memLV1Status` = 3)
                                             )
                                         ) M
-                                GROUP BY M.`conId`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver`
-                                ) M ON M.`conId` = C.`conId`
+                                GROUP BY M.`conId`, M.`appId`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver`
+                                ) M ON M.`conId` = C.`conId` AND M.`appId` = C.`appId`
                      WHERE 1 = 1';
             $sql .= $Conn->UtilCheckNotNull($keyword) ? ' AND (C.`conTitle` REGEXP :keyword OR CONCAT(C.`conSerial`, C.`conVer`) REGEXP :keyword)' : '';
             $sql .= $Conn->UtilCheckNotNull($conSerial) ? ' AND C.`conSerial` = :conSerial' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($comId) ? ' AND CM.`comId` = :comId' : '';
             $sql .= $Conn->UtilCheckNotNull($comCode) ? ' AND C.`comCode` = :comCode' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatus) ? ' AND C.`conStatus` = :conStatus' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($status) ? ' AND C.`Status` = :status' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($temId) ? ' AND C.`temId` = :temId' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($conStatusNot) ? ' AND C.`conStatus` != :conStatusNot' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($conMark) ? ' AND C.`conMark` = :conMark' : '';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($conInh) ? ' AND C.`conInh` = :conInh' : '';
-            $sql .= ' AND ((M.`CT` > 0 AND C.`conStatus` IN (0, 1, 3)) OR (CM.`comCode` = :perBu1Code AND C.`perKey` = :perKey AND C.`conStatus` IN (0, 2, 4)))';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($statusNot) ? ' AND C.`Status` != :statusNot' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($mark) ? ' AND C.`Mark` = :mark' : '';
+            $sql .= $Conn->UtilCheckNotNullIsNumeric($inh) ? ' AND C.`Inh` = :inh' : '';
+            $sql .= ' AND ((M.`CT` > 0 AND C.`Status` IN (0, 1, 3)) OR (M.`CT` IS NULL AND C.`perKey` = :perKey AND C.`Status` >= 0))';
+            $sql .= ' AND (1=2';
             if ($Conn->UtilCheckNotNullIsNumeric($memOwner) || $Conn->UtilCheckNotNullIsNumeric($memDraft) || $Conn->UtilCheckNotNullIsNumeric($memView) || $Conn->UtilCheckNotNullIsNumeric($memSign) || $Conn->UtilCheckNotNullIsNumeric($memOver)) {
-                $sql .= ' AND (1=2';
                 $sql .= $Conn->UtilCheckNotNullIsNumeric($memOwner) ? ' OR M.`memOwner` = :memOwner' : '';
                 $sql .= $Conn->UtilCheckNotNullIsNumeric($memDraft) ? ' OR M.`memDraft` = :memDraft' : '';
                 $sql .= $Conn->UtilCheckNotNullIsNumeric($memView) ? ' OR M.`memView` = :memView' : '';
                 $sql .= $Conn->UtilCheckNotNullIsNumeric($memSign) ? ' OR M.`memSign` = :memSign' : '';
                 $sql .= $Conn->UtilCheckNotNullIsNumeric($memOver) ? ' OR M.`memOver` = :memOver' : '';
-                $sql .= ' )';
             }
+            $sql.= ' OR C.`perKey` = :perKey';
+            $sql .= ' )';
+            $sql.= ' AND C.`Status` != -1';
             $sql .= $Conn->getLimit($anum, $num);
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();

@@ -43,21 +43,18 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.35174417">
+    <splitter split-orientation="horizontal" split-proportion="0.25345957">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="224">
-                  <caret line="1118" column="124" selection-start-line="1118" selection-start-column="124" selection-end-line="1118" selection-end-column="124" />
+                <state relative-caret-position="424">
+                  <caret line="538" column="358" selection-start-line="538" selection-start-column="358" selection-end-line="538" selection-end-column="358" />
                   <folding>
-                    <element signature="e#34538#35518#0#PHP" />
-                    <element signature="e#35527#36960#0#PHP" />
-                    <element signature="e#36969#39598#0#PHP" />
-                    <element signature="e#39607#40406#0#PHP" />
-                    <element signature="e#40415#46906#0#PHP" />
-                    <element signature="e#46915#47861#0#PHP" />
+                    <element signature="e#36011#37008#0#PHP" />
+                    <element signature="e#37017#38458#0#PHP" />
+                    <element signature="e#38467#41104#0#PHP" />
                   </folding>
                 </state>
               </provider>
@@ -66,20 +63,18 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="363">
-                  <caret line="3350" column="34" selection-start-line="3350" selection-start-column="34" selection-end-line="3350" selection-end-column="34" />
+                <state relative-caret-position="531">
+                  <caret line="4044" column="46" selection-start-line="4044" selection-start-column="46" selection-end-line="4044" selection-end-column="46" />
                   <folding>
                     <element signature="e#92#256#0#PHP" />
-                    <element signature="e#53858#54498#0#PHP" />
-                    <element signature="e#54507#62717#0#PHP" />
-                    <element signature="e#90757#90909#0#PHP" />
-                    <element signature="e#90918#91708#0#PHP" />
-                    <element signature="e#96985#97363#0#PHP" />
-                    <element signature="e#97372#99312#0#PHP" />
+                    <element signature="e#54498#62708#0#PHP" />
+                    <element signature="e#97128#97506#0#PHP" />
+                    <element signature="e#97515#99455#0#PHP" />
+                    <element signature="e#134996#135875#0#PHP" />
                   </folding>
                 </state>
               </provider>
@@ -98,23 +93,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tooltip</find>
-      <find>dropdown</find>
-      <find>dropdown(</find>
-      <find>'template'</find>
-      <find>`exes`</find>
-      <find>$keyword</find>
-      <find>contact</find>
-      <find>contract</find>
-      <find>'contract</find>
-      <find>deleteContractLogByContract</find>
-      <find>`col</find>
-      <find>queryContractForAction</find>
-      <find>'contractMember'</find>
-      <find>'memberStatus'</find>
-      <find>conLogNext</find>
-      <find>conLog</find>
-      <find>die</find>
       <find>contract'</find>
       <find>signMember</find>
       <find>'contract'</find>
@@ -125,12 +103,28 @@
       <find>'apportionI</find>
       <find>updateContractM</find>
       <find>'apportion'</find>
-      <find>'apportion</find>
       <find>apportion</find>
       <find>'contrac</find>
+      <find>contractId</find>
+      <find>'apportion</find>
+      <find>deleteExe</find>
+      <find>'appo</find>
+      <find>queryAnn</find>
+      <find>insertSub</find>
+      <find>queryApp</find>
+      <find>copyAnn</find>
+      <find>signDefault</find>
+      <find>contractDefault</find>
+      <find>apportionStat</find>
+      <find>signStatus</find>
+      <find>col</find>
+      <find>$log['col</find>
+      <find>deleteA</find>
+      <find>Lock</find>
+      <find>'contract</find>
+      <find>Action</find>
     </findStrings>
     <replaceStrings>
-      <replace>$ite[</replace>
       <replace>&quot;,&quot;</replace>
       <replace>'],</replace>
       <replace>perKey</replace>
@@ -160,6 +154,7 @@
       <replace>memberData</replace>
       <replace>insertSignLog</replace>
       <replace>signLog</replace>
+      <replace>$log['sgl</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/Cathay-maindropdown</dir>
@@ -223,7 +218,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -259,6 +253,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -328,12 +323,13 @@
       <workItem from="1697965176657" duration="17801000" />
       <workItem from="1698216437347" duration="150557000" />
       <workItem from="1701968046256" duration="15024000" />
-      <workItem from="1702292302046" duration="4931000" />
+      <workItem from="1702292302046" duration="16527000" />
+      <workItem from="1702444008329" duration="14781000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="470468000" />
+    <option name="totallyTimeSpent" value="496845000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -348,7 +344,7 @@
     <frame x="0" y="25" width="1672" height="948" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15582822" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15766871" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -571,31 +567,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="1118" column="124" selection-start-line="1118" selection-start-column="124" selection-end-line="1118" selection-end-column="124" />
+        <state relative-caret-position="424">
+          <caret line="538" column="358" selection-start-line="538" selection-start-column="358" selection-end-line="538" selection-end-column="358" />
           <folding>
-            <element signature="e#34538#35518#0#PHP" />
-            <element signature="e#35527#36960#0#PHP" />
-            <element signature="e#36969#39598#0#PHP" />
-            <element signature="e#39607#40406#0#PHP" />
-            <element signature="e#40415#46906#0#PHP" />
-            <element signature="e#46915#47861#0#PHP" />
+            <element signature="e#36011#37008#0#PHP" />
+            <element signature="e#37017#38458#0#PHP" />
+            <element signature="e#38467#41104#0#PHP" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="3350" column="34" selection-start-line="3350" selection-start-column="34" selection-end-line="3350" selection-end-column="34" />
+        <state relative-caret-position="531">
+          <caret line="4044" column="46" selection-start-line="4044" selection-start-column="46" selection-end-line="4044" selection-end-column="46" />
           <folding>
             <element signature="e#92#256#0#PHP" />
-            <element signature="e#53858#54498#0#PHP" />
-            <element signature="e#54507#62717#0#PHP" />
-            <element signature="e#90757#90909#0#PHP" />
-            <element signature="e#90918#91708#0#PHP" />
-            <element signature="e#96985#97363#0#PHP" />
-            <element signature="e#97372#99312#0#PHP" />
+            <element signature="e#54498#62708#0#PHP" />
+            <element signature="e#97128#97506#0#PHP" />
+            <element signature="e#97515#99455#0#PHP" />
+            <element signature="e#134996#135875#0#PHP" />
           </folding>
         </state>
       </provider>
