@@ -1353,6 +1353,60 @@
                     break;
             }
             break;
+        case 'inventory':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $inventory_list = $ContractMgr->queryInventory(NULL);
+                    $return_data['data'] = replaceArr($inventory_list['data']);
+                    break;
+            }
+            break;
+        case 'integrate':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    $now_year = isset($_GET['year']) ? $_GET['year'] : date('Y', time());
+                    $start_year = $now_year;
+                    $end_year = $now_year;
+                    $integrate_list = NULL;
+                    $company_list = $ContractMgr->queryCompany('', '', '');
+                    $og_frame_list = $ContractMgr->queryFrame('', '', '');
+                    for ($i = 0; $i < $company_list['count']; $i++) {
+                        $frame_list = $og_frame_list;
+                        for ($j = 0; $j < $frame_list['count']; $j++) {
+                            $exes_list = $ContractMgr->queryIntegrateExes('', $company_list['data'][$i]['comCode'], $frame_list['data'][$j]['frmId'], 3, $_GET['year']);
+                            if (0 < $exes_list['count']) {
+                                for ($k = 0; $k < $exes_list['count']; $k++) {
+                                    $annual_list = $ContractMgr->queryIntegrateAnnualYear($exes_list['data'][$k]['exeId']);
+                                    if (0 < $annual_list['count']) {
+                                        for ($l = 0; $l < $annual_list['count']; $l++) {
+                                            if ($start_year > $annual_list['data'][$l]['annYear']) {
+                                                $start_year = $annual_list['data'][$l]['annYear'];
+                                            }
+                                            if ($end_year < $annual_list['data'][$l]['annYear']) {
+                                                $end_year = $annual_list['data'][$l]['annYear'];
+                                            }
+                                        }
+                                    }
+                                    $annual_sum = $ContractMgr->queryIntegrateAnnualSum($exes_list['data'][$k]['exeId']);
+                                    $subsidiary_sum = $ContractMgr->queryIntegrateSubsidiarySum($exes_list['data'][$k]['exeId'], $now_year);
+                                    $exes_list['data'][$k]['annual'] = $annual_sum['data'];
+                                    $exes_list['data'][$k]['subsidiary'] = $subsidiary_sum['data'];
+                                }
+                            }
+                            $frame_list['data'][$j]['exes'] = $exes_list['data'];
+                        }
+                        $company_list['data'][$i]['frame'] = $frame_list['data'];
+                    }
+                    $integrate_list['company'] = $company_list['data'];
+                    $year_list = NULL;
+                    for ($i = $start_year; $i <= $end_year; $i++) {
+                        $year_list[] = (int)$i;
+                    }
+                    $integrate_list['years'] = $year_list;
+                    $return_data['data'] = replaceArr($integrate_list);
+                    break;
+            }
+            break;
 
     }
     die(json_encode($return_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
