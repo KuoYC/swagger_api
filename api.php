@@ -495,12 +495,7 @@
         case 'search'://todo: contract 文件操作
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':// todo: contract GET[conId|{temId|comId|null}] 取得[單一|全部]文件
-                    if (isset($_GET['action']) && '1' == $_GET['action']) {
-                        $contract_list = $ContractMgr->queryContractForAction($_GET['keyword'], $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['conSerial'], $_GET['conStatus'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'], $_GET['conStatusNot'], $_GET['conMark'], $_GET['conInh'], NULL, NULL);
-                    }
-                    else {
-                        $contract_list = $ContractMgr->queryContract(NULL, $_GET['keyword'], $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['perKey'], $_GET['conSerial'], $_GET['conStatus'], NULL, NULL);
-                    }
+                    $contract_list = $ContractMgr->querySearch($_GET['contract_search'], $_GET['apportion_search'], $_GET['keyword'], $_GET['temId'], $_GET['comId'], $_GET['comCode'], $_GET['frmId'], $_GET['conSerial'], $_GET['status'], $_GET['perKey'], $_GET['perBu1Code'], $_GET['perBu2Code'], $_GET['perBu3Code'], $_GET['memOwner'], $_GET['memDraft'], $_GET['memView'], $_GET['memSign'], $_GET['memOver'], $_GET['conStatusNot'], $_GET['conMark'], $_GET['conInh'], NULL, NULL);
                     if ($contract_list['count'] > 0) {
                         for ($i = 0; $i < $contract_list['count']; $i++) {
                             $contract_list['data'][$i]['conValue'] = htmlspecialchars_decode($contract_list['data'][$i]['conValue']);

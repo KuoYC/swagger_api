@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e59db8fe-0a60-4119-a6ff-764f1167db19.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e59db8fe-0a60-4119-a6ff-764f1167db19.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ihr.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vip.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/class/ContractManager.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/class/ContractManager.class.php" afterDir="false" />
@@ -44,17 +46,14 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.56108266">
+    <splitter split-orientation="horizontal" split-proportion="0.103877105">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="250">
-                  <caret line="1375" column="66" selection-start-line="1375" selection-start-column="66" selection-end-line="1375" selection-end-column="66" />
-                  <folding>
-                    <element signature="e#26650#36381#0#PHP" />
-                  </folding>
+                <state relative-caret-position="498">
+                  <caret line="533" column="72" selection-start-line="533" selection-start-column="72" selection-end-line="533" selection-end-column="72" />
                 </state>
               </provider>
             </entry>
@@ -63,16 +62,52 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="132">
-                  <caret line="4171" column="17" selection-start-line="4171" selection-start-column="17" selection-end-line="4171" selection-end-column="17" />
+                <state relative-caret-position="46">
+                  <caret line="4129" column="32" selection-start-line="4129" selection-start-column="32" selection-end-line="4129" selection-end-column="32" />
                   <folding>
                     <element signature="e#92#256#0#PHP" />
                     <element signature="e#54214#56473#0#PHP" />
-                    <element signature="e#54498#62708#0#PHP" />
+                    <element signature="e#53849#54489#0#PHP" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/t.json">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1050">
+                  <caret line="50" column="1" selection-end-line="51" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/vip.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="395">
+                  <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/.htaccess">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="378">
+                  <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/ihr.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="231">
+                  <caret line="11" column="31" lean-forward="true" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
                 </state>
               </provider>
             </entry>
@@ -90,8 +125,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>'contra</find>
-      <find>updateMember</find>
       <find>`exes</find>
       <find>'contractI</find>
       <find>'apportionI</find>
@@ -117,12 +150,13 @@
       <find>Lock</find>
       <find>'contract</find>
       <find>Action</find>
-      <find>'contract'</find>
       <find>queryExes</find>
       <find>querySubsidiary</find>
+      <find>querySearch</find>
+      <find>'contract'</find>
+      <find>，</find>
     </findStrings>
     <replaceStrings>
-      <replace>&quot;,&quot;</replace>
       <replace>'],</replace>
       <replace>perKey</replace>
       <replace>分攤比例方式</replace>
@@ -152,6 +186,7 @@
       <replace>insertSignLog</replace>
       <replace>signLog</replace>
       <replace>$log['sgl</replace>
+      <replace>,</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/Cathay-maindropdown</dir>
@@ -187,16 +222,19 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/Cathay-main/app/payment-share.html" />
         <option value="$PROJECT_DIR$/Cathay-main/app/payment-share-2.html" />
-        <option value="$PROJECT_DIR$/.htaccess" />
         <option value="$PROJECT_DIR$/include/config/Config.php" />
-        <option value="$PROJECT_DIR$/t.txt" />
         <option value="$PROJECT_DIR$/Cathay-main/app/document-detail.html" />
         <option value="$PROJECT_DIR$/include/class/ConnManager.class.php" />
         <option value="$PROJECT_DIR$/cost.html" />
         <option value="$PROJECT_DIR$/reAPI.php" />
         <option value="$PROJECT_DIR$/include/ContractManager.class.php" />
-        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
         <option value="$PROJECT_DIR$/api.php" />
+        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
+        <option value="$PROJECT_DIR$/t.txt" />
+        <option value="$PROJECT_DIR$/t.json" />
+        <option value="$PROJECT_DIR$/.htaccess" />
+        <option value="$PROJECT_DIR$/ihr.php" />
+        <option value="$PROJECT_DIR$/vip.php" />
       </list>
     </option>
   </component>
@@ -323,12 +361,12 @@
       <workItem from="1702292302046" duration="16527000" />
       <workItem from="1702444008329" duration="17932000" />
       <workItem from="1702717691513" duration="16000" />
-      <workItem from="1702967895850" duration="12914000" />
+      <workItem from="1702967895850" duration="24982000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="512926000" />
+    <option name="totallyTimeSpent" value="524994000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -343,7 +381,7 @@
     <frame x="0" y="25" width="1672" height="948" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1613497" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1613497" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -423,13 +461,6 @@
     <entry file="file://$PROJECT_DIR$/test_r.php" />
     <entry file="file://$PROJECT_DIR$/test_sp.php" />
     <entry file="file://$PROJECT_DIR$/.haccess" />
-    <entry file="file://$PROJECT_DIR$/api.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/table.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1134">
@@ -481,7 +512,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/t.txt" />
     <entry file="file://$PROJECT_DIR$/Cathay-main/app/document-detail.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
@@ -542,13 +572,6 @@
     <entry file="file://$PROJECT_DIR$/include/config/default/define_path.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/config/Config.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
@@ -566,23 +589,55 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="1375" column="66" selection-start-line="1375" selection-start-column="66" selection-end-line="1375" selection-end-column="66" />
-          <folding>
-            <element signature="e#26650#36381#0#PHP" />
-          </folding>
+        <state relative-caret-position="498">
+          <caret line="533" column="72" selection-start-line="533" selection-start-column="72" selection-end-line="533" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="4171" column="17" selection-start-line="4171" selection-start-column="17" selection-end-line="4171" selection-end-column="17" />
+        <state relative-caret-position="46">
+          <caret line="4129" column="32" selection-start-line="4129" selection-start-column="32" selection-end-line="4129" selection-end-column="32" />
           <folding>
             <element signature="e#92#256#0#PHP" />
             <element signature="e#54214#56473#0#PHP" />
-            <element signature="e#54498#62708#0#PHP" />
+            <element signature="e#53849#54489#0#PHP" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/t.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1050">
+          <caret line="50" column="1" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ihr.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="11" column="31" lean-forward="true" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vip.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
         </state>
       </provider>
     </entry>
