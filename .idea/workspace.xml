@@ -5,10 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ihr.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vip.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/class/ContractManager.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/class/ContractManager.class.php" afterDir="false" />
     </list>
@@ -46,14 +42,14 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.103877105">
+    <splitter split-orientation="horizontal" split-proportion="0.5596196">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="498">
-                  <caret line="533" column="72" selection-start-line="533" selection-start-column="72" selection-end-line="533" selection-end-column="72" />
+                <state relative-caret-position="311">
+                  <caret line="473" column="21" lean-forward="true" selection-start-line="473" selection-start-column="21" selection-end-line="473" selection-end-column="21" />
                 </state>
               </provider>
             </entry>
@@ -62,11 +58,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="46">
-                  <caret line="4129" column="32" selection-start-line="4129" selection-start-column="32" selection-end-line="4129" selection-end-column="32" />
+                <state relative-caret-position="324">
+                  <caret line="1125" column="64" selection-start-line="1125" selection-start-column="64" selection-end-line="1125" selection-end-column="64" />
                   <folding>
                     <element signature="e#92#256#0#PHP" />
                     <element signature="e#54214#56473#0#PHP" />
@@ -85,11 +81,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/vip.php">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="395">
-                  <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+                  <caret line="27" selection-start-line="27" selection-end-line="27" />
                 </state>
               </provider>
             </entry>
@@ -98,7 +94,7 @@
             <entry file="file://$PROJECT_DIR$/.htaccess">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="378">
-                  <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+                  <caret line="18" selection-start-line="18" selection-end-line="18" />
                 </state>
               </provider>
             </entry>
@@ -107,7 +103,7 @@
             <entry file="file://$PROJECT_DIR$/ihr.php">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="231">
-                  <caret line="11" column="31" lean-forward="true" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+                  <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
                 </state>
               </provider>
             </entry>
@@ -125,7 +121,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>`exes</find>
       <find>'contractI</find>
       <find>'apportionI</find>
       <find>updateContractM</find>
@@ -138,7 +133,6 @@
       <find>'appo</find>
       <find>queryAnn</find>
       <find>insertSub</find>
-      <find>queryApp</find>
       <find>copyAnn</find>
       <find>signDefault</find>
       <find>contractDefault</find>
@@ -155,6 +149,8 @@
       <find>querySearch</find>
       <find>'contract'</find>
       <find>，</find>
+      <find>insertMem</find>
+      <find>queryApp</find>
     </findStrings>
     <replaceStrings>
       <replace>'],</replace>
@@ -228,13 +224,14 @@
         <option value="$PROJECT_DIR$/cost.html" />
         <option value="$PROJECT_DIR$/reAPI.php" />
         <option value="$PROJECT_DIR$/include/ContractManager.class.php" />
-        <option value="$PROJECT_DIR$/api.php" />
-        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
         <option value="$PROJECT_DIR$/t.txt" />
         <option value="$PROJECT_DIR$/t.json" />
         <option value="$PROJECT_DIR$/.htaccess" />
         <option value="$PROJECT_DIR$/ihr.php" />
         <option value="$PROJECT_DIR$/vip.php" />
+        <option value="$PROJECT_DIR$/api.php" />
+        <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
+        <option value="$PROJECT_DIR$/../hotgo/include/smarty/templates/backend/cms_mbr.tpl.htm" />
       </list>
     </option>
   </component>
@@ -361,12 +358,12 @@
       <workItem from="1702292302046" duration="16527000" />
       <workItem from="1702444008329" duration="17932000" />
       <workItem from="1702717691513" duration="16000" />
-      <workItem from="1702967895850" duration="24982000" />
+      <workItem from="1702967895850" duration="29824000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="524994000" />
+    <option name="totallyTimeSpent" value="529836000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -587,29 +584,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="533" column="72" selection-start-line="533" selection-start-column="72" selection-end-line="533" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/api.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="4129" column="32" selection-start-line="4129" selection-start-column="32" selection-end-line="4129" selection-end-column="32" />
-          <folding>
-            <element signature="e#92#256#0#PHP" />
-            <element signature="e#54214#56473#0#PHP" />
-            <element signature="e#53849#54489#0#PHP" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -623,21 +601,47 @@
     <entry file="file://$PROJECT_DIR$/ihr.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
-          <caret line="11" column="31" lean-forward="true" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/vip.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="395">
-          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="473" column="21" lean-forward="true" selection-start-line="473" selection-start-column="21" selection-end-line="473" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../hotgo/include/smarty/templates/backend/cms_mbr.tpl.htm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="15" column="34" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="1125" column="64" selection-start-line="1125" selection-start-column="64" selection-end-line="1125" selection-end-column="64" />
+          <folding>
+            <element signature="e#92#256#0#PHP" />
+            <element signature="e#54214#56473#0#PHP" />
+            <element signature="e#53849#54489#0#PHP" />
+          </folding>
         </state>
       </provider>
     </entry>

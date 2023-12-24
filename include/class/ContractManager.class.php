@@ -1123,7 +1123,7 @@
         {
             $Conn = new ConnManager();
             $arrPar = array('cotId'   => $Conn->UtilCheckNotNullIsNumeric($cotId) ? $cotId : '',
-                            'comCode' => $Conn->UtilCheckNotNullIsNumeric($comCode) ? $comCode : 0,
+                            'comCode' => $Conn->UtilCheckNotNull($comCode) ? $comCode : 0,
                             'perKey'  => $Conn->UtilCheckNotNull($perKey) ? $perKey : '');
             //SQL
             $sql = ' UPDATE `contact`
@@ -4216,7 +4216,7 @@
             $sql .= $Conn->UtilCheckNotNullIsNumeric($statusNot) ? ' AND C.`Status` != :statusNot' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($mark) ? ' AND C.`Mark` = :mark' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($inh) ? ' AND C.`Inh` = :inh' : '';
-            $sql .= ' AND ((M.`CT` > 0 AND C.`Status` IN (0, 1, 3)) OR (M.`CT` IS NULL AND C.`perKey` = :perKey AND C.`Status` >= 0))';
+            $sql .= ' AND ((M.`CT` > 0 AND C.`Status` IN (0, 1, 3, 4)) OR (M.`CT` IS NULL AND C.`perKey` = :perKey AND C.`Status` >= 0))';
             if ($Conn->UtilCheckNotNullIsNumeric($memOwner) || $Conn->UtilCheckNotNullIsNumeric($memDraft) || $Conn->UtilCheckNotNullIsNumeric($memView) || $Conn->UtilCheckNotNullIsNumeric($memSign) || $Conn->UtilCheckNotNullIsNumeric($memOver)) {
                 $sql .= ' AND (1=2';
                 $sql .= $Conn->UtilCheckNotNullIsNumeric($memOwner) ? ' OR M.`memOwner` = :memOwner  OR C.`perKey` = :perKey' : '';

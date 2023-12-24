@@ -1033,6 +1033,7 @@
                             $apportion_sl['data']['itemData'] = $item_list['data'];
                             $member_list = $ContractMgr->queryMember(NULL, $_GET['conId'], $_GET['appId'], $_GET['memType'], '', '');
                             $apportion_sl['data']['memberData'] = $member_list['data'];
+                            $apportion_list = $ContractMgr->queryApportion(array('A.`appId`', 'A.`appYear`'), '', $apportion_sl['data']['conSerial'], '', '3', '', '', '', '3', '', '', '', '', '');
                             $return_data['data'] = replaceArr($apportion_sl['data']);
                         }
                     }
@@ -1226,17 +1227,23 @@
                         $apportion_ad = $ContractMgr->insertApportion($_GET['conId'], $_GET['perKey'], $_GET['comCode'], $info_sl['data']['infYear'], 'A', '0', $_GET['appType'], '-1');
                     }
                     $contract_sl = $ContractMgr->queryContractByID('', $_GET['conId']);
-                    if ($contract_sl['data']['conApp'] >= 0) {
-                        if ('0' != $contract_sl['data']['conApp']) {
-                            $ContractMgr->deleteSubsidiaryByApportionId($contract_sl['data']['conApp']);
-                            $ContractMgr->deleteAnnualByApportionId($contract_sl['data']['conApp']);
-                            $ContractMgr->deleteExesByApportionId($contract_sl['data']['conApp']);
-                            $apportion_dl = $ContractMgr->deleteApportionByID($contract_sl['data']['conApp']);
-                        }
+                    if ($contract_sl['data']['conApp'] == 0) {
+//                        if ('0' != $contract_sl['data']['conApp']) {
+//                            $ContractMgr->deleteSubsidiaryByApportionId($contract_sl['data']['conApp']);
+//                            $ContractMgr->deleteAnnualByApportionId($contract_sl['data']['conApp']);
+//                            $ContractMgr->deleteExesByApportionId($contract_sl['data']['conApp']);
+//                            $apportion_dl = $ContractMgr->deleteApportionByID($contract_sl['data']['conApp']);
+//                        }
                         $contract_lock_up = $ContractMgr->updateContractLockByID($_GET['conId'], 1);
                         $contract_up = $ContractMgr->updateContractAppByID($_GET['conId'], $apportion_ad);
                         $member_up_appId = $ContractMgr->updateMemberAppIdByConId($_GET['conId'], $apportion_ad);
                         $member_up = $ContractMgr->updateMemberByContractApportionDefault($_GET['conId'], $apportion_ad);
+                    }
+                    else {
+                        $member_list = $ContractMgr->queryMember('', $contract_sl['data']['conId'], '', '', '', '');
+                        for ($i=0;$i<$member_list['count'];$i++){
+                            $ContractMgr->insertMember(0, $apportion_ad, $member_list['data'][$i]['memType'], $member_list['data'][$i]['memBu1Code'], $member_list['data'][$i]['memBu2Code'], $member_list['data'][$i]['memBu2'], $member_list['data'][$i]['memBu3Code'], $member_list['data'][$i]['memBu3'], $member_list['data'][$i]['memLV0Key'], $member_list['data'][$i]['memLV0Name'], $member_list['data'][$i]['memLV0PositionName'], '', '', '', '', '', '', '', '', '', $member_list['data'][$i]['memPhone'], '');
+                        }
                     }
                     $return_data['appId'] = $apportion_ad;
                     $return_data['data'] = 'success';
