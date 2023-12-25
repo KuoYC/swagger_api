@@ -2481,7 +2481,7 @@
                             'appIdNew' => $Conn->UtilCheckNotNullIsNumeric($appIdNew) ? $appIdNew : NULL);
             //SQL
             $sql = ' INSERT INTO `member`(`conId`, `appId`, `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, `memLV0Status`, `memLV0Msg`, `memLV0Time`, `memLVCKey`, `memLVCName`, `memLVCPositionName`, `memLVCStatus`, `memLVCTime`, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, `memLV1Status`, `memLV1Msg`, `memLV1Time`, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, `memLV2Status`, `memLV2Msg`, `memLV2Time`, `memPhone`, `memNowKey`, `memNowStatus`, `memStatus`)
-                     SELECT '.($Conn->UtilCheckNotNullIsNumeric($conIdNew) ? ':conIdNew' : '`conId`').', '.($Conn->UtilCheckNotNullIsNumeric($appIdNew) ? ':appId' : '`appId`').', `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, -1, NULL, NULL, \'\', \'\', \'\', -1, NULL, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, -1, NULL, NULL, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, -1, NULL, NULL, `memPhone`, \'\', -1, -1 
+                     SELECT '.($Conn->UtilCheckNotNullIsNumeric($conIdNew) ? ':conIdNew' : '`conId`').', '.($Conn->UtilCheckNotNullIsNumeric($appIdNew) ? ':appIdNew' : '`appId`').', `memType`, `memBu1Code`, `memBu2Code`, `memBu2`, `memBu3Code`, `memBu3`, `memLV0Key`, `memLV0Name`, `memLV0PositionName`, -1, NULL, NULL, \'\', \'\', \'\', -1, NULL, `memLV1Key`, `memLV1Name`, `memLV1PositionName`, -1, NULL, NULL, `memLV2Key`, `memLV2Name`, `memLV2PositionName`, -1, NULL, NULL, `memPhone`, \'\', -1, -1 
                      FROM `member` WHERE 1=1';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($conId) ? ' AND `conId` = :conId' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($appId) ? ' AND `appId` = :appId' : '';
@@ -3257,8 +3257,8 @@
                             'appMark'   => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : 0,
                             'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : 0);
             //SQL
-            $sql = ' INSERT INTO `apportion`(`conId`, `appYear`, `appVer`, `appMark`, `appStatus`, `appInh`, `appUpdateTime`, `appCreateTime`)
-                     SELECT '.($Conn->UtilCheckNotNullIsNumeric($conId) ? ':conId' : `conId`).', '.($Conn->UtilCheckNotNull($appYear) ? ' :appYear' : ' `appYear`').', :appVer, :appMark, :appStatus, 0, NOW(), NOW() FROM `apportion` WHERE `appId` = :appId';
+            $sql = ' INSERT INTO `apportion`(`conId`, `appYear`, `appVer`, `appMark`, `perKey`, `comCode`, `appStatus`, `appInh`, `appUpdateTime`, `appCreateTime`)
+                     SELECT '.($Conn->UtilCheckNotNullIsNumeric($conId) ? ':conId' : `conId`).', '.($Conn->UtilCheckNotNull($appYear) ? ' :appYear' : ' `appYear`').', :appVer, :appMark, `perKey`, `comCode`, :appStatus, 0, NOW(), NOW() FROM `apportion` WHERE `appId` = :appId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -4165,9 +4165,9 @@
                         ) C
                         UNION
                         SELECT * FROM (
-                            SELECT 1 AS `Type`, A.`conId`, 0, A.`appId`, C.`conTitle`, C.`conType`, A.`appType`, C.`temId`, A.`perKey`, A.`comCode`, C.`frmId`, C.`conSerial`, `C`.`conVer`, A.`appYear`, A.`appVer`, C.`conMark`, A.`appMark`, A.`appMark` AS `Mark`, C.`conInh`, A.`appInh`, A.`appInh` AS `Inh`, C.`conStatus`, A.`appStatus`, A.`appStatus` AS `Status`, C.`conDate`, A.`appDate`, A.`appDate` AS `Date`, C.`conCreateTime`, A.`appCreateTime` FROM `apportion` A
+                            SELECT 1 AS `Type`, 0 AS `conId`, 0 AS `conApp`, A.`appId`, C.`conTitle`, C.`conType`, A.`appType`, C.`temId`, A.`perKey`, A.`comCode`, C.`frmId`, C.`conSerial`, `C`.`conVer`, A.`appYear`, A.`appVer`, C.`conMark`, A.`appMark`, A.`appMark` AS `Mark`, C.`conInh`, A.`appInh`, A.`appInh` AS `Inh`, C.`conStatus`, A.`appStatus`, A.`appStatus` AS `Status`, C.`conDate`, A.`appDate`, A.`appDate` AS `Date`, C.`conCreateTime`, A.`appCreateTime` FROM `apportion` A
                             LEFT JOIN `contract` C ON C.`conId` = A.`conId`
-                            WHERE C.`conApp` != A.`appId`
+                            WHERE C.`conApp` = -1
                         ) A
                      ) C
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
