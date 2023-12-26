@@ -693,9 +693,9 @@
                                 if ($contract_sl['count'] > 0) {
                                     $contract_copy = $ContractMgr->copyContract($data['conId'], $contract_sl['data']['conType'], $contract_sl['data']['conSerial'], $contract_sl['data']['conVer'], 0, 0);
                                     if ($contract_copy) {
-                                        $item_copy = $ContractMgr->copyItem($_GET['conId'], $contract_copy);
-                                        $member_copy = $ContractMgr->copyMember($_GET['conId'], $contract_copy, '', '');
-                                        $contract_sl = $ContractMgr->queryContractByInh('', $_GET['conId']);
+                                        $item_copy = $ContractMgr->copyItem($data['conId'], $contract_copy);
+                                        $member_copy = $ContractMgr->copyMember($data['conId'], $contract_copy, '', '');
+                                        $contract_sl = $ContractMgr->queryContractByInh('', $data['conId']);
                                         if (0 < $contract_sl['count']) {
                                             $contract_inh_up = $ContractMgr->updateContractInheritByID($contract_sl['data']['conId'], $contract_copy);
                                         }
@@ -804,6 +804,47 @@
                             $ContractMgr->updateMemberByApportionDefault($data['appId']);
                             $return_data['data'] = 'success';
                         }
+                    }
+                    break;
+                default:
+                    $return_data = FALSE;
+                    break;
+            }
+            break;
+        case 'apportionCopy'://todo: apportionCopy 複製一份文件 ##new##
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':// todo: apportion GET[perKey, temId] 取得[單一|全部]文件
+                    $apportion_sl = $ContractMgr->queryApportionByID('', $_GET['appId']);
+                    if (0 < $apportion_sl['count']) {
+                        $apportion_copy = $ContractMgr->copyApportion($_GET['appId'], $_GET['conId'], $apportion_sl['data']['appYear'], chr(ord(trim($apportion_sl['data']['appVer'])) + 1), $_GET['appMark'], -1);
+                        if ($apportion_copy) {
+                            $exes_list = $ContractMgr->queryExes('', $data['appId']);
+                            for ($i = 0; $i < $exes_list['count']; $i++) {
+                                $exes_ad = $ContractMgr->copyExesByID($exes_list['data'][$i]['exeId'], $apportion_copy);
+                                if ($exes_ad) {
+                                    $annual_list = $ContractMgr->queryAnnual('', $exes_list['data'][$i]['exeId']);
+                                    for ($j = 0; $j < $annual_list['count']; $j++) {
+                                        $ann_ad = $ContractMgr->copyAnnualByID($annual_list['data'][$j]['annId'], $exes_ad);
+                                        if ($ann_ad) {
+                                            $subsidiary_list = $ContractMgr->querySubsidiary('', $annual_list['data'][$j]['annId']);
+                                            for ($k = 0; $k < $subsidiary_list['count']; $k++) {
+                                                $subsidiary_ad = $ContractMgr->copySubsidiaryByID($subsidiary_list['data'][$k]['subId'], $ann_ad);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            $member_copy = $ContractMgr->copyMember('', '', $data['appId'], $apportion_copy);
+                            $apportion_sl = $ContractMgr->queryApportionByInh('', $data['conId']);
+                            if (0 < $apportion_sl['count']) {
+                                $apportion_inh_up = $ContractMgr->updateApportionInheritByID($apportion_sl['data']['appId'], $apportion_copy);
+                            }
+                        }
+                        $return_data['appId'] = $apportion_copy;
+                        $return_data['data'] = 'success';
+                    }
+                    else {
+                        $return_data = FALSE;
                     }
                     break;
                 default:

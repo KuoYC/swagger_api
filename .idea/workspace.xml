@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c60c579-8490-44b5-9c8b-88b2ce3972a8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/vip_get.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/class/ContractManager.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/class/ContractManager.class.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vip.php" beforeDir="false" afterPath="$PROJECT_DIR$/vip.php" afterDir="false" />
@@ -43,14 +45,14 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.45866862">
+    <splitter split-orientation="horizontal" split-proportion="0.31675202">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/api.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="577">
-                  <caret line="1283" column="61" selection-start-line="1283" selection-start-column="61" selection-end-line="1283" selection-end-column="61" />
+                <state relative-caret-position="558">
+                  <caret line="798" selection-start-line="798" selection-end-line="799" />
                 </state>
               </provider>
             </entry>
@@ -59,11 +61,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="278">
-                  <caret line="2478" column="104" selection-start-line="2478" selection-start-column="100" selection-end-line="2478" selection-end-column="104" />
+                <state relative-caret-position="462">
+                  <caret line="3255" column="35" selection-start-line="3255" selection-start-column="29" selection-end-line="3255" selection-end-column="35" />
                   <folding>
                     <element signature="e#92#256#0#PHP" />
                     <element signature="e#54214#56473#0#PHP" />
@@ -83,11 +85,20 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/vip.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="441">
-                  <caret line="21" selection-start-line="21" selection-end-line="22" />
+                <state relative-caret-position="63">
+                  <caret line="3" column="41" selection-start-line="3" selection-start-column="41" selection-end-line="3" selection-end-column="41" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/vip_get.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="42">
+                  <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
                 </state>
               </provider>
             </entry>
@@ -123,12 +134,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>updateContractM</find>
-      <find>'apportion'</find>
       <find>apportion</find>
       <find>'contrac</find>
       <find>contractId</find>
-      <find>'apportion</find>
       <find>deleteExe</find>
       <find>'appo</find>
       <find>queryAnn</find>
@@ -153,6 +161,9 @@
       <find>queryApp</find>
       <find>json_encode</find>
       <find>'contact'</find>
+      <find>'apportion</find>
+      <find>copyApportion</find>
+      <find>'apportionSta</find>
     </findStrings>
     <replaceStrings>
       <replace>'],</replace>
@@ -231,9 +242,10 @@
         <option value="$PROJECT_DIR$/.htaccess" />
         <option value="$PROJECT_DIR$/ihr.php" />
         <option value="$PROJECT_DIR$/../hotgo/include/smarty/templates/backend/cms_mbr.tpl.htm" />
-        <option value="$PROJECT_DIR$/vip.php" />
-        <option value="$PROJECT_DIR$/api.php" />
         <option value="$PROJECT_DIR$/include/class/ContractManager.class.php" />
+        <option value="$PROJECT_DIR$/api.php" />
+        <option value="$PROJECT_DIR$/vip_get.php" />
+        <option value="$PROJECT_DIR$/vip.php" />
       </list>
     </option>
   </component>
@@ -360,12 +372,12 @@
       <workItem from="1702292302046" duration="16527000" />
       <workItem from="1702444008329" duration="17932000" />
       <workItem from="1702717691513" duration="16000" />
-      <workItem from="1702967895850" duration="37190000" />
+      <workItem from="1702967895850" duration="39467000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="537202000" />
+    <option name="totallyTimeSpent" value="539479000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -621,30 +633,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vip.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="21" selection-start-line="21" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="577">
-          <caret line="1283" column="61" selection-start-line="1283" selection-start-column="61" selection-end-line="1283" selection-end-column="61" />
+        <state relative-caret-position="558">
+          <caret line="798" selection-start-line="798" selection-end-line="799" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/class/ContractManager.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="2478" column="104" selection-start-line="2478" selection-start-column="100" selection-end-line="2478" selection-end-column="104" />
+        <state relative-caret-position="462">
+          <caret line="3255" column="35" selection-start-line="3255" selection-start-column="29" selection-end-line="3255" selection-end-column="35" />
           <folding>
             <element signature="e#92#256#0#PHP" />
             <element signature="e#54214#56473#0#PHP" />
             <element signature="e#53849#54489#0#PHP" />
             <element signature="e#1983#5237#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vip_get.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vip.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="3" column="41" selection-start-line="3" selection-start-column="41" selection-end-line="3" selection-end-column="41" />
         </state>
       </provider>
     </entry>

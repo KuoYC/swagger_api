@@ -1,6 +1,7 @@
 <?php
 
-    $url = "https://api-uat.cathayholdings.com.tw/cxl-mwp-get-all-manager-list/v1/getAllManagerListWithUpperClass_API";
+//    $url = "https://api-uat.cathayholdings.com.tw/cxl-mwp-get-all-manager-list/v1/getAllManagerListWithUpperClass_API";
+    $url = "http://www.api.ks/vip_get.php";
     $headers = array(
         "Content-Type: application/json",
         "Consumer-Secret: NO4Q5NwxyyGHxeE9VH3aEv5EWyQZhOJx1UBAE6atCoDLwe46PTP8CE9beuIZ9rx1",
@@ -129,6 +130,7 @@
 //  "UUID": ""
 //}
 //';
+    var_dump($response);die;
     $parsedResponse = json_decode($response, true);
     if (isset($parsedResponse['detail'])) {
         foreach ($parsedResponse['detail'] as $v) {

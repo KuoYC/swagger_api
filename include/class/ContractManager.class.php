@@ -1840,13 +1840,13 @@
             $Conn = new ConnManager();
             $arrPar = array('conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : 0,
                             'conType'   => $Conn->UtilCheckNotNullIsNumeric($conType) ? $conType : 0,
-                            'conSerial' => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : '',
+                            'conSerial' => $Conn->UtilCheckNotNull($conSerial) ? $conSerial : NULL,
                             'conVer'    => $Conn->UtilCheckNotNull($conVer) ? $conVer : 'A',
                             'conMark'   => $Conn->UtilCheckNotNullIsNumeric($conMark) ? $conMark : 0,
                             'conStatus' => $Conn->UtilCheckNotNullIsNumeric($conStatus) ? $conStatus : -1);
             //SQL
             $sql = ' INSERT INTO `contract`(`temId`, `perKey`, `comCode`, `frmId`, `conSerial`, `conVer`, `conMark`, `conTitle`, `conType`, `conDate`, `conWork`, `conCompany`, `conValue`, `conStatus`, `conInh`, `conUpdateTime`, `conCreateTime`)
-                     SELECT `temId`, `perKey`, `comCode`, `frmId`, `conSerial`, :conVer, :conMark, `conTitle`, :conType, `conDate`, `conWork`, `conCompany`, `conValue`, :conStatus, 0, NOW(), NOW() FROM `contract` WHERE `conId` = :conId';
+                     SELECT `temId`, `perKey`, `comCode`, `frmId`, '.($Conn->UtilCheckNotNull($conSerial) ? ':conSerial' : '`conSerial`').', :conVer, :conMark, `conTitle`, :conType, `conDate`, `conWork`, `conCompany`, `conValue`, :conStatus, 0, NOW(), NOW() FROM `contract` WHERE `conId` = :conId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
