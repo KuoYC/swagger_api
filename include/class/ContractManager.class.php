@@ -3240,6 +3240,7 @@
          *
          * @param $appId
          * @param $conId
+         * @param $appType
          * @param $appYear
          * @param $appVer
          * @param $appMark
@@ -3247,18 +3248,19 @@
          *
          * @return array|int|Number
          */
-        function copyApportion($appId, $conId, $appYear, $appVer, $appMark, $appStatus)
+        function copyApportion($appId, $conId, $appType, $appYear, $appVer, $appMark, $appStatus)
         {
             $Conn = new ConnManager();
             $arrPar = array('appId'     => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0,
                             'conId'     => $Conn->UtilCheckNotNullIsNumeric($conId) ? $conId : NULL,
+                            'appType'     => $Conn->UtilCheckNotNullIsNumeric($appType) ? $appType : NULL,
                             'appYear'   => $Conn->UtilCheckNotNull($appYear) ? $appYear : '',
                             'appVer'    => $Conn->UtilCheckNotNull($appVer) ? $appVer : 'A',
                             'appMark'   => $Conn->UtilCheckNotNullIsNumeric($appMark) ? $appMark : 0,
                             'appStatus' => $Conn->UtilCheckNotNullIsNumeric($appStatus) ? $appStatus : 0);
             //SQL
-            $sql = ' INSERT INTO `apportion`(`conId`, `appYear`, `appVer`, `appMark`, `perKey`, `comCode`, `appStatus`, `appInh`, `appUpdateTime`, `appCreateTime`)
-                     SELECT '.($Conn->UtilCheckNotNullIsNumeric($conId) ? ':conId' : `conId`).', '.($Conn->UtilCheckNotNull($appYear) ? ' :appYear' : ' `appYear`').', :appVer, :appMark, `perKey`, `comCode`, :appStatus, 0, NOW(), NOW() FROM `apportion` WHERE `appId` = :appId';
+            $sql = ' INSERT INTO `apportion`(`conId`, `appType`, `appYear`, `appVer`, `appMark`, `perKey`, `comCode`, `appStatus`, `appInh`, `appUpdateTime`, `appCreateTime`)
+                     SELECT '.($Conn->UtilCheckNotNullIsNumeric($conId) ? ':conId' : '`conId`').', '.($Conn->UtilCheckNotNullIsNumeric($appType) ? ':appType' : ' `appType`').', '.($Conn->UtilCheckNotNull($appYear) ? ' :appYear' : ' `appYear`').', :appVer, :appMark, `perKey`, `comCode`, :appStatus, 0, NOW(), NOW() FROM `apportion` WHERE `appId` = :appId';
             $aryExecute = $Conn->pramExecute($sql, $arrPar);
             if ($aryExecute) {
                 return $Conn->getLastId();
@@ -3425,7 +3427,7 @@
         function queryExes($rows, $appId)
         {
             $Conn = new ConnManager();
-            $arrPar = array('appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : NULL);
+            $arrPar = array('appId' => $Conn->UtilCheckNotNullIsNumeric($appId) ? $appId : 0);
             //SQL
             $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `exes` E
                      LEFT JOIN `item` I ON I.`iteId` = E.`iteId`
@@ -3436,7 +3438,7 @@
                      LEFT JOIN `manner` M ON M.`manId` = I.`manId`
                      LEFT JOIN `source` S ON S.`souId` = I.`iteTime`
                      WHERE 1=1';
-            $sql .= $Conn->UtilCheckNotNullIsNumeric($appId) ? ' AND E.`appId` = :appId' : '';
+            $sql .= ' AND E.`appId` = :appId';
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
             return $aryData;
@@ -4204,7 +4206,7 @@
                                                 (M.`memLV2Key` = :perKey AND M.`memLV2Status` NOT IN (-1, 2) AND M.`memLV1Status` = 3)
                                             )
                                         ) M
-                                GROUP BY M.`conId`, M.`appId`, M.`memOwner`, M.`memDraft`, M.`memView`, M.`memSign`, M.`memOver`
+                                GROUP BY M.`conId`, M.`appId`
                                 ) M ON M.`conId` = C.`conId` AND M.`appId` = C.`appId`
                      WHERE 1 = 1';
             $sql .= $Conn->UtilCheckNotNull($keyword) ? ' AND (C.`conTitle` REGEXP :keyword OR CONCAT(C.`conSerial`, C.`conVer`) REGEXP :keyword)' : '';
@@ -4216,7 +4218,7 @@
             $sql .= $Conn->UtilCheckNotNullIsNumeric($statusNot) ? ' AND C.`Status` != :statusNot' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($mark) ? ' AND C.`Mark` = :mark' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($inh) ? ' AND C.`Inh` = :inh' : '';
-            $sql .= ' AND ((M.`CT` > 0 AND C.`Status` IN (0, 1, 3, 4)) OR (M.`CT` IS NULL AND C.`perKey` = :perKey AND C.`Status` >= 0))';
+            $sql .= ' AND ((M.`CT` > 0 AND C.`Status` IN (0, 1, 3, 4)) OR (M.`CT` IS NULL AND C.`perKey` = :perKey AND C.`Status` >= 0) OR (C.`Status` = 2 AND C.`perKey` = :perKey))';
             if ($Conn->UtilCheckNotNullIsNumeric($memOwner) || $Conn->UtilCheckNotNullIsNumeric($memDraft) || $Conn->UtilCheckNotNullIsNumeric($memView) || $Conn->UtilCheckNotNullIsNumeric($memSign) || $Conn->UtilCheckNotNullIsNumeric($memOver)) {
                 $sql .= ' AND (1=2';
                 $sql .= $Conn->UtilCheckNotNullIsNumeric($memOwner) ? ' OR M.`memOwner` = :memOwner  OR C.`perKey` = :perKey' : '';

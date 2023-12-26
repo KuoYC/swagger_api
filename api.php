@@ -1,5 +1,6 @@
 <?php
     include 'include/config/Web_Config.php';
+    include 'inc/class.phpmailer.php';
     include INCLUDE_PATH.'class/ContractManager.class.php';
     // 允许跨域请求的源
     header("Access-Control-Allow-Origin: *");
@@ -816,9 +817,9 @@
                 case 'GET':// todo: apportion GET[perKey, temId] 取得[單一|全部]文件
                     $apportion_sl = $ContractMgr->queryApportionByID('', $_GET['appId']);
                     if (0 < $apportion_sl['count']) {
-                        $apportion_copy = $ContractMgr->copyApportion($_GET['appId'], $_GET['conId'], $apportion_sl['data']['appYear'], chr(ord(trim($apportion_sl['data']['appVer'])) + 1), $_GET['appMark'], -1);
+                        $apportion_copy = $ContractMgr->copyApportion($_GET['appId'], $_GET['conId'], $_GET['appType'], $apportion_sl['data']['appYear'], chr(ord(trim($apportion_sl['data']['appVer'])) + 1), $_GET['appMark'], -1);
                         if ($apportion_copy) {
-                            $exes_list = $ContractMgr->queryExes('', $data['appId']);
+                            $exes_list = $ContractMgr->queryExes('', $_GET['appId']);
                             for ($i = 0; $i < $exes_list['count']; $i++) {
                                 $exes_ad = $ContractMgr->copyExesByID($exes_list['data'][$i]['exeId'], $apportion_copy);
                                 if ($exes_ad) {
@@ -834,8 +835,8 @@
                                     }
                                 }
                             }
-                            $member_copy = $ContractMgr->copyMember('', '', $data['appId'], $apportion_copy);
-                            $apportion_sl = $ContractMgr->queryApportionByInh('', $data['conId']);
+                            $member_copy = $ContractMgr->copyMember('', '', $_GET['appId'], $apportion_copy);
+                            $apportion_sl = $ContractMgr->queryApportionByInh('', $_GET['conId']);
                             if (0 < $apportion_sl['count']) {
                                 $apportion_inh_up = $ContractMgr->updateApportionInheritByID($apportion_sl['data']['appId'], $apportion_copy);
                             }
@@ -900,7 +901,7 @@
 
                                         $apportion_sl = $ContractMgr->queryApportionByID('', $data['appId']);
                                         if ($apportion_sl['count'] > 0) {
-                                            $apportion_copy = $ContractMgr->copyApportion($data['appId'], $contract_copy, $apportion_sl['data']['appYear'], $apportion_sl['data']['appVer'], 0, 0);
+                                            $apportion_copy = $ContractMgr->copyApportion($data['appId'], $contract_copy, $data['appType'], $apportion_sl['data']['appYear'], $apportion_sl['data']['appVer'], 0, 0);
                                             if ($apportion_copy) {
                                                 $exes_list = $ContractMgr->queryExes('', $_GET['appId']);
                                                 for ($i = 0; $i < $exes_list['count']; $i++) {
@@ -1304,7 +1305,7 @@
                             if ('2' == $data['appStatus']) {
                                 $apportion_sl = $ContractMgr->queryApportionByID(array('A.*'), $data['appId']);
                                 if ($apportion_sl['count'] > 0) {
-                                    $apportion_copy = $ContractMgr->copyApportion($data['appId'], $apportion_sl['data']['conId'], $apportion_sl['data']['appYear'], $apportion_sl['data']['appVer'], 0, 0);
+                                    $apportion_copy = $ContractMgr->copyApportion($data['appId'], $apportion_sl['data']['conId'], $data['appType'], $apportion_sl['data']['appYear'], $apportion_sl['data']['appVer'], 0, 0);
                                     if ($apportion_copy) {
                                         $exes_list = $ContractMgr->queryExes('', $data['appId']);
                                         for ($i = 0; $i < $exes_list['count']; $i++) {
