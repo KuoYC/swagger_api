@@ -707,6 +707,17 @@
                             if ('4' == $data['conStatus']) {
                                 $contract_inh_clean = $ContractMgr->cleanContractInheritByID($data['conId']);
                             }
+                            if ('3' == $data['conStatus']) {
+                                $perKey = '';
+                                $contract_sl = $ContractMgr->queryContractByID('', $data['conId']);
+                                if (0 < $contract_sl['count']) {
+                                    $perKey = $contract_sl['data']['perKey'];
+                                }
+                                $personnel_sl = $ContractMgr->queryPersonnelByKey('', $perKey);
+                                if (0 < $personnel_sl['count']) {
+                                    sendEmail(33, $personnel_sl['data']['perEmail'], $personnel_sl['data']['perName'], $personnel_sl['data']['perPositionName'], '');
+                                }
+                            }
                             if (isset($data['sglLog'])) {
                                 $log = json_decode($data['sglLog'], TRUE);
                                 $ContractMgr->insertSignLog($log['conId'], $log['appId'], $log['memId'], $log['perKey'], $log['sglMemberStatus'], $log['sglMsg'], $log['sglStatus']);
@@ -935,6 +946,18 @@
                                 $contract_inh_clean = $ContractMgr->cleanContractInheritByID($data['conId']);
                                 $apportion_inh_clean = $ContractMgr->cleanApportionInheritByID($data['conId']);
                             }
+                            if ('3' == $data['status']) {
+                                $perKey = '';
+                                $contract_sl = $ContractMgr->queryContractByID('', $data['conId']);
+                                if (0 < $contract_sl['count']) {
+                                    $perKey = $contract_sl['data']['perKey'];
+                                }
+                                $personnel_sl = $ContractMgr->queryPersonnelByKey('', $perKey);
+                                if (0 < $personnel_sl['count']) {
+                                    sendEmail(1, $personnel_sl['data']['perEmail'], $personnel_sl['data']['perName'], $personnel_sl['data']['perPositionName'], '');
+                                }
+
+                            }
                             if (isset($data['sglLog'])) {
                                 $log = json_decode($data['sglLog'], TRUE);
                                 $ContractMgr->insertSignLog($log['conId'], $log['appId'], $log['memId'], $log['perKey'], $log['sglMemberStatus'], $log['sglMsg'], $log['sglStatus']);
@@ -952,8 +975,88 @@
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT'://up
                     $data = json_decode(file_get_contents('php://input'), TRUE);
+                    $member_sl = $ContractMgr->queryMemberByID('', $data['memId']);
                     $member_up = $ContractMgr->updateMemberStatus($data['memId'], $data['memLV0Status'], $data['memLV0Time'], $data['memLV0Msg'], $data['memLVCKey'], $data['memLVCName'], $data['memLVCPositionName'], $data['memLVCStatus'], $data['memLVCTime'], $data['memLV1Status'], $data['memLV1Time'], $data['memLV1Msg'], $data['memLV2Status'], $data['memLV2Time'], $data['memLV2Msg'], $data['memNowKey'], $data['memNowStatus'], $data['memStatus']);
                     if ($member_up) {
+                        if (0 < $member_sl['count']) {
+                            if ($member_sl['data']['memStatus'] != $data['memStatus']) {
+                                $perKey = '';
+                                switch ($data['memStatus']) {
+                                    case 1://簽核
+                                        $perKey = $data['memNowKey'];
+                                        if (0 < $member_sl['data']['appId']) {
+                                            $apportion_sl = $ContractMgr->queryApportionByID('', $member_sl['data']['appId']);
+                                            if (0 < $apportion_sl['count']) {
+                                                $perKey = $apportion_sl['data']['perKey'];
+                                            }
+                                        }
+                                        else {
+                                            $contract_sl = $ContractMgr->queryContractByID('', $member_sl['data']['conId']);
+                                            if (0 < $contract_sl['count']) {
+                                                $perKey = $contract_sl['data']['perKey'];
+                                            }
+                                        }
+                                        $personnel_sl = $ContractMgr->queryPersonnelByKey('', $perKey);
+                                        if (0 < $personnel_sl['count']) {
+                                            sendEmail(1, $personnel_sl['data']['perEmail'], $personnel_sl['data']['perName'], $personnel_sl['data']['perPositionName'], '');
+                                        }
+                                        break;
+                                    case 2://退件
+                                        if (0 < $member_sl['data']['appId']) {
+                                            $apportion_sl = $ContractMgr->queryApportionByID('', $member_sl['data']['appId']);
+                                            if (0 < $apportion_sl['count']) {
+                                                $perKey = $apportion_sl['data']['perKey'];
+                                            }
+                                        }
+                                        else {
+                                            $contract_sl = $ContractMgr->queryContractByID('', $member_sl['data']['conId']);
+                                            if (0 < $contract_sl['count']) {
+                                                $perKey = $contract_sl['data']['perKey'];
+                                            }
+                                        }
+                                        $personnel_sl = $ContractMgr->queryPersonnelByKey('', $perKey);
+                                        if (0 < $personnel_sl['count']) {
+                                            sendEmail(2, $personnel_sl['data']['perEmail'], $personnel_sl['data']['perName'], $personnel_sl['data']['perPositionName'], '');
+                                        }
+                                        break;
+                                    case 3://簽核完成
+                                        if (0 < $member_sl['data']['appId']) {
+                                            $apportion_sl = $ContractMgr->queryApportionByID('', $member_sl['data']['appId']);
+                                            if (0 < $apportion_sl['count']) {
+                                                $perKey = $apportion_sl['data']['perKey'];
+                                            }
+                                        }
+                                        else {
+                                            $contract_sl = $ContractMgr->queryContractByID('', $member_sl['data']['conId']);
+                                            if (0 < $contract_sl['count']) {
+                                                $perKey = $contract_sl['data']['perKey'];
+                                            }
+                                        }
+                                        $personnel_sl = $ContractMgr->queryPersonnelByKey('', $perKey);
+                                        if (0 < $personnel_sl['count']) {
+                                            switch ($member_sl['data']['memType']) {
+                                                case 0:
+                                                    sendEmail(30, $personnel_sl['data']['perEmail'], $personnel_sl['data']['perName'], $personnel_sl['data']['perPositionName'], $member_sl['data']['comTitle']);
+                                                    break;
+                                                case 1:
+                                                    sendEmail(31, $personnel_sl['data']['perEmail'], $personnel_sl['data']['perName'], $personnel_sl['data']['perPositionName'], $member_sl['data']['comTitle']);
+                                                    break;
+                                                case 2:
+                                                    sendEmail(32, $personnel_sl['data']['perEmail'], $personnel_sl['data']['perName'], $personnel_sl['data']['perPositionName'], $member_sl['data']['comTitle']);
+                                                    break;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                            else {
+                                if ('1' == $member_sl['data']['memStatus'] || '1' == $data['memStatus']) {
+
+                                }
+                            }
+                        }
+
+
                         if (isset($data['sglLog'])) {
                             $log = json_decode($data['sglLog'], TRUE);
                             $ContractMgr->insertSignLog($log['conId'], $log['appId'], $log['memId'], $log['perKey'], $log['sglMemberStatus'], $log['sglMsg'], $log);
@@ -1283,7 +1386,7 @@
                     }
                     else {
                         $member_list = $ContractMgr->queryMember('', $contract_sl['data']['conId'], '', '', '', '');
-                        for ($i=0;$i<$member_list['count'];$i++){
+                        for ($i = 0; $i < $member_list['count']; $i++) {
                             $ContractMgr->insertMember(0, $apportion_ad, $member_list['data'][$i]['memType'], $member_list['data'][$i]['memBu1Code'], $member_list['data'][$i]['memBu2Code'], $member_list['data'][$i]['memBu2'], $member_list['data'][$i]['memBu3Code'], $member_list['data'][$i]['memBu3'], $member_list['data'][$i]['memLV0Key'], $member_list['data'][$i]['memLV0Name'], $member_list['data'][$i]['memLV0PositionName'], '', '', '', '', '', '', '', '', '', $member_list['data'][$i]['memPhone'], '');
                         }
                     }
@@ -1295,7 +1398,7 @@
                     break;
             }
             break;
-        case 'apportionStatus': // todo: contractStatus 修改文件狀態
+        case 'apportionStatus': // todo: apportionStatus 修改文件狀態
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'PUT':// todo: contract_status PUT[conId, conStatus, {conDate|null}] 修改文件狀態
                     $data = json_decode(file_get_contents('php://input'), TRUE); // 解析 JSON 資料
@@ -1331,6 +1434,17 @@
                                     }
                                 }
                                 $apportion_mark_up = $ContractMgr->updateApportionMarkByID($data['appId'], '1');
+                            }
+                            if ('3' == $data['appStatus']) {
+                                $perKey = '';
+                                $apportion_sl = $ContractMgr->queryApportionByID('', $data['appId']);
+                                if (0 < $apportion_sl['count']) {
+                                    $perKey = $apportion_sl['data']['perKey'];
+                                }
+                                $personnel_sl = $ContractMgr->queryPersonnelByKey('', $perKey);
+                                if (0 < $personnel_sl['count']) {
+                                    sendEmail(33, $personnel_sl['data']['perEmail'], $personnel_sl['data']['perName'], $personnel_sl['data']['perPositionName'], '');
+                                }
                             }
                             if ('4' == $data['conStatus']) {
                                 $apportion_inh_clean = $ContractMgr->cleanApportionInheritByID($data['appId']);
@@ -1451,6 +1565,37 @@
                     break;
             }
             break;
+        case 'vip':
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET'://sl
+                    if (isset($_GET['perKey'])) {
+                        $lv1 = NULL;
+                        $lv2 = NULL;
+                        $api = getAPI($_GET['perKey']);
+                        if (is_array($api) && isset($api['returnCode']) && 0 == $api['returnCode']) {
+                            if (isset($api['detail'][0])) {
+                                $personnel_lv1 = $ContractMgr->queryPersonnel('', '', $api['detail'][0][0]['COMP_ID'], '', $api['detail'][0][0]['DIV_NO'], '', '', $api['detail'][0][0]['ID_NO'], $api['detail'][0][0]['CATHAY_NO'], $api['detail'][0][0]['POSITION'], '', '');
+                                if (0 < $personnel_lv1['count']) {
+                                    $lv1 = $personnel_lv1['data'][0];
+                                }
+                            }
+                            if (isset($api['detail'][1])) {
+                                $personnel_lv2 = $ContractMgr->queryPersonnel('', '', $api['detail'][1][0]['COMP_ID'], '', $api['detail'][1][0]['DIV_NO'], '', '', $api['detail'][1][0]['ID_NO'], $api['detail'][1][0]['CATHAY_NO'], $api['detail'][1][0]['POSITION'], '', '');
+                                if (0 < $personnel_lv2['count']) {
+                                    $lv2 = $personnel_lv2['data'][0];
+                                }
+                            }
+                        }
+                        $vip = array('lv1' => $lv1,
+                                     'lv2' => $lv2);
+                        $return_data['data'] = replaceArr($vip);
+                    }
+                    else {
+                        $return_data = FALSE;
+                    }
+                    break;
+            }
+            break;
 
     }
     die(json_encode($return_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
@@ -1503,6 +1648,90 @@
         }
 
         return $arr;
+    }
+
+    function sendEmail($type, $mail_to, $name, $position, $company)
+    {
+        $test = FALSE;
+        $subject = '';
+        $message = $name.' '.$position.' ';
+        switch ($type) {
+            case 1:
+                $subject = '簽核文件通知';
+                $message .= '您有新的簽核文件';
+                break;
+            case 2:
+                $subject = '文件退回通知';
+                $message .= '您的文件已被退回';
+                break;
+            case 30:
+                $subject = '完成簽核通知';
+                $message .= '發起 '.$company.' 公司已完成簽核';
+                break;
+            case 31:
+                $subject = '完成簽核通知';
+                $message .= '維運 '.$company.' 公司已完成簽核';
+                break;
+            case 32:
+                $subject = '完成簽核通知';
+                $message .= '使用 '.$company.' 公司已完成簽核';
+                break;
+            case 33:
+                $subject = '歸檔通知';
+                $message .= '文件已完成簽核歸檔';
+                break;
+        }
+        $mail = new PHPMailer(); //建立新物件
+        $mail->IsSMTP(); //設定使用SMTP方式寄信
+        $mail->SMTPAuth = TRUE; //設定SMTP需要驗證
+        if ($test) {
+            $mail->SMTPSecure = "ssl"; // Gmail的SMTP主機需要使用SSL連線
+            $mail->Host = "smtp.gmail.com"; //Gamil的SMTP主機
+            $mail->Port = 465; //Gamil的SMTP主機的SMTP埠位為465埠。
+            $mail->CharSet = "UTF-8"; //設定郵件編碼
+
+            $mail->Username = "icabs@cmu.edu.tw"; //設定驗證帳號
+            $mail->Password = "Taichung1234"; //設定驗證密碼
+        }
+        else {
+            $mail->Host = "202.154.197.40"; //Gamil的SMTP主機
+            $mail->CharSet = "UTF-8"; //設定郵件編碼
+            $mail->Username = "itsharing@cathayholdings.com.tw"; //設定驗證帳號
+            $mail->Password = "Abc12345"; //設定驗證密碼
+        }
+
+        $mail->From = "itsharing@cathayholdings.com.tw"; //設定寄件者信箱
+        $mail->FromName = "itsharing"; //設定寄件者姓名
+
+        $mail->Subject = $subject; //設定郵件標題
+        $mail->Body = $message; //設定郵件內容
+        $mail->IsHTML(TRUE); //設定郵件內容為HTML
+        $mail->AddAddress($mail_to, $name); //設定收件者郵件及名稱
+
+    }
+
+    function getAPI($perKey)
+    {
+        $test = TRUE;
+        $ContractMgr = new ContractManager();
+        $personnel_sl = $ContractMgr->queryPersonnelByKey('', $perKey);
+        if (0 < $personnel_sl['count']) {
+            if ($test) {
+                $curlCommand = 'curl -s --location "'.(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].'/get_vip/" --header "Content-Type:application/json" --header "Consumer-Secret: NO4Q5NwxyyGHxeE9VH3aEv5EWyQZhOJx1UBAE6atCoDLwe46PTP8CE9beuIZ9rx1" --header "x-api-key: HUySxhLAt889ssBfpysMNeCrBTBmPSp8Cp24mlxNgWHYx8cP" --data \'{"COMP_ID":"'.$personnel_sl['data']['perBu1Code'].'","DIV_NO":"'.$personnel_sl['data']['perBu3Code'].'","ID_TYPE":"1","ID":"'.$personnel_sl['data']['perAccount'].'","UPPER_CLASS":"2"}\'';
+            }
+            else {
+                $curlCommand = 'curl -s --location "https://api-uat.cathayholdings.com.tw/cxl-mwp-get-all-manager-list/v1/getAllManagerListWithUpperClass_API" --header "Content-Type:application/json" --header "Consumer-Secret: NO4Q5NwxyyGHxeE9VH3aEv5EWyQZhOJx1UBAE6atCoDLwe46PTP8CE9beuIZ9rx1" --header "x-api-key: HUySxhLAt889ssBfpysMNeCrBTBmPSp8Cp24mlxNgWHYx8cP" --data \'{"COMP_ID":"'.$personnel_sl['data']['perBu1Code'].'","DIV_NO":"'.$personnel_sl['data']['perBu3Code'].'","ID_TYPE":"1","ID":"'.$personnel_sl['data']['perAccount'].'","UPPER_CLASS":"2"}\'';
+            }
+            exec($curlCommand, $output, $returnValue);
+            if ($returnValue !== 0) {
+                return FALSE;
+            }
+            $resultArray = json_decode(implode('', $output), TRUE);
+            return $resultArray;
+        }
+        else {
+            return FALSE;
+        }
     }
 
 ?>

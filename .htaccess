@@ -11,6 +11,7 @@ RewriteRule ^api/$ /api.php [L]
 RewriteRule ^api/([a-zA-Z0-9_-]*)/$ /api.php?type=$1 [L]
 
 RewriteRule ^vip/$ /vip.php [L]
+RewriteRule ^get_vip/$ /get_vip.php [L]
 RewriteRule ^ihr/$ /ihr.php [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f

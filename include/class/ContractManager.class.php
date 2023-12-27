@@ -1280,9 +1280,9 @@
             $Conn = new ConnManager();
             $arrPar = array('perId' => $Conn->UtilCheckNotNullIsNumeric($perId) ? $perId : '');
             //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `personnel` Ｐ
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `personnel` P
                      LEFT JOIN `company` C ON C.`comCode` = P.`perBu1Code`
-                     WHERE `perId` = :perId';
+                     WHERE P.`perId` = :perId';
             $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
             return $aryData;
@@ -1301,9 +1301,9 @@
             $Conn = new ConnManager();
             $arrPar = array('perKey' => $Conn->UtilCheckNotNull($perKey) ? $perKey : '');
             //SQL
-            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `personnel` Ｐ
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `personnel` P
                      LEFT JOIN `company` C ON C.`comCode` = P.`perBu1Code`
-                     WHERE `perKey` = :perKey';
+                     WHERE P.`perKey` = :perKey';
             $aryData['data'] = $Conn->pramGetOne($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
             return $aryData;
@@ -2392,6 +2392,28 @@
             $sql .= $Conn->UtilCheckNotNullIsNumeric($memType) ? ' AND M.`memType` = :memType' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($memStatus) ? ' AND M.`memStatus` = :memStatus' : '';
             $sql .= $Conn->UtilCheckNotNullIsNumeric($memStatusNot) ? ' AND M.`memStatus` != :memStatusNot' : '';
+            $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
+            $aryData['count'] = $Conn->pramGetRowCount();
+            return $aryData;
+        }
+
+        /**
+         * todo:queryMember 查看簽核人員資料
+         *
+         * @param $rows
+         * @param $memId
+         *
+         * @return mixed
+         */
+        function queryMemberByID($rows, $memId)
+        {
+            $Conn = new ConnManager();
+            $arrPar = array('memId'        => $Conn->UtilCheckNotNullIsNumeric($memId) ? $memId : 0);
+            //SQL
+            $sql = ' SELECT SQL_CALC_FOUND_ROWS '.$Conn->getFiledRow($rows).' FROM `member` M
+                     LEFT JOIN `company` C ON M.`memBu1Code` = C.`comCode`
+                     WHERE 1=1';
+            $sql .= ' AND M.`memId` = :memId';
             $aryData['data'] = $Conn->pramGetAll($sql, $arrPar);
             $aryData['count'] = $Conn->pramGetRowCount();
             return $aryData;
@@ -4321,7 +4343,7 @@
                      LEFT JOIN `distribution` D ON D.`disId` = I.`disId`
                      LEFT JOIN `manner` M ON M.`manId` = I.`manId`
                      LEFT JOIN `apportion` A ON A.`appId` = E.`appId`
-                     LEFT JOIN `contract` C ON C.`appId` = A.`appId`
+                     LEFT JOIN `contract` C ON C.`conId` = A.`conId`
                      LEFT JOIN `personnel` P ON P.`perKey` = C.`perKey`
                      LEFT JOIN `template` T ON T.`temId` = C.`temId`
                      WHERE 1=1';
